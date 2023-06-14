@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.authority.service.impl.AuthorityMapper">
+	<select id="selectAuthorityToCnt" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.p_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+	</select>
+	
+	<select id="selectAuthorityList" resultType="egovMap">
+		SELECT
+			b.p_group,
+			b.p_name,
+			a.a_lev,
+			a.p_idx
+		FROM sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.p_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+		ORDER BY a.p_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectProgramName" resultType="egovMap">
+		SELECT
+			a.p_idx,
+			a.p_name
+		FROM sm_program a
+		LEFT JOIN sm_authority b
+		ON a.p_idx = b.p_idx
+		WHERE b.p_idx IS NULL
+	</select>
+	
+	<insert id="registAuthority">
+		INSERT INTO sm_authority
+			(
+			p_idx,
+			a_lev
+			)
+		VALUES
+			(
+			#{pIdx},
+			#{aLev}
+			)
+	</insert>
+	
+	<select id="selectAuthorityInfo" resultType="egovMap">
+		SELECT
+			a.p_idx,
+			a.a_lev,
+			b.p_name
+		FROM sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE a.p_idx = #{pIdx}
+	</select>
+	
+	<update id="modifyAuthority">
+		UPDATE sm_authority SET
+			p_idx = #{pIdx},
+			a_lev = #{aLev}
+		WHERE p_idx = #{curPIdx}
+	</update>
+	
+	<delete id="deleteAuthority">
+		DELETE FROM sm_authority WHERE p_idx = #{pIdx}
+	</delete>
+	
+	<select id="selectAccessLevel" resultType="int">
+		SELECT
+			a.a_lev
+		FROM sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE 1=1
+		AND p_url LIKE CONCAT('%',#{str},'%')
+	</select>
+</mapper>

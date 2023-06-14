@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.production.process.service.impl.ProcessMapper">
+	<select id="selectProcessChkListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_process_check
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND pr_chk_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND pr_chk_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectProcessChkList" resultType="egovMap">
+		SELECT
+			a.pr_chk_idx,
+			a.fa_cd,
+			a.pr_list_idx,
+			a.pr_chk_list,
+			IF(LENGTH(a.pr_chk_insp) > 40, CONCAT(LEFT(a.pr_chk_insp, 12),'...'), a.pr_chk_insp) AS pr_chk_insp,
+			a.pr_chk_dte,
+			a.pr_chk_manager,
+			b.pr_list_nm,
+			c.fa_name
+		FROM sm_process_check a
+		JOIN sm_process_list b
+		ON a.pr_list_idx = b.pr_list_idx
+		JOIN sm_facility c
+		ON a.fa_cd = c.fa_cd
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND pr_chk_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND pr_chk_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY pr_chk_dte DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectProcessList" resultType="egovMap">
+		SELECT
+			b.pr_list_idx,
+			b.pr_list_nm
+		FROM sm_facility a
+		JOIN sm_process_list b
+		ON a.fa_ctl_val = b.pr_list_idx
+		GROUP BY pr_list_idx
+	</select>
+		
+	<select id="selectFacilityList" resultType="egovMap">
+		SELECT fa_cd, fa_name FROM sm_facility WHERE fa_ctl_val IS NOT NULL
+	</select>
+	
+	<select id="selectProcessEquipInfo" resultType="egovMap">
+		SELECT fa_cd, fa_name FROM sm_facility WHERE fa_ctl_val = #{prListIdx}
+	</select>
+	
+	<select id="selectExistsPrIdx" resultType="int">
+		SELECT
+			COUNT(b.pr_list_idx)
+		FROM sm_facility a
+		JOIN sm_process_list b
+		ON a.fa_ctl_val = b.pr_list_idx
+		WHERE pr_list_idx = #{prListIdx}
+	</select>
+	
+	<select id="selectExistsFaIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_facility WHERE fa_cd = #{faCd}
+	</select>
+	
+	<insert id="registProcess">
+		INSERT INTO sm_process_check
+			(
+			pr_chk_idx,
+			fa_cd,
+			pr_list_idx,
+			pr_chk_list,
+			pr_chk_insp,
+			pr_chk_dte,
+			pr_chk_manager,
+			pr_chk_reg_dte,
+			pr_chk_reg_mem
+			)
+		VALUES
+			(
+			(SELECT CONCAT('PC', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.pr_chk_idx),0) FROM sm_process_check a),'[a-z]','')))+1,5,0))),
+			#{faCd},
+			#{prListIdx},
+			#{prChkList},
+			#{prChkInsp},
+			#{prChkDte},
+			#{prChkManager},
+			NOW(),
+			#{userId}
+			)
+	</insert>
+	
+	<select id="selectProcessInfo" resultType="egovMap">
+		SELECT
+			pr_chk_idx,
+			fa_cd,
+			pr_list_idx,
+			pr_chk_list,
+			pr_chk_insp,
+			pr_chk_dte,
+			pr_chk_manager
+		FROM sm_process_check
+		WHERE pr_chk_idx = #{prChkIdx}
+	</select>
+	
+	<update id="modifyProcess">
+		UPDATE sm_process_check SET
+			fa_cd = #{faCd},
+			pr_list_idx = #{prListIdx},
+			pr_chk_list = #{prChkList},
+			pr_chk_insp = #{prChkInsp},
+			pr_chk_dte = #{prChkDte},
+			pr_chk_manager = #{prChkManager},
+			pr_chk_edt_dte = NOW(),
+			pr_chk_edt_mem = #{userId}
+		WHERE pr_chk_idx = #{prChkIdx}
+	</update>
+	
+	<delete id="deleteProcess">
+		DELETE FROM sm_process_check WHERE pr_chk_idx = #{prChkIdx}
+	</delete>
+</mapper>

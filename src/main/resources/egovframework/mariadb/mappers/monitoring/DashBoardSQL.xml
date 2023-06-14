@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.monitoring.dashBoard.service.impl.DashBoardMapper">
+	<select id="selectNoticeList" resultType="egovMap">
+		SELECT
+			no_idx,
+			no_cont
+		FROM sm_notice
+		WHERE no_use = '공개'
+		ORDER BY no_idx DESC
+	</select>
+	
+	<select id="selectNoticeInfo" resultType="egovMap">
+		SELECT
+			no_title,
+			no_cont,
+			DATE_FORMAT(no_reg_dte, '%Y-%m-%d %H:%i:%s') AS no_reg_dte,
+			no_reg_mem
+		FROM sm_notice
+		WHERE no_idx = #{noIdx}
+	</select>
+	
+	<select id="selectItemList" resultType="egovMap">
+		SELECT
+			item_name,
+			item_cnt
+		FROM sm_item
+		WHERE item_type IN ('자재','부자재')
+	</select>
+
+</mapper>
