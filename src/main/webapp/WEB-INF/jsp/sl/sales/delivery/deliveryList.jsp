@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">비전검사정보관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">비전정보검사관리(나머지정보는 상세보기탭 만들예정)</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -57,8 +57,16 @@
 									<input type="hidden" name="deIdx">
 									<input type="hidden" name="orIdx">
 									<input type="hidden" name="shIdx">
-									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
+							    		<option value="문서" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>문서</option>
+							    		<option value="LOT번호" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>LOT번호</option>
+							    		<option value="품목" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>품목</option>
+							    		<option value="공정번호" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>공정번호</option>
+						    		</select>
+									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
+						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
 									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
 									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
@@ -79,32 +87,24 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>번호</th>
 											<th>문서번호</th>
 											<th>LOT번호</th>
-											<th>품목코드</th>
 											<th>품목명</th>
-											<th>호칭</th>
-											<th>두께</th>
-											<th>공정번호</th>
-											<th>검사일자</th>
-											<th>검사확인일자</th>
 											<th>수정/삭제</th>
+											
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${deliveryList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_delivery('${result.deIdx}')" style="cursor: pointer;">
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<td>${result.orName}</td>
+												<td>${result.deDte}</td>
+												<td>
+													<c:if test="${result.deState == '0'}">미확인</c:if>
+													<c:if test="${result.deState == '1'}">납품확인</c:if>
+													<c:if test="${result.deState == '2'}">납품불량</c:if>
+													<c:if test="${result.deState == '3'}">수금확인</c:if>
+												</td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_delivery_go('${result.deIdx}')">
 				                                        <span class="text">수정</span>
@@ -115,7 +115,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty deliveryList}"><tr><td colspan='11'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty deliveryList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

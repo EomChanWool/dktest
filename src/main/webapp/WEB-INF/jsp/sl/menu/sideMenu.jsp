@@ -92,18 +92,18 @@
 </c:if>
 
 <c:if test="${mLevel.P0019 <= memberVO.mLev || mLevel.P0020 <= memberVO.mLev || mLevel.P0021 <= memberVO.mLev || mLevel.P0022 <= memberVO.mLev}">
-<li class="nav-item" id="#processMenu">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#process"
-        aria-expanded="true" aria-controls="process">
+<li class="nav-item" id="qualityMenu">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#quality"
+        aria-expanded="true" aria-controls="quality">
         <i class="fas fa-fw fa-folder"></i>
         <span>공정관리</span>
     </a>
-    <div id="process" class="collapse" aria-labelledby="headingProcess" data-parent="#accordionSidebar">
+    <div id="quality" class="collapse" aria-labelledby="headingQuality" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
-		    <c:if test="${mLevel.P0019 <= memberVO.mLev}"><a class="collapse-item" id="workOrderList" href="${pageContext.request.contextPath}/sl/production/workOrder/workOrderList.do">절단공정관리</a></c:if>
-		    <c:if test="${mLevel.P0020 <= memberVO.mLev}"><a class="collapse-item" id="prodResultList" href="${pageContext.request.contextPath}/sl/production/prodResult/prodResultList.do">가공공정관리</a></c:if>
-		    <c:if test="${mLevel.P0021 <= memberVO.mLev}"><a class="collapse-item" id="prodEquipList" href="${pageContext.request.contextPath}/sl/production/prodEquip/prodEquipList.do">검사공정관리</a></c:if>
-		    <c:if test="${mLevel.P0022 <= memberVO.mLev}"><a class="collapse-item" id="prodCurStateList" href="${pageContext.request.contextPath}/sl/production/prodCurState/prodCurStateList.do">성능시험관리</a></c:if>
+		    <c:if test="${mLevel.P0019 <= memberVO.mLev}"><a class="collapse-item" id="analyManageList" href="${pageContext.request.contextPath}/sl/quality/analyManage/analyManageList.do">절단공정관리</a></c:if>
+		    <c:if test="${mLevel.P0020 <= memberVO.mLev}"><a class="collapse-item" id="checkProdList" href="${pageContext.request.contextPath}/sl/quality/checkProd/checkProdList.do">가공공정관리</a></c:if>
+		    <c:if test="${mLevel.P0021 <= memberVO.mLev}"><a class="collapse-item" id="incongruentList" href="${pageContext.request.contextPath}/sl/quality/incongruent/incongruentList.do">검사공정관리</a></c:if>
+		    <c:if test="${mLevel.P0022 <= memberVO.mLev}"><a class="collapse-item" id="instList" href="${pageContext.request.contextPath}/sl/quality/inst/instList.do">성능시험관리</a></c:if>
 		</div>
     </div>
 </li>

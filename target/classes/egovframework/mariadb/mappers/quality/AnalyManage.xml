@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.quality.analyManage.service.impl.AnalyManageMapper">
+	<select id="selectAnalyManageListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_analysis_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND ti_name LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND ti_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND ti_dte <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+
+	<select id="selectAnalyManageList" resultType="egovMap">
+		SELECT
+		ti_idx,
+		do_idx,
+		ti_name,
+		ti_analyst,
+		ti_dte,
+		ti_state,
+		wo_idx
+		FROM
+		sm_analysis_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND ti_name LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND ti_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND ti_dte <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY ti_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectWorkOrderList" resultType="egovMap">
+		SELECT
+		a.wo_idx,
+		b.wo_name
+		FROM sm_process a
+		JOIN sm_work_order b
+		ON a.wo_idx = b.wo_idx
+		WHERE pr_cur_nm = #{str}
+	</select>
+
+	<select id="selectDocumentList" resultType="egovMap">
+		SELECT do_idx,
+		do_name FROM sm_document WHERE do_type = #{str} AND do_state = 0
+	</select>
+
+	<select id="detailAnalysis" resultType="egovMap">
+		SELECT a.ti_idx,
+		a.wo_idx, a.az_idx, a.ti_state, a.ti_analyst, c.item_name, f.ac_name,
+		b.wo_pdt_cnt,
+		date_format(ti_reg_dte, '%Y-%m-%d %H:%i') AS ti_reg_dte
+		FROM
+		sm_analysis_info a
+		JOIN
+		sm_work_order b ON a.WO_IDX = b.WO_IDX
+		JOIN
+		sm_item c ON b.ITEM_CD =
+		c.ITEM_CD
+		JOIN sm_orders d ON b.OR_IDX =
+		d.OR_IDX
+		JOIN sm_estimate e ON d.ES_IDX =
+		e.ES_IDX
+		JOIN sm_account f ON
+		e.A_IDX = f.AC_CODE
+		WHERE ti_idx = #{tiIdx}
+	</select>
+
+	<insert id="registAnalysisData">
+		INSERT INTO sm_anlz_data
+		(
+		az_idx,
+		az_brix_std,
+		az_brix,
+		az_water_std,
+		az_water,
+		az_ph_std,
+		az_ph,
+		az_temp_std,
+		az_temp,
+		az_viscosity_std,
+		az_viscosity,
+		az_sg_std,
+		az_sg,
+		az_dte
+		)
+		VALUES
+		(
+		(SELECT
+		CONCAT(CONCAT('AZ',SUBSTRING(DATE_FORMAT(NOW(),'%Y%m%d'),3,6)),'-',
+		(SELECT LPAD((SELECT IFNULL(MAX(SUBSTRING(a.az_idx,10,12)),0)+1
+		FROM
+		sm_anlz_data a
+		WHERE a.az_idx
+		LIKE
+		CONCAT(CONCAT('AZ',SUBSTRING(DATE_FORMAT(NOW(),'%Y%m%d'),3,8)),
+		'%')),3,0))) AS AZ),
+		#{azBrixStd},
+		#{azBrix},
+		#{azWaterStd},
+		#{azWater},
+		#{azPhStd},
+		#{azPh},
+		#{azTempStd},
+		#{azTemp},
+		#{azViscosityStd},
+		#{azViscosity},
+		#{azSgStd},
+		#{azSg},
+		NOW()
+		)
+	</insert>
+
+	<select id="selectAzIdxData" resultType="egovMap">
+		SELECT az_brix,
+		az_water, az_ph, az_temp, az_viscosity, az_sg
+		FROM sm_anlz_data
+		WHERE
+		az_idx = (SELECT
+		MAX(az_idx) AS az_idx
+		FROM sm_anlz_data)
+	</select>
+
+	<select id="selectAzIdx" resultType="egovMap">
+		SELECT
+		MAX(az_idx) AS az_idx
+		FROM sm_anlz_data
+	</select>
+
+	<select id="selectExistsAzIdx" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_work_order WHERE wo_idx = #{woIdx}
+	</select>
+
+	<select id="selectExistsDocumentIdx" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_document WHERE do_idx = #{doIdx}
+	</select>
+
+	<select id="selectExistsProdResult" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_prod_result WHERE wo_idx = #{woIdx} AND pr_list_nm = #{prNm}
+	</select>
+
+	<insert id="registAnalyManage">
+		INSERT INTO sm_analysis_info
+		(
+		ti_idx,
+		wo_idx,
+		<if test="doIdx != ''">do_idx,</if>
+		ti_name,
+		<if test="tiSample != ''">ti_sample,</if>
+		az_idx,
+		ti_analyst,
+		ti_dte,
+		ti_state,
+		<if test="tiNote != ''">ti_note,</if>
+		ti_reg_dte,
+		ti_reg_mem
+		)
+		VALUES
+		(
+		(SELECT
+		CONCAT(CONCAT('TI',SUBSTRING(DATE_FORMAT(#{tiDte},'%Y%m%d'),3,6)),'-',
+		(SELECT LPAD((SELECT IFNULL(MAX(SUBSTRING(a.ti_idx,10,12)),0)+1
+		FROM
+		sm_analysis_info a
+		WHERE a.ti_idx
+		LIKE
+		CONCAT(CONCAT('TI',SUBSTRING(DATE_FORMAT(#{tiDte},'%Y%m%d'),3,8)),
+		'%')),3,0))) AS TI),
+		#{woIdx},
+		<if test="doIdx != ''">#{doIdx},</if>
+		#{tiName},
+		<if test="tiSample != ''">#{tiSample},</if>
+		#{azIdx},
+		#{tiAnalyst},
+		#{tiDte},
+		#{tiState},
+		<if test="tiNote != ''">#{tiNote},</if>
+		NOW(),
+		#{userId}
+		)
+	</insert>
+
+	<select id="selectAnalyManageInfo" resultType="egovMap">
+		SELECT
+		a.ti_idx,
+		a.wo_idx,
+		a.do_idx,
+		a.ti_name,
+		a.ti_sample,
+		a.az_idx,
+		a.ti_analyst,
+		a.ti_dte,
+		a.ti_state,
+		a.ti_note,
+		b.az_brix_std, b.az_brix,
+		b.az_water_std, b.az_water,
+		b.az_ph_std, b.az_ph,
+		b.az_temp_std,
+		b.az_temp,
+		b.az_viscosity_std, b.az_viscosity,
+		b.az_sg_std, b.az_sg,
+		c.wo_name
+		FROM sm_analysis_info a
+		JOIN sm_anlz_data b
+		ON a.az_idx =
+		b.az_idx
+		JOIN
+		sm_work_order c
+		ON a.wo_idx = c.wo_idx
+		WHERE ti_idx =
+		#{tiIdx}
+	</select>
+	<update id="updateProcess2">
+		UPDATE sm_process SET
+		pr_cur_seq = (pr_cur_seq - 1),
+		pr_cur_idx = (SELECT
+		${nextIdx} FROM sm_process WHERE wo_idx =
+		#{woIdx}),
+		pr_cur_nm =
+		(SELECT pr_list_nm3 FROM sm_process WHERE wo_idx
+		=
+		#{woIdx}),
+		pr_fin_cnt
+		= (pr_fin_cnt - 1)
+		WHERE wo_idx = #{woIdx}
+	</update>
+
+	<update id="modifyAnalysisData">
+		UPDATE sm_anlz_data SET
+		az_brix_std = #{azBrixStd},
+		az_brix = #{azBrix},
+		az_water_std = #{azWaterStd},
+		az_water =
+		#{azWater},
+		az_ph_std = #{azPhStd},
+		az_ph = #{azPh},
+		az_temp_std =
+		#{azTempStd},
+		az_temp = #{azTemp},
+		az_viscosity_std = #{azViscosityStd},
+		az_viscosity = #{azViscosity},
+		az_sg_std = #{azSgStd},
+		az_sg = #{azSg}
+		WHERE az_idx = #{azIdx}
+	</update>
+
+	<update id="modifyAnalyManage">
+		UPDATE sm_analysis_info SET
+		do_idx = #{doIdx},
+		ti_name
+		= #{tiName},
+		ti_sample = #{tiSample},
+		ti_analyst = #{tiAnalyst},
+		ti_dte =
+		#{tiDte},
+		ti_state = #{tiState},
+		ti_note = #{tiNote},
+		ti_edt_dte = NOW(),
+		ti_edt_mem = #{userId}
+		WHERE ti_idx = #{tiIdx}
+	</update>
+
+	<update id="updatePrReReSt">
+		UPDATE sm_prod_result a JOIN sm_work_order b ON
+		a.WO_IDX=b.WO_IDX
+		JOIN sm_analysis_info c ON b.WO_IDX=c.WO_IDX
+		SET
+		a.PR_RE_RE_ST = 'Y'
+		WHERE a.WO_IDX = #{woIdx}
+		AND a.pr_re_idx = (
+		SELECT
+		MAX(pr_re_idx)
+		FROM sm_prod_result
+		WHERE WO_IDX = #{woIdx}
+		)
+
+	</update>
+
+	<delete id="deleteAnalyManage">
+		DELETE FROM sm_analysis_info WHERE ti_idx = #{tiIdx}
+	</delete>
+	<delete id="deleteProdResult">
+		DELETE FROM sm_prod_result WHERE wo_idx = #{woIdx}
+		AND PR_LIST_NM = '품질검사'
+	</delete>
+
+	<select id="selectOrderState" resultType="egovMap">
+		SELECT b.or_state FROM sm_work_order a JOIN
+		sm_orders b ON a.OR_IDX=b.OR_IDX
+		WHERE a.wo_idx = #{woIdx}
+	</select>
+
+	<select id="selectAnalysisCnt" resultType="egovMap">
+		SELECT
+		COUNT(*) AS
+		total,
+		(SELECT COUNT(*) FROM sm_prod_result WHERE pr_list_nm = '품질검사')
+		AS
+		analysisCnt,
+		(SELECT COUNT(*) FROM sm_process WHERE pr_cur_nm='품질검사')
+		AS processingCnt
+		FROM sm_work_order
+	</select>
+
+	<update id="updateDocumnetState">
+		UPDATE sm_document SET
+		do_state = #{state}
+		WHERE do_idx
+		= #{doIdx}
+	</update>
+</mapper>
