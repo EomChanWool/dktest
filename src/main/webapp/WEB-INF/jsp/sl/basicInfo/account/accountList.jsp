@@ -50,7 +50,7 @@
 									<input type="hidden" name="aIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" 
-						    					value="${searchVO.searchKeyword}" placeholder="거래처명을 입력해 주세요" 
+						    					value="${searchVO.searchKeyword}" placeholder="권한명을 입력해 주세요" 
 						    					style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_account()" style="margin-left: 0.3rem;">

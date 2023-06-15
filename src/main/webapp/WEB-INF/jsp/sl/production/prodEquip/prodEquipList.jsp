@@ -56,8 +56,16 @@
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/production/prodEquip/prodEquipList.do" method="post">
 									<input type="hidden" name=faCd>
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+									
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
+							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>설비구분</option>
+							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>고장구분</option>
+							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>조치구분</option>
+						    		</select>
+									
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="설비명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_prodEquip()" style="margin-left: 0.3rem;">

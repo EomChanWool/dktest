@@ -56,11 +56,7 @@
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/item/itemList.do" method="post">
 									<input type="hidden" name="itemCd">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>제품</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>자재</option>
-						    		</select>
+						    		
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="품목명을 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">

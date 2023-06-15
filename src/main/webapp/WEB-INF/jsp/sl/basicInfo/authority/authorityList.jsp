@@ -56,14 +56,9 @@
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/authority/authorityList.do" method="post">
 									<input type="hidden" name="pIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		<select  class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="기준정보관리" <c:if test="${searchVO.searchCondition eq '기준정보관리'}">selected="selected"</c:if>>기준정보관리</option>
-							    		<option value="영업관리" <c:if test="${searchVO.searchCondition eq '영업관리'}">selected="selected"</c:if>>영업관리</option>
-							    		<option value="자재/출하관리" <c:if test="${searchVO.searchCondition eq '자재/출하관리'}">selected="selected"</c:if>>자재/출하관리</option>
-							    		<option value="생산관리" <c:if test="${searchVO.searchCondition eq '생산관리'}">selected="selected"</c:if>>생산관리</option>
-							    		<option value="모니터링" <c:if test="${searchVO.searchCondition eq '모니터링'}">selected="selected"</c:if>>모니터링</option>
-					    			</select>
+						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="관리항목명을 입력해 주세요"
+						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_authority()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>

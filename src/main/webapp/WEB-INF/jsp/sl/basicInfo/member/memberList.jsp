@@ -57,8 +57,11 @@
 									<input type="hidden" name="mIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="성명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
+						    									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
+									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
+									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_member()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>

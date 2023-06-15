@@ -6,6 +6,7 @@
 <%@ include file="../../header.jsp" %>
 
 <body id="page-top">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -53,34 +54,35 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/material/stockAdjust/stockAdjustList.do" method="post">
-									<input type="hidden" name="adIdx">
-									<input type="hidden" name="itemCd">
-									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									
-									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-										<option value="">선택</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>자재</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>제품</option>
-						    		</select>
-						    		
-						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="품명을 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;">
-						    	</form>
-						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_stockAdjust()" style="margin-left: 0.3rem;">
-	                                <span class="text">검색</span>
-	                            </a>
-						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_stockAdjust()">
-	                                <span class="text">전체목록</span>
-	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_stockAdjust()" style="float: right;">
-	                                <span class="text">등록</span>
-	                            </a>
+								<form name="listForm" class="listForm"
+									action="${pageContext.request.contextPath}/sl/material/mtStockState/stockStateList.do"
+									method="post">
+									<input type="hidden" name="mIdx"> <input type="hidden"
+										name="pageIndex"
+										value="<c:out value='${searchVO.pageIndex}'/>" /> <input
+										class="btn btn-secondary searchDate" id="searchStDate"
+										name="searchStDate" value="${searchVO.searchStDate}"
+										type="date"> <span class="dash"
+										style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
+									<input class="btn btn-secondary searchDate" id="searchEdDate"
+										name="searchEdDate" value="${searchVO.searchEdDate}"
+										type="date"> <input type="text"
+										class="form-control bg-light border-0 small"
+										name="searchKeyword" value="${searchVO.searchKeyword}"
+										placeholder="스펙정보를 입력해 주세요"
+										style="background-color: #eaecf4; width: 25%; float: left;">
+								</form>
+								<a href="#" class="btn btn-info btn-icon-split"
+									onclick="fn_search_stockState()" style="margin-left: 0.3rem;">
+									<span class="text">검색</span>
+								</a> <a href="#" class="btn btn-success btn-icon-split"
+									onclick="fn_searchAll_stockState()"> <span class="text">전체목록</span>
+								</a>
 							</div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                            <div id="graph" style="width: 100%; height:500px;"></div>
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
@@ -191,6 +193,31 @@
 			listForm.submit();
 		});
 	});
+	
+	//그래프
+	var chartDom = document.getElementById('graph');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	const dataMin = 0;
+	const dataMax = 0;
+	const dataInterval = 1000;
+
+	option = {
+		xAxis : {
+			type : 'category',
+			data : [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+		},
+		yAxis : {
+			type : 'value'
+		},
+		series : [ {
+			data : [ 150, 230, 224, 218, 135, 147, 260 ],
+			type : 'line'
+		} ]
+	};
+
+	option && myChart.setOption(option);
 	</script>
 </body>
 

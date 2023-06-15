@@ -56,9 +56,16 @@
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/systemLog/systemLogList.do" method="post">
 									<input type="hidden" name="pIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="아이디를 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;">
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+						    			<option value="생산량" <c:if test="${searchVO.searchCondition eq '생산량'}">selected="selected"</c:if>>2023년</option>
+						    			<option value="매출액" <c:if test="${searchVO.searchCondition eq '매출액'}">selected="selected"</c:if>>2024년</option>
+						    		</select>
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition3" id="searchCondition3">
+							    		<option value="">선택</option>
+							    		<c:forEach begin="1" end="12" varStatus="status">
+							    			<option value="${status.count}" <c:if test="${searchVO.searchCondition3 eq status.count}">selected="selected"</c:if>>${status.count}월</option>
+							    		</c:forEach>
+						    		</select>
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_systemLog()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>

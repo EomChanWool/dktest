@@ -59,7 +59,7 @@
 									<input type="hidden" name="stCnt">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="품명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="항목을 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin: 0 5px 0 0">
 					    			
 					    			<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
