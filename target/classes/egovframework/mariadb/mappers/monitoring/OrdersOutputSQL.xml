@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.monitoring.ordersOutput.service.impl.OrdersOutputMapper">
+	<select id="selectOrderOutputData" resultType="egovMap">
+		SELECT
+			a.es_idx,
+			b.or_dte,
+			DATE_FORMAT(or_dte, '%Y') AS years,
+			DATE_FORMAT(or_dte, '%m') AS MONTH,
+			SUM(
+				IFNULL(es_cnt1,0)+IFNULL(es_cnt2,0)+
+				IFNULL(es_cnt3,0)+IFNULL(es_cnt4,0)+
+				IFNULL(es_cnt5,0)+IFNULL(es_cnt6,0)+
+				IFNULL(es_cnt7,0)+IFNULL(es_cnt8,0)+
+				IFNULL(es_cnt9,0)+IFNULL(es_cnt10,0)
+			) AS orderCnt,
+			SUM(pr_re_cnt) AS prodCnt
+		from sm_estimate a
+		JOIN sm_orders b
+		ON a.es_idx = b.es_idx
+		JOIN sm_work_order c
+		ON b.or_idx = c.or_idx
+		JOIN sm_prod_result d
+		ON c.wo_idx = d.wo_idx
+		JOIN sm_delivery e
+		ON b.or_idx = e.or_idx
+		WHERE DATE_FORMAT(or_dte, '%Y') = DATE_FORMAT(NOW(), '%Y')
+		GROUP BY MONTH 
+		ORDER BY or_dte
+	</select>
+	
+	<select id="selectOrdersCnt" resultType="egovMap">
+		SELECT
+			a.es_idx,
+			b.or_dte,
+			DATE_FORMAT(or_dte, '%Y') AS years,
+			DATE_FORMAT(or_dte, '%m') AS MONTH,
+			SUM(
+				IFNULL(es_cnt1,0)+IFNULL(es_cnt2,0)+
+				IFNULL(es_cnt3,0)+IFNULL(es_cnt4,0)+
+				IFNULL(es_cnt5,0)+IFNULL(es_cnt6,0)+
+				IFNULL(es_cnt7,0)+IFNULL(es_cnt8,0)+
+				IFNULL(es_cnt9,0)+IFNULL(es_cnt10,0)
+			) AS orderCnt
+		from sm_estimate a
+		JOIN sm_orders b
+		ON a.es_idx = b.es_idx
+		WHERE DATE_FORMAT(or_dte, '%Y') = DATE_FORMAT(NOW(), '%Y')
+		GROUP BY MONTH 
+		ORDER BY or_dte
+	</select>
+	
+	<select id="selectProdCnt" resultType="egovMap">
+		SELECT
+			DATE_FORMAT(pr_re_reg_dte, '%Y-%m') AS monthly,
+			DATE_FORMAT(pr_re_reg_dte, '%Y') AS years,
+			DATE_FORMAT(pr_re_reg_dte, '%m') AS MONTH,
+			SUM(pr_re_cnt) AS prodCnt
+		FROM sm_prod_result
+		WHERE 1=1
+		AND DATE_FORMAT(NOW(), '%Y') = DATE_FORMAT(pr_re_reg_dte, '%Y')
+		GROUP BY monthly
+	</select>
+	
+	<select id="selectSales" resultType="egovMap">
+		SELECT
+			DATE_FORMAT(or_dte, '%Y-%m') AS monthly,
+			DATE_FORMAT(or_dte, '%m') AS MONTH,
+			SUM(or_money)/10000 AS money
+		FROM sm_orders
+		WHERE 1=1
+		AND DATE_FORMAT(NOW(), '%Y') = DATE_FORMAT(or_dte, '%Y')
+		GROUP BY monthly
+	</select>
+</mapper>

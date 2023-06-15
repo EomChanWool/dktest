@@ -4,7 +4,7 @@
 		<div class="gnb_date">
 			<span class="time" id="time"></span>
 		</div>
-		<div style="font-size: 20px;">(주) 정인테크</div>
+		<div style="font-size: 20px;">(주) 대경벤드</div>
 		<div class="gnb_info">
 			<span>${memberVO.mName}님  접속중입니다</span>
 			<span class="btn_logout" onclick="location.href='${pageContext.request.contextPath}/sl/logout.do'">로그아웃</span>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.sales.estimate.service.impl.EstimateMapper">
+	<select id="selectEstimateListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_estimate
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND es_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectEstimateList" resultType="egovMap">
+		SELECT
+			a.es_idx,
+			a.es_name,
+			a.es_com_manager,
+			DATE_FORMAT(a.es_fst_qut_dte, '%Y-%m-%d') as es_fst_qut_dte,
+			FORMAT(a.es_fst_qut_money, 0) AS es_fst_qut_money,
+			DATE_FORMAT(a.es_fnl_qut_dte, '%Y-%m-%d') as es_fnl_qut_dte,
+			FORMAT(a.es_fnl_qut_money, 0) AS es_fnl_qut_money,
+			b.a_name
+		FROM sm_estimate a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		<if test="searchKeyword != ''">
+			AND es_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY es_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectAccountList" resultType="egovMap">
+		SELECT
+			a_idx,
+			a_name
+		FROM sm_account
+	</select>
+	
+	<select id="selectProdList" resultType="egovMap">
+		SELECT item_cd, item_name FROM sm_item WHERE item_type = '제품'
+	</select>
+	
+	<select id="selectCompanyList" resultType="egovMap">
+		SELECT
+			c_idx,
+			c_name
+		FROM sm_company
+	</select>
+	
+	<select id="selectComapnyInfo" resultType="egovMap">
+		SELECT
+			c_name,
+			c_addr,
+			c_tel,
+			c_fax,
+			c_regit_no,
+			c_owner,
+			c_email
+		FROM sm_company
+		WHERE c_idx = #{cIdx}
+	</select>
+	
+	<select id="selectProdPerPrice" resultType="egovMap">
+		SELECT item_per_price FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+	
+	<insert id="registEstimate">
+		INSERT INTO sm_estimate
+			(
+			c_idx, a_idx, es_name, es_com_manager,
+			<if test="prod1 != ''">es_prod1, es_cnt1, es_per_price1,</if>
+			<if test="prod2 != ''">es_prod2, es_cnt2, es_per_price2,</if>
+			<if test="prod3 != ''">es_prod3, es_cnt3, es_per_price3,</if>
+			<if test="prod4 != ''">es_prod4, es_cnt4, es_per_price4,</if>
+			<if test="prod5 != ''">es_prod5, es_cnt5, es_per_price5,</if>
+			<if test="prod6 != ''">es_prod6, es_cnt6, es_per_price6,</if>
+			<if test="prod7 != ''">es_prod7, es_cnt7, es_per_price7,</if>
+			<if test="prod7 != ''">es_prod8, es_cnt8, es_per_price8,</if>
+			<if test="prod9 != ''">es_prod9, es_cnt9, es_per_price9,</if>
+			<if test="prod10 != ''">es_prod10, es_cnt10, es_per_price10,</if>
+			es_fst_qut_dte,
+			es_fst_qut_money,
+			es_fnl_qut_dte,
+			es_fnl_qut_money,
+			es_note,
+			es_reg_dte,
+			es_reg_mem
+			)
+		VALUES
+			(
+			#{cIdx}, #{aIdx}, #{esName}, #{esComManager},
+			<if test="prod1 != ''">#{prod1}, #{cnt1}, #{perPrice1},</if>
+			<if test="prod2 != ''">#{prod2}, #{cnt2}, #{perPrice2},</if>
+			<if test="prod3 != ''">#{prod3}, #{cnt3}, #{perPrice3},</if>
+			<if test="prod4 != ''">#{prod4}, #{cnt4}, #{perPrice4},</if>
+			<if test="prod5 != ''">#{prod5}, #{cnt5}, #{perPrice5},</if>
+			<if test="prod6 != ''">#{prod6}, #{cnt6}, #{perPrice6},</if>
+			<if test="prod7 != ''">#{prod7}, #{cnt7}, #{perPrice7},</if>
+			<if test="prod7 != ''">#{prod8}, #{cnt8}, #{perPrice8},</if>
+			<if test="prod9 != ''">#{prod9}, #{cnt9}, #{perPrice9},</if>
+			<if test="prod10 != ''">#{prod10}, #{cnt10}, #{perPrice10},</if>
+			NOW(), #{totalPrice},
+			NOW(), #{totalPrice},
+			#{esNote},
+			NOW(),
+			#{user}
+			)
+	</insert>
+	
+	<select id="selectEstimateInfo" resultType="egovMap">
+		SELECT * FROM sm_estimate WHERE es_idx = #{esIdx}
+	</select>
+	
+	<update id="modifyEstimate">
+		UPDATE sm_estimate SET
+			c_idx = #{cIdx},
+			a_idx = #{aIdx},
+			es_name = #{esName},
+			es_com_manager = #{esComManager},
+			es_note = #{esNote},
+			<if test="prod1 != ''">es_prod1 = #{prod1}, es_cnt1 = #{cnt1}, es_per_price1 = #{perPrice1},</if>
+			<if test="prod2 != ''">es_prod2 = #{prod2}, es_cnt2 = #{cnt2}, es_per_price2 = #{perPrice2},</if>
+			<if test="prod3 != ''">es_prod3 = #{prod3}, es_cnt3 = #{cnt3}, es_per_price3 = #{perPrice3},</if>
+			<if test="prod4 != ''">es_prod4 = #{prod4}, es_cnt4 = #{cnt4}, es_per_price4 = #{perPrice4},</if>
+			<if test="prod5 != ''">es_prod5 = #{prod5}, es_cnt5 = #{cnt5}, es_per_price5 = #{perPrice5},</if>
+			<if test="prod6 != ''">es_prod6 = #{prod6}, es_cnt6 = #{cnt6}, es_per_price6 = #{perPrice6},</if>
+			<if test="prod7 != ''">es_prod7 = #{prod7}, es_cnt7 = #{cnt7}, es_per_price7 = #{perPrice7},</if>
+			<if test="prod8 != ''">es_prod8 = #{prod8}, es_cnt8 = #{cnt8}, es_per_price8 = #{perPrice8},</if>
+			<if test="prod9 != ''">es_prod9 = #{prod9}, es_cnt9 = #{cnt9}, es_per_price9 = #{perPrice9},</if>
+			<if test="prod10 != ''">es_prod10 = #{prod10}, es_cnt10 = #{cnt10}, es_per_price10 = #{perPrice10},</if>
+			es_fnl_qut_dte = NOW(),
+			es_fnl_qut_money = #{totalPrice}
+		WHERE es_idx = #{esIdx}
+	</update>
+	
+	<delete id="deleteEstimate">
+		DELETE FROM sm_estimate WHERE es_idx = #{esIdx}
+	</delete>
+</mapper>

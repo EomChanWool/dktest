@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.systemLog.service.impl.SystemLogMapper">
+	<select id="selectSystemLogToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_system_log
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND sl_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectSystemLogList" resultType="egovMap">
+		SELECT
+			sl_id,
+			sl_name,
+			sl_belong,
+			DATE_FORMAT(sl_dte, '%Y/%m/%d %H:%i:%s') AS sl_dte,
+			sl_note
+		FROM sm_system_log
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND sl_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY sl_idx DESC
+		LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+</mapper>

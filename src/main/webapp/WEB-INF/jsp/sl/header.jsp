@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>(주) 정인테크</title>
+    <title>(주) 대경벤드</title>
 
     <!-- Custom fonts for this template -->
     <link href="/resources/conf/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
