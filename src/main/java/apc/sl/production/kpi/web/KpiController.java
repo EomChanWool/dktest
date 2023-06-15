@@ -66,6 +66,26 @@ public class KpiController {
 		return "sl/production/kpi/kpiList";
 	}
 	
+	@RequestMapping("/sl/kpi/kpiState/kpiStateList.do")
+	public String graphKpi(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
+		/*
+		 * if(searchVO.getSearchCondition().equals("")) {
+		 * searchVO.setSearchCondition("생산량");
+		 * searchVO.setSearchCondition2(getYears().get("exYear")+""); } List<?> kpiList
+		 * = kpiService.selectKpiList(searchVO); model.put("kpiList", kpiList);
+		 * model.put("date", getYears());
+		 * 
+		 * List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
+		 * model.put("kpiGraphList", kpiGraphList);
+		 * if(searchVO.getSearchCondition().equals("생산량")) { //총생산량 List<?> dataList =
+		 * kpiService.selectKpiList(searchVO); model.put("dataList", dataList); }else
+		 * if(searchVO.getSearchCondition().equals("매출액")) { //매출액 List<?> dataList =
+		 * kpiService.selectSales(searchVO); model.put("dataList", dataList); }
+		 */
+		
+		return "sl/production/kpi/kpiGraph";
+	}
+	
 	@RequestMapping("/sl/production/kpi/registKpi.do")
 	public String registKpi(ModelMap model) {
 		model.put("date", getYears());

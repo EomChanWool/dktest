@@ -117,8 +117,8 @@
     </a>
     <div id="kpi" class="collapse" aria-labelledby="headingKpi" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
-		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="workOrderList" href="${pageContext.request.contextPath}/sl/production/workOrder/workOrderList.do">KPI목표관리</a></c:if>
-		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="prodResultList" href="${pageContext.request.contextPath}/sl/production/prodResult/prodResultList.do">KPI현황</a></c:if>
+		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="kpi" href="${pageContext.request.contextPath}/sl/production/kpi/kpiList.do">KPI목표관리</a></c:if>
+		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="prodResultList" href="${pageContext.request.contextPath}/sl/kpi/kpiState/kpiStateList.do">KPI현황</a></c:if>
 		</div>
     </div>
 </li>
@@ -136,9 +136,9 @@
 		    <c:if test="${mLevel.P0025 <= memberVO.mLev}"><a class="collapse-item" id="ordersOutput" href="${pageContext.request.contextPath}/sl/monitoring/ordersOutput/ordersOutput.do">수주대실적현황</a></c:if>
 		    <c:if test="${mLevel.P0026 <= memberVO.mLev}"><a class="collapse-item" id="stockState" href="${pageContext.request.contextPath}/sl/monitoring/moStockState/moStockState.do">재고현황</a></c:if>
 		    <c:if test="${mLevel.P0027 <= memberVO.mLev}"><a class="collapse-item" id="actualOutput" href="${pageContext.request.contextPath}/sl/monitoring/actualOutput/actualOutput.do">생산실적현황</a></c:if>
-		    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
+		 <%--    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
 		    <c:if test="${mLevel.P0029 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
-		    <c:if test="${mLevel.P0030 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
+		    <c:if test="${mLevel.P0030 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if> --%>
 		</div>
     </div>
 </li>
