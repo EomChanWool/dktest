@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">수주 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">가공공정정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -77,18 +77,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>수주명</th>
-											<th>수주일자</th>
-											<th>수주 금액</th>
+                                            <th>등록일시</th>
+											<th>설비명</th>
+											<th>센서명</th>
+											<th>생산 시작시간</th>
+											<th>생산 종료시간</th>
+											<th>입력방식(자동/수동)</th>
+											<th>엑셀 다운로드</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${ordersList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_orders('${result.orIdx}')" style="cursor: pointer;">
-	                                            <td>${result.orName}</td>
-												<td>${result.orDte}</td>						
-												<td>${result.orMoney}</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_orders_go('${result.orIdx}')">
 				                                        <span class="text">수정</span>
@@ -99,7 +107,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty ordersList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty ordersList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

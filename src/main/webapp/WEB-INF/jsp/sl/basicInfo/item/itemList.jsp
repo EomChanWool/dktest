@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">품목코드 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">제품정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -81,20 +81,22 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>품목코드</th>
-											<th>분류</th>
-											<th>품목명</th>
-											<th>규격</th>
+                                            <th>제품구분</th>
+											<th>제품코드</th>
+											<th>제품약어</th>
+											<th>제품사이즈</th>
+											<th>도면등록여부</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${itemList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.itemCd}</td>
-												<td>${result.itemType}</td>
-												<td>${result.itemName}</td>						
-												<td>${result.itemStd}</td>
+	                                            <td></td>
+												<td></td>
+												<td></td>						
+												<td></td>
+												<td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_item_go('${result.itemCd}')">
 				                                        <span class="text">수정</span>
@@ -105,7 +107,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty itemList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty itemList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

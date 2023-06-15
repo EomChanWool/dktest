@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">재고조정관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">공정능력추이조회</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -84,22 +84,13 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>물품명</th>
-											<th>조정일시</th>
-											<th>재고 수량</th>
-											<th>실사 수량</th>
-											<th>변동량</th>
-											<th>수정/삭제</th>
+											<th>그래프</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${stockAdjustList}" varStatus="status">
 	                                   		<tr>
-												<td>${result.itemName}</td>
-												<td>${result.adRegDte}</td>
-												<td>${result.adCnt} ${result.adUom}</td>
-												<td>${result.adRealCnt} ${result.adUom}</td>
-												<td>${result.adAdjCnt} ${result.adUom}</td>
+												<td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_stockAdjust_go('${result.adIdx}')">
 				                                        <span class="text">수정</span>

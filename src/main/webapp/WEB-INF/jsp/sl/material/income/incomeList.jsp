@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">입고관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">SPC항목관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -82,18 +82,18 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>품명</th>
-											<th>수량</th>
-											<th>입고일</th>
+                                            <th>번호</th>
+											<th>항목구분</th>
+											<th>항목명</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${incomeList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_income('${result.stIdx}')" style="cursor: pointer;">
-	                                            <td>${result.itemName}</td>
-												<td>${result.stCnt}</td>
-												<td>${result.stDte}</td>
+	                                            <td></td>
+												<td></td>
+												<td></td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_income_go('${result.stIdx}')">
 				                                        <span class="text">수정</span>

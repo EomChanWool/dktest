@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">생산설비정보 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -76,18 +76,26 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>설비명</th>
-											<th>적용공정</th>
-											<th>상태</th>
+                                            <th>번호</th>
+                                            <th>설비구분</th>
+											<th>설비명</th>
+											<th>고장구분</th>
+											<th>고장신고일자</th>
+											<th>조치구분</th>
+											<th>조치일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${prodEquipList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.faName}</td>
-												<td>${result.faCtlVal}(${result.prListNm})</td>
-												<td>${result.faStatus}</td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prodEquip_go('${result.faCd}')">
 				                                        <span class="text">수정</span>
@@ -98,7 +106,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty prodEquipList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty prodEquipList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

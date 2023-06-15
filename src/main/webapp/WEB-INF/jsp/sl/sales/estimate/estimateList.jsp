@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">견적서 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">절단공정정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -76,18 +76,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>거래처</th>
-											<th>최초견적일</th>
-											<th>최종 견적금액</th>
+											<th>J28등록일시</th>
+											<th>생산품명</th>
+											<th>생산량</th>
+											<th>절단길이</th>
+											<th>절단각</th>
+											<th>입력방식(자동/수동)</th>
+											<th>엑셀다운로드</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${estimateList}" varStatus="status">
 	                                   		<tr>
-												<td>${result.aName}</td>						
-												<td>${result.esFstQutDte}</td>
-												<td>${result.esFnlQutMoney}</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_estimate_go('${result.esIdx}')">
 				                                        <span class="text">수정</span>
@@ -98,7 +106,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty estimateList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty estimateList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

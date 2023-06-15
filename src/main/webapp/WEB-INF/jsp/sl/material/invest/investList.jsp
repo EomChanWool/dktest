@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">투입관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">SPC스펙관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -77,16 +77,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>작업지시번호</th>
-											<th>투입일</th>
+                                            <th>제품구분</th>
+											<th>제품코드</th>
+											<th>제품명</th>
+											<th>제품약어</th>
+											<th>항목별등록건수(KS)</th>
+											<th>항목별등록건수(JIS)</th>
+											<th>항목별등록건수(ASME)</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${investList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_invest('${result.inIdx}','${result.woIdx}')" style="cursor: pointer;">
-	                                            <td>${result.woIdx}</td>
-												<td>${result.inDte}</td>
+	                                            <td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_invest_go('${result.inIdx}')">
 				                                        <span class="text">수정</span>
@@ -97,7 +107,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty investList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty investList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

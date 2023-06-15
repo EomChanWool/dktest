@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">사업장 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">사원관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -76,20 +76,28 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>사업장명</th>
-                                            <th>주소</th>
-                                            <th>전화</th>
-                                            <th>사업자등록번호</th>
+                                            <th>사원번호</th>
+                                            <th>이름</th>
+                                            <th>부서명</th>
+                                            <th>직급</th>
+                                            <th>이메일</th>
+                                            <th>전화번호</th>
+                                            <th>사용권한</th>
+                                            <th>접속허용</th>
                                             <th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${companyList}" varStatus="status">
                                     		<tr>
-                                            <td>${result.cName}</td>
-                                            <td>${result.cAddr}</td>
-                                            <td>${result.cTel}</td>
-                                            <td>${result.cRegitNo}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td style="padding: 5px 0px;">
                                             	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_company_go('${result.cIdx}')">
 			                                        <span class="text">수정</span>
@@ -100,7 +108,7 @@
                                             </td>
                                         </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty companyList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty companyList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

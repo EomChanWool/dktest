@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">시스템 로그</h1>
+                    <h1 class="h3 mb-2 text-gray-800">목표관리정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -73,24 +73,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>사용자</th>
-											<th>아이디</th>
-											<th>소속</th>
-											<th>일자</th>
-											<th>내용</th>
+                                            <th>목표연도</th>
+											<th>목표월</th>
+											<th>목표생산량</th>
+											<th>목표생산률</th>
+											<th>목표불량율</th>
+											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${systemLogList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.slName}</td>
-												<td>${result.slId}</td>
-												<td>${result.slBelong}</td>
-												<td>${result.slDte}</td>
-												<td>${result.slNote}</td>
+	                                            <td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty systemLogList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty systemLogList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

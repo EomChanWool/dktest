@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">재고 현황</h1>
+                    <h1 class="h3 mb-2 text-gray-800">관리도조회</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -74,17 +74,13 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                        	<th>품명</th>
-											<th>규격</th>
-											<th>재고(EA)</th>
+                                        	<th>그래프</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${stockStateList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.itemName}</td>
-												<td>${result.itemStd}</td>
-												<td>${result.itemCnt}</td>
+												<td></td>
 	                                        </tr>
                                     	</c:forEach>
                                     	<c:if test="${empty stockStateList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if>

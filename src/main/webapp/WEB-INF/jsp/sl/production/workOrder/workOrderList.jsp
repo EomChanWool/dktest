@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">생산계획/지시 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비마스터관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -82,20 +82,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>작업지시명</th>
-											<th>작업지시일</th>
-											<th>제품명</th>
-											<th>계획수량</th>
+											<th>번호</th>
+											<th>설비구분</th>
+											<th>설비코드</th>
+											<th>설비명</th>
+											<th>센서ID</th>
+											<th>설치장소</th>
+											<th>설비상태</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${workOrderList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_workOrder('${result.woIdx}','${result.orIdx}')" style="cursor: pointer;">
-												<td>${result.woName}</td>
-												<td>${result.woItnDte}</td>
-												<td>${result.itemName}</td>
-												<td>${result.woPdtCnt}</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_workOrder_go('${result.woIdx}')">
 				                                        <span class="text">수정</span>
@@ -106,7 +112,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty workOrderList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty workOrderList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

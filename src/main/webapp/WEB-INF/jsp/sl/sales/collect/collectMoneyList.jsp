@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">수금관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">수압시험정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -83,28 +83,22 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                        	<th>수주명</th>
-                                            <th>거래처명</th>
-                                            <th>총합계 금액</th>
-											<th>수금상태</th>
-											<th>수금일</th>
+                                        	<th>설비명</th>
+                                            <th>센서명</th>
+                                            <th>압력값</th>
+											<th>입력방식(자동/수동)</th>
+											<th>엑셀다운로드</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${collectList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_collect('${result.coIdx}')" style="cursor: pointer;">
-	                                   			<td>${result.orName}</td>
-	                                            <td>${result.aName}</td>
-	                                            <td>${result.coTotPrice}원</td>
-												<td>
-													<c:if test="${result.coState eq '0'}">미수금</c:if>
-													<c:if test="${result.coState eq '1'}">수금</c:if>
-												</td>
-												<td>
-													<c:if test="${result.coDte == null}">-</c:if>
-													<c:if test="${result.coDte != null}">${result.coDte}</c:if>
-												</td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_collect_go('${result.coIdx}')">
 				                                        <span class="text">수정</span>

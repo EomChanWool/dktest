@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">생산실적 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장신고관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -76,28 +76,22 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>작업지시번호</th>
-											<th>공정명</th>
-											<th>작업담당자</th>
-											<th>수량</th>
-											<th>작업상태</th>
+                                            <th>설비구분</th>
+											<th>설비코드</th>
+											<th>설비명</th>
+											<th>고장구분</th>
+											<th>고장신고일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${prResultList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.woIdx} (${result.woName})</td>
-												<td>${result.prListNm}</td>
-												<td>
-													<c:if test="${result.prReManager eq null}">-</c:if>
-													<c:if test="${result.prReManager ne null}">${result.prReManager}</c:if>
-												</td>
-												<td>${result.prReCnt}</td>
-												<td>
-													<c:if test="${result.prReState eq '0'}">작업중</c:if>
-													<c:if test="${result.prReState eq '1'}">작업종료</c:if>
-												</td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_ProdResult_go('${result.prReIdx}')">
 				                                        <span class="text">수정</span>

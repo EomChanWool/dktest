@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">납품관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">비전검사정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -79,23 +79,32 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>수주명</th>
-											<th>납품일자</th>
-											<th>상태</th>
+											<th>번호</th>
+											<th>문서번호</th>
+											<th>LOT번호</th>
+											<th>품목코드</th>
+											<th>품목명</th>
+											<th>호칭</th>
+											<th>두께</th>
+											<th>공정번호</th>
+											<th>검사일자</th>
+											<th>검사확인일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${deliveryList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_delivery('${result.deIdx}')" style="cursor: pointer;">
-												<td>${result.orName}</td>
-												<td>${result.deDte}</td>
-												<td>
-													<c:if test="${result.deState == '0'}">미확인</c:if>
-													<c:if test="${result.deState == '1'}">납품확인</c:if>
-													<c:if test="${result.deState == '2'}">납품불량</c:if>
-													<c:if test="${result.deState == '3'}">수금확인</c:if>
-												</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_delivery_go('${result.deIdx}')">
 				                                        <span class="text">수정</span>
@@ -106,7 +115,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty deliveryList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty deliveryList}"><tr><td colspan='11'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

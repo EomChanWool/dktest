@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">권한 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">품질정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -81,21 +81,26 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>메뉴그룹</th>
-											<th>메뉴명</th>
-											<th>권한레벨</th>
+											<th>관리항목그룹</th>
+											<th>관리항목코드</th>
+											<th>관리항목명</th>
+											<th>신뢰성구분</th>
+											<th>정성/정량구분</th>
+											<th>부적합내용</th>
+											<th>사용여부</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${authorityList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.pGroup}</td>
-												<td>${result.pName}</td>
-												<td>
-													<c:if test="${result.aLev == '1'}">작업자</c:if>
-													<c:if test="${result.aLev == '2'}">관리자</c:if>
-												</td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_authority_go('${result.pIdx}')">
 				                                        <span class="text">수정</span>
@@ -106,7 +111,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty authorityList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty authorityList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

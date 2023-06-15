@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">프로그램 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">자재이동관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -81,20 +81,20 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>메뉴그룹</th>
-											<th>메뉴명</th>
-											<th>메뉴URL</th>
-											<th>사용여부</th>
+                                            <th>지시번호</th>
+											<th>LOT번호</th>
+											<th>발주번호</th>
+											<th>공정정보</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${programList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.pGroup}</td>
-												<td>${result.pName}</td>
-												<td>${result.pUrl}</td>						
-												<td>${result.pUseFlag}</td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
+	                                            <td></td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_program_go('${result.pIdx}')">
 				                                        <span class="text">수정</span>

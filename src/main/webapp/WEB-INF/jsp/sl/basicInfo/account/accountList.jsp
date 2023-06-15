@@ -40,7 +40,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">거래처 관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">사원권한관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -69,20 +69,16 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>사업장명</th>
-                                            <th>주소</th>
-                                            <th>연락처</th>
-                                            <th>사업자등록번호</th>
+                                            <th>권한명</th>
+                                            <th>등록일</th>
                                             <th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${acList}" varStatus="status">
                                     		<tr>
-                                            <td>${result.aName}</td>
-                                            <td>${result.aAddr}</td>
-                                            <td>${result.aTel}</td>
-                                            <td>${result.aRegitNo}</td>
+                                            <td></td>
+                                            <td></td>
                                             <td style="padding: 5px 0px;">
                                             	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_account_go('${result.aIdx}')">
 			                                        <span class="text">수정</span>
