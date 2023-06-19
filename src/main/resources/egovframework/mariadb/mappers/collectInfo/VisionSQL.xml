@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.collectInfo.vision.service.impl.VisionMapper">
+	<select id="selectVisionListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_delivery
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND de_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND de_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectVisionList" resultType="egovMap">
+		SELECT
+			a.de_idx,
+			a.or_idx,
+			a.sh_idx,
+			b.or_name,
+			a.de_money,
+			a.de_dte,
+			a.de_state
+		FROM sm_delivery a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND de_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND de_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY de_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectShipmentList" resultType="egovMap">
+		SELECT 
+			a.sh_idx,
+			b.or_name
+		FROM sm_shipment a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE sh_state = #{state}
+	</select>
+
+	<select id="shipmentAjax" resultType="egovMap">
+		SELECT 
+			a.or_idx,
+			b.or_money
+		FROM sm_shipment a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE sh_idx = #{shIdx}
+	</select>
+	
+	<select id="selectShipmentIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_shipment WHERE sh_idx = #{shIdx}
+	</select>
+	
+	<select id="selectEstimateProdList" resultType="egovMap">
+		SELECT
+			es_prod1, es_cnt1,
+			es_prod2, es_cnt2,
+			es_prod3, es_cnt3,
+			es_prod4, es_cnt4,
+			es_prod5, es_cnt5,
+			es_prod6, es_cnt6,
+			es_prod7, es_cnt7,
+			es_prod8, es_cnt8,
+			es_prod9, es_cnt9,
+			es_prod10, es_cnt10
+		FROM  sm_estimate a
+		JOIN sm_orders b
+		ON a.es_idx = b.es_idx
+		WHERE b.or_idx = #{orIdx}
+	</select>
+	
+	<select id="selectExistsShipment" resultType="int">
+		SELECT COUNT(*) FROM sm_shipment WHERE or_idx = #{orIdx}
+	</select>
+	
+	<select id="selectStockOk" resultType="egovMap">
+		SELECT
+			(SELECT item_name FROM sm_item WHERE item_cd = #{itemCd}) AS itemName,
+			COUNT(*) AS count
+		FROM sm_item
+		WHERE 1=1
+		AND item_cd = #{itemCd}
+		AND item_cnt > ABS(#{itemCnt})
+	</select>
+	
+	<update id="updateItem">
+		UPDATE sm_item SET
+			item_cnt = (item_cnt + #{itemCnt})
+		WHERE item_cd = #{itemCd}
+	</update>
+	
+	<insert id="registVision">
+		INSERT INTO sm_delivery
+			(
+			sh_idx,
+			or_idx,
+			a_idx,
+			de_money,
+			de_dte,
+			<if test="deChkManager != ''">de_chk_manager,</if>
+			<if test="deChkAcManager != ''">de_chk_ac_manager,</if>
+			<if test="deChkDte != ''">de_chk_dte,</if>
+			de_state,
+			<if test="deNote != ''">de_note,</if>
+			de_reg_dte,
+			de_reg_mem
+			)
+		VALUES
+			(
+			#{shIdx},
+			(SELECT or_idx FROM sm_shipment WHERE sh_idx = #{shIdx}),
+			(SELECT a_idx FROM sm_shipment WHERE sh_idx = #{shIdx}),
+			#{deMoney},
+			#{deDte},
+			<if test="deChkManager != ''">#{deChkManager},</if>
+			<if test="deChkAcManager != ''">#{deChkAcManager},</if>
+			<if test="deChkDte != ''">#{deChkDte},</if>
+			#{deState},
+			<if test="deNote != ''">#{deNote},</if>
+			NOW(),
+			#{userId}
+			)
+	</insert>
+	
+	<update id="updateShipment">
+		UPDATE sm_shipment SET
+			sh_state = #{state}
+		WHERE sh_idx = #{shIdx}
+	</update>
+	
+	<update id="updateOrders">
+		UPDATE sm_orders SET
+			or_state = #{state}
+		WHERE or_idx = #{orIdx}
+	</update>
+	
+	<select id="selectVisionInfo" resultType="egovMap">
+		SELECT
+			a.de_idx,
+			a.sh_idx,
+			(SELECT or_name FROM sm_orders WHERE or_idx = 
+										(SELECT or_idx FROM sm_delivery WHERE de_idx = #{deIdx})) AS orName,
+			a.de_money,
+			a.de_dte,
+			a.de_chk_manager,
+			a.de_chk_ac_manager,
+			a.de_chk_dte,
+			a.de_state,
+			a.de_note,
+			b.a_name,
+			b.a_owner,
+			b.a_tel
+		FROM sm_delivery a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		WHERE de_idx = #{deIdx}
+	</select>
+	
+	<update id="modifyVision">
+		UPDATE sm_delivery SET
+			de_dte = #{deDte},
+			<if test="deChkManager != ''">de_chk_manager = #{deChkManager},</if>
+			<if test="deChkAcManager != ''">de_chk_ac_manager = #{deChkAcManager},</if>
+			<if test="deChkDte != ''">de_chk_dte = #{deChkDte},</if>
+			de_state = #{deState},
+			<if test="deNote != ''">de_note = #{deNote},</if>
+			de_edt_dte = NOW(),
+			de_edt_mem = #{userId}
+		WHERE de_idx = #{deIdx}
+	</update>
+	
+	<delete id="deleteVision">
+		DELETE FROM sm_delivery WHERE de_idx = #{deIdx}
+	</delete>
+</mapper>

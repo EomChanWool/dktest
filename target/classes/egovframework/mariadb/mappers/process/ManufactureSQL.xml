@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.process.manufacture.service.impl.ManufactureMapper">
+
+	<select id="selectManufactureListToCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_insp_change
+
+	</select>
+
+	<select id="selectManufactureList" resultType="egovMap">
+		SELECT a.ch_idx, b.IN_NAME, a.ch_state, DATE_FORMAT(a.ch_reg_dte,
+		'%Y-%m-%d') as ch_reg_dte FROM
+		sm_insp_change a
+		JOIN sm_incongruity b
+		ON
+		a.IN_IDX = b.IN_IDX
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND b.in_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+
+		ORDER BY ch_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+
+	</select>
+
+
+	<select id="selelctInList" resultType="egovMap">
+
+		SELECT in_idx, in_name,
+		(SELECT bi_name FROM sm_bad_item c WHERE c.BI_IDX = a.BI_IDX) AS
+		ch_state FROM sm_incongruity a
+		WHERE in_idx NOT IN (SELECT in_idx FROM
+		sm_insp_change b)
+
+	</select>
+
+	<select id="selectInfo" resultType="egovMap">
+		SELECT in_name, (SELECT
+		bi_name FROM sm_bad_item c WHERE c.BI_IDX =
+		a.BI_IDX) AS
+		ch_state FROM
+		sm_incongruity a WHERE a.in_idx = #{inIdx}
+	</select>
+
+	<select id="selectInIdx" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_incongruity WHERE in_idx= #{inIdx}
+	</select>
+
+	<select id="selectCheck" resultType="egovMap">
+		SELECT a.ch_idx, a.in_idx,
+		ch_state, ch_recycle, ch_reason, b.in_name
+		FROM sm_insp_change a
+		JOIN
+		sm_incongruity b
+		ON a.in_idx=b.in_idx
+		WHERE a.ch_IDX = #{chIdx}
+	</select>
+
+	<select id="selectDetailManufacture" resultType="egovMap">
+		SELECT in_name,
+		ch_state, item_name, ti_name, wo_pdt_cnt, ch_recycle, ch_reason,
+		DATE_FORMAT(ch_reg_dte, '%Y-%m-%d') AS ch_reg_dte
+		FROM sm_insp_change a
+		JOIN sm_incongruity b ON a.IN_IDX=b.IN_IDX
+		JOIN sm_analysis_info c ON
+		b.TI_IDX = c.TI_IDX
+		JOIN sm_work_order d ON c.WO_IDX = d.WO_IDX
+		JOIN
+		sm_item e ON d.ITEM_CD = e.ITEM_CD
+		WHERE a.CH_IDX = #{chIdx}
+	</select>
+
+
+<!-- 	<insert id="registManufacture"> -->
+<!-- 		insert into sm_insp_change ( ch_idx, in_idx, ch_state, ch_recycle,  -->
+<!-- 			ch_reason, ch_reg_dte, ch_reg_mem) values( (SELECT CONCAT('CH', LPAD((SELECT  -->
+<!-- 			(SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.in_idx),0) FROM sm_insp_change  -->
+<!-- 			a),'[a-z]','')))+1,10,0))), #{inIdx}, #{chState}, #{chRecycle}, #{chReason},  -->
+<!-- 			now(), #{userId}) -->
+<!-- 		insert into sm_insp_change ( -->
+<!-- 		ch_idx, -->
+<!-- 		in_idx, -->
+<!-- 		ch_state, -->
+<!-- 		ch_recycle, -->
+<!-- 		ch_reason, -->
+<!-- 		ch_reg_dte, -->
+<!-- 		ch_reg_mem, -->
+<!-- 		wo_idx) -->
+<!-- 		values( -->
+<!-- 		(SELECT -->
+<!-- 		CONCAT('CH', -->
+<!-- 		LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT -->
+<!-- 		IFNULL(MAX(a.in_idx),0) -->
+<!-- 		FROM sm_insp_change a),'[a-z]','')))+1,10,0))), -->
+<!-- 		#{inIdx}, -->
+<!-- 		#{chState}, -->
+<!-- 		#{chRecycle}, -->
+<!-- 		#{chReason}, -->
+<!-- 		now(), -->
+<!-- 		#{userId}, -->
+<!-- 		(SELECT a.WO_IDX FROM -->
+<!-- 		sm_analysis_info a JOIN -->
+<!-- 		sm_incongruity b ON a.TI_IDX = b.TI_IDX -->
+<!-- 		WHERE b.IN_IDX = #{inIdx}) -->
+<!-- 		) -->
+<!-- 	</insert> -->
+
+<!-- 	<update id="modifyManufacture"> -->
+<!-- 		UPDATE sm_insp_change SET -->
+<!-- 		ch_recycle = #{chRecycle}, -->
+<!-- 		ch_reason = #{chReason}, -->
+<!-- 		ch_edt_dte = now(), -->
+<!-- 		ch_edt_mem = #{userId} -->
+<!-- 		where ch_idx = #{chIdx} -->
+<!-- 	</update> -->
+
+<!-- 	<delete id="deleteManufacture"> -->
+
+<!-- 		Delete From sm_insp_change where ch_idx = #{chIdx} -->
+<!-- 	</delete> -->
+
+</mapper>

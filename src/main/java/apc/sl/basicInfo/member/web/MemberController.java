@@ -69,7 +69,7 @@ public class MemberController {
 		}
 		session.setAttribute("mLevel", mLev);
 		if(Integer.parseInt(member.get("mLev")+"") == 2) {
-			return "redirect:/sl/basicInfo/company/companyList.do";
+			return "redirect:/sl/basicInfo/user/userList.do";
 		}else {
 			return "redirect:/sl/material/income/incomeList.do";
 		}

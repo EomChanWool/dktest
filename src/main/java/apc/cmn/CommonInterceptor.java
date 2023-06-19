@@ -12,13 +12,13 @@ import org.springframework.web.servlet.FlashMapManager;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import apc.sl.basicInfo.authority.service.AuthorityService;
+import apc.sl.basicInfo.qualityInfo.service.QualityInfoService;
 import apc.util.ScriptAlert;
 
 
 public class CommonInterceptor extends HandlerInterceptorAdapter {
 	@Inject
-	private AuthorityService authorityService;
+	private QualityInfoService qualityInfoService;
 	
 //	@Override
 //	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
