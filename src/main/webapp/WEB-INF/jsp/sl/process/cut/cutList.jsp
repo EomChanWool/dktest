@@ -51,10 +51,10 @@
 
                     <!-- Page Heading -->
                     <div class="btn_bottom_wrap">
-                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">검사관리</h1>
+                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정관리</h1>
                     	<div style="display: inline-block; float: right; margin-top: -5px;">
                    			<button type="button" class="btn btn-success btn-icon-split" style="border:none;" onclick="analysisState()">
-                   				<span class="text">절단공정관리</span>
+                   				<span class="text">검사</span>
                    			</button>
                    		</div>
                     </div>

@@ -27,7 +27,7 @@ public class KpiController {
 	@Autowired
 	private KpiService kpiService;
 	
-	@RequestMapping("/sl/facility/kpi/kpiList.do")
+	@RequestMapping("/sl/kpi/kpi/kpiList.do")
 	public String kpiList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		searchVO.setTemp("케이블드럼");
 		if(searchVO.getSearchCondition().equals("")) {

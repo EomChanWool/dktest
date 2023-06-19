@@ -7,12 +7,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import apc.sl.basicInfo.member.service.MemberService;
+import apc.sl.basicInfo.actualResult.service.ActualResultService;
 
 
 public class LoginInterceptor extends HandlerInterceptorAdapter  {
 	@Inject
-	private MemberService memberService;
+	private ActualResultService actualResultService;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

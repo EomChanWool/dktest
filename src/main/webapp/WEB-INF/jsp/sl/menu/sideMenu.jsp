@@ -32,7 +32,7 @@
 		    <c:if test="${mLevel.P0001 <= memberVO.mLev}"><a class="collapse-item" id="userList" href="${pageContext.request.contextPath}/sl/basicInfo/user/userList.do">사원관리</a></c:if>
 		    <c:if test="${mLevel.P0002 <= memberVO.mLev}"><a class="collapse-item" id="userAuthorityList" href="${pageContext.request.contextPath}/sl/basicInfo/userAuthority/userAuthorityList.do">사원권한관리</a></c:if>
 		    <c:if test="${mLevel.P0003 <= memberVO.mLev}"><a class="collapse-item" id="prodInfoList" href="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/prodInfoList.do">제품정보관리</a></c:if>
-		    <c:if test="${mLevel.P0004 <= memberVO.mLev}"><a class="collapse-item" id="memberList" href="${pageContext.request.contextPath}/sl/basicInfo/member/memberList.do">생산실적관리</a></c:if>
+		    <c:if test="${mLevel.P0004 <= memberVO.mLev}"><a class="collapse-item" id="actualResultList" href="${pageContext.request.contextPath}/sl/basicInfo/actualResult/actualResultList.do">생산실적관리</a></c:if>
 		    <c:if test="${mLevel.P0005 <= memberVO.mLev}"><a class="collapse-item" id="materialMoveList" href="${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do">자재이동관리</a></c:if>
 		    <c:if test="${mLevel.P0006 <= memberVO.mLev}"><a class="collapse-item" id="qualityInfoList" href="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do">품질정보관리</a></c:if>
 		    <c:if test="${mLevel.P0007 <= memberVO.mLev}"><a class="collapse-item" id="goalList" href="${pageContext.request.contextPath}/sl/basicInfo/goal/goalList.do">목표관리정보관리</a></c:if>
@@ -117,7 +117,7 @@
     </a>
     <div id="kpi" class="collapse" aria-labelledby="headingKpi" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
-		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="kpiList" href="${pageContext.request.contextPath}/sl/facility/kpi/kpiList.do">KPI목표관리</a></c:if>
+		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="kpiList" href="${pageContext.request.contextPath}/sl/kpi/kpi/kpiList.do">KPI목표관리</a></c:if>
 		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="kpiStateList" href="${pageContext.request.contextPath}/sl/kpi/kpiState/kpiStateList.do">KPI현황</a></c:if>
 		</div>
     </div>
@@ -134,8 +134,8 @@
     <div id="monitoring" class="collapse" aria-labelledby="headingMonitoring" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
 		    <c:if test="${mLevel.P0025 <= memberVO.mLev}"><a class="collapse-item" id="ordersOutput" href="${pageContext.request.contextPath}/sl/monitoring/ordersOutput/ordersOutput.do">수주대실적현황</a></c:if>
-		    <c:if test="${mLevel.P0026 <= memberVO.mLev}"><a class="collapse-item" id="stockState" href="${pageContext.request.contextPath}/sl/monitoring/moStockState/moStockState.do">재고현황</a></c:if>
-		    <c:if test="${mLevel.P0027 <= memberVO.mLev}"><a class="collapse-item" id="actualOutput" href="${pageContext.request.contextPath}/sl/monitoring/actualOutput/actualOutput.do">생산실적현황</a></c:if>
+		    <c:if test="${mLevel.P0026 <= memberVO.mLev}"><a class="collapse-item" id="lineRunning" href="${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunning.do">라인가동현황</a></c:if>
+		    <c:if test="${mLevel.P0027 <= memberVO.mLev}"><a class="collapse-item" id="actualOutput" href="${pageContext.request.contextPath}/sl/monitoring/actualOutput/actualOutput.do">생산집계현황</a></c:if>
 		 <%--    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
 		    <c:if test="${mLevel.P0029 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>
 		    <c:if test="${mLevel.P0030 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if> --%>
