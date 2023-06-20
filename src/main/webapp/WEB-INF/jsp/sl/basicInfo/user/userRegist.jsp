@@ -43,7 +43,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">사업장 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">사원 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -52,54 +52,34 @@
 	                                <table class="table table-bordered" id="dataTable"  >
 	                                    <tbody>
 											<tr>
-												<th>사업장명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="cName" value="${userVO.cName}"/></td>
-												<th>주소 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="cAddr" value="${userVO.cAddr}"/></td>
+												<th>아이디 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mId" value="${userVO.mId}"/></td>
+												<th>비밀번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mPwd" value="${userVO.mPwd}"/></td>
 											</tr>
 											<tr>
-												<th>사업자등록번호</th>
-												<td><input type="text" class="form-control" name="cRegitNo" value="${userVO.cRegitNo}"/></td>
-												<th>대표자</th>
-												<td><input type="text" class="form-control" name="cOwner" value="${userVO.cOwner}"/></td>
+												<th>이름 </th>
+												<td><input type="text" class="form-control" name="mName" value="${userVO.mName}"/></td>
+												<th>부서명 </th>
+												<td><input type="text" class="form-control" name="mBelong" value="${userVO.mBelong}"/></td>
 											</tr>
 											<tr>
-												<th>전화</th>
-												<td><input type="text" class="form-control" name="cTel" value="${userVO.cTel}"/></td>
-												<th>팩스</th>
-												<td><input type="text" class="form-control" name="cFax" value="${userVO.cFax}"/></td>
+												<th>직급명 </th>
+												<td><input type="text" class="form-control" name="mRank" value="${userVO.mRank}"/></td>
+												<th>이메일 </th>
+												<td><input type="text" class="form-control" name="mEmail" value="${userVO.mEmail}"/></td>
 											</tr>
 											<tr>
-												<th>업종</th>
-												<td><input type="text" class="form-control" name="cSector" value="${userVO.cSector}"/></td>
-												<th>업태</th>
-												<td><input type="text" class="form-control" name="cBusiness" value="${userVO.cBusiness}"/></td>
+												<th>전화번호 </th>
+												<td><input type="text" class="form-control" name="mPhone" value="${userVO.mPhone}"/></td>
+												<th>서명 </th>
+												<td><input type="text" class="form-control" name="mSign" value="${userVO.mSign}"/></td>
 											</tr>
 											<tr>
-												<th>홈페이지</th>
-												<td><input type="text" class="form-control" name="cHomepage" value="${userVO.cHomepage}"/></td>
-												<th>이메일</th>
-												<td><input type="text" class="form-control" name="cEmail" value="${userVO.cEmail}"/></td>
-											</tr>
-											<tr>
-												<th>법인번호</th>
-												<td><input type="text" class="form-control" name="cCorNo" value="${userVO.cCorNo}"/></td>
-												<th>결제은행</th>
-												<td><input type="text" class="form-control" name="cPayBank" value="${userVO.cPayBank}"/></td>
-											</tr>
-											<tr>
-												<th>결제계좌</th>
-												<td><input type="text" class="form-control" name="cPayAccount" value="${userVO.cPayAccount}"/></td>
-												<th>예금주</th>
-												<td><input type="text" class="form-control" name="cAccHolder" value="${userVO.cAccHolder}"/></td>
-											</tr>
-											<tr>
-												<th>현장정보</th>
-												<td colspan="3"><input type="text" class="form-control" name="cSiteInfo"/>${userVO.cSiteInfo}</td>
-											</tr>
-											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="cNote">${userVO.cNote}</textArea></td>
+												<th>사용권한</th>
+												<td><input type="text" class="form-control" name="mLev" value="${userVO.mLev}"/></td>
+												<th>접속허용여부</th>
+												<td><input type="text" class="form-control" name="mLoginAuth" value="${userVO.mLoginAuth}"/></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -151,35 +131,35 @@
 			//이메일
 			const email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 			
-			if(registForm.cName.value == ''){
-				alert("사업장명을 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cName.value == ''){
+// 				alert("사업장명을 확인 바랍니다.");
+// 				return;
+// 			}
 			
-			if(registForm.cAddr.value == ''){
-				alert("주소를 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cAddr.value == ''){
+// 				alert("주소를 확인 바랍니다.");
+// 				return;
+// 			}
 			
-			if(registForm.cTel.value != '' && !localPhone.test(registForm.cTel.value)){
-				alert("전화번호를 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cTel.value != '' && !localPhone.test(registForm.cTel.value)){
+// 				alert("전화번호를 확인 바랍니다.");
+// 				return;
+// 			}
 			
-			if(registForm.cFax.value != '' && !localPhone.test(registForm.cFax.value)){
-				alert("팩스번호를 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cFax.value != '' && !localPhone.test(registForm.cFax.value)){
+// 				alert("팩스번호를 확인 바랍니다.");
+// 				return;
+// 			}
 			
-			if(registForm.cRegitNo.value != '' && !regitNo.test(registForm.cRegitNo.value)){
-				alert("사업자등록 번호를 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cRegitNo.value != '' && !regitNo.test(registForm.cRegitNo.value)){
+// 				alert("사업자등록 번호를 확인 바랍니다.");
+// 				return;
+// 			}
 			
-			if(registForm.cEmail.value != '' && !email.test(registForm.cEmail.value)){
-				alert("이메일을 확인 바랍니다.");
-				return;
-			}
+// 			if(registForm.cEmail.value != '' && !email.test(registForm.cEmail.value)){
+// 				alert("이메일을 확인 바랍니다.");
+// 				return;
+// 			}
 			
 			registForm.submit();
 		}

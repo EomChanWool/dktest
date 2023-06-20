@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/user/userList.do" method="post">
-									<input type="hidden" name="cIdx">
+									<input type="hidden" name="mIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
@@ -83,6 +83,7 @@
                                     <thead>
                                         <tr>
                                             <th>사원번호</th>
+                                            <th>아이디</th>
                                             <th>이름</th>
                                             <th>부서명</th>
                                             <th>직급</th>
@@ -95,20 +96,21 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${userList}" varStatus="status">
-                                    		<tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td style="padding: 5px 0px;">
-                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_user_go('${result.cIdx}')">
+                                    		<tr onclick="fn_detail_user('${result.mIdx}')" style="cursor: pointer;">
+                                            <td>${result.mIdx}</td>
+                                            <td>${result.mId }</td>
+                                            <td>${result.mName }</td>
+                                            <td>${result.mBelong }</td>
+                                            <td>${result.mRank }</td>
+                                            <td>${result.mEmail }</td>
+                                            <td>${result.mPhone }</td>
+                                            <td>${result.mLev }</td>
+                                            <td>${result.mLoginAuth }</td>
+                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
+                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_user_go('${result.mIdx}')">
 			                                        <span class="text">수정</span>
 			                                    </a>
-			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_user('${result.cIdx}')">
+			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_user('${result.mIdx}')">
 			                                        <span class="text">삭제</span>
 			                                    </a>
                                             </td>
@@ -174,15 +176,21 @@
 			listForm.submit();
 		}
 	
-		function fn_modify_user_go(cIdx){
-			listForm.cIdx.value = cIdx;
+		function fn_modify_user_go(mIdx){
+			listForm.mIdx.value = mIdx;
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/user/modifyUser.do";
 			listForm.submit();
 		}
+		
+		function fn_detail_user(mIdx){
+			listForm.mIdx.value = mIdx;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/user/detailUser.do";
+			listForm.submit();
+		}
 	
-		function fn_delete_user(cIdx){
+		function fn_delete_user(mIdx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.cIdx.value = cIdx;
+				listForm.mIdx.value = mIdx;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/user/deleteUser.do";
 				listForm.submit();
 			}

@@ -47,15 +47,14 @@ public class ActualResultController {
 				return "redirect:/sl/main.do";
 			}
 		}
-		
 		//로그인 성공시 세션값 부여
 		session.setAttribute("memberVO", member);
 		session.setAttribute("user_id", member.get("mId"));
 		session.setMaxInactiveInterval(0);
 		
 		//시스템로그 기록
-		member.put("note", "로그인");
-		actualResultService.insertSystemLog(member);
+//		member.put("note", "로그인");
+//		actualResultService.insertSystemLog(member);
 		
 		//메뉴 권한 목록
 		List<?> mLevel = actualResultService.selectMenuLevel();
@@ -68,6 +67,8 @@ public class ActualResultController {
 			mLev.put(str1[1], str2[1]);
 		}
 		session.setAttribute("mLevel", mLev);
+		System.out.println("mLEvel값 확인 : " + mLevel);
+		System.out.println("mLev 확인 : " + mLev);
 		if(Integer.parseInt(member.get("mLev")+"") == 2) {
 			return "redirect:/sl/basicInfo/user/userList.do";
 		}else {
@@ -82,9 +83,9 @@ public class ActualResultController {
 		Object obj = session.getAttribute("memberVO");
 		
 		//시스템로그 기록
-		Map<String, Object> log = (Map<String, Object>) session.getAttribute("memberVO");
-		log.put("note","로그아웃");
-		actualResultService.insertSystemLog(log);
+//		Map<String, Object> log = (Map<String, Object>) session.getAttribute("memberVO");
+//		log.put("note","로그아웃");
+//		actualResultService.insertSystemLog(log);
 		
 		if(obj != null) {
 			session.removeAttribute("memberVO");

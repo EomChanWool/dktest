@@ -60,14 +60,23 @@ public class UserController {
 	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = userService.selectUserInfo(map);
 		model.put("userVO", detail);
+		System.out.println(map);
 		return "sl/basicInfo/user/userModify";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
 	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println("확인 : " + map);
 		userService.modifyUser(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
+	}
+	
+	@RequestMapping("/sl/basicInfo/user/detailUser.do")
+	public String detailUser(@RequestParam Map<String, Object> map, ModelMap model) {
+		Map<String, Object> detail = userService.selectUserInfo(map);
+		model.put("userVO", detail);
+		return "sl/basicInfo/user/userDetail";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/deleteUser.do")

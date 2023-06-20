@@ -3,7 +3,7 @@
 <mapper namespace="apc.sl.basicInfo.user.service.impl.UserMapper">
 
 	<select id="selectUserListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_company
+		SELECT COUNT(*) FROM sm_member_test
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND c_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -11,101 +11,90 @@
 	</select>
 	
 	<select id="selectUserList" resultType="egovMap">
-		SELECT c_idx, c_name, c_addr, c_tel, c_regit_no FROM sm_company
+		SELECT
+			m_idx,
+			m_name,
+			m_id,
+			m_belong,
+			m_rank,
+			m_email,
+			m_phone,
+			m_lev,
+			m_login_auth
+		FROM sm_member_test
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND c_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND m_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY c_idx DESC
+		ORDER BY m_idx DESC
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
-<!-- 	<insert id="registUser"> -->
-<!-- 		INSERT INTO sm_company -->
-<!-- 			( -->
-<!-- 			c_name, -->
-<!-- 			c_addr, -->
-<!-- 			c_tel, -->
-<!-- 			c_fax, -->
-<!-- 			c_regit_no, -->
-<!-- 			c_sector, -->
-<!-- 			c_business, -->
-<!-- 			c_owner, -->
-<!-- 			c_homepage, -->
-<!-- 			c_email, -->
-<!-- 			c_cor_no, -->
-<!-- 			c_pay_bank, -->
-<!-- 			c_pay_account, -->
-<!-- 			c_acc_holder, -->
-<!-- 			c_site_info, -->
-<!-- 			c_note -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			#{cName}, -->
-<!-- 			#{cAddr}, -->
-<!-- 			#{cTel}, -->
-<!-- 			#{cFax}, -->
-<!-- 			#{cRegitNo}, -->
-<!-- 			#{cSector}, -->
-<!-- 			#{cBusiness}, -->
-<!-- 			#{cOwner}, -->
-<!-- 			#{cHomepage}, -->
-<!-- 			#{cEmail}, -->
-<!-- 			#{cCorNo}, -->
-<!-- 			#{cPayBank}, -->
-<!-- 			#{cPacAccount}, -->
-<!-- 			#{cAccHolder}, -->
-<!-- 			#{cSiteInfo}, -->
-<!-- 			#{cNote} -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="registUser">
+		INSERT INTO sm_member_test
+			(
+			m_id,
+			m_pwd,
+			m_name,
+			m_belong,
+			m_rank,
+			m_email,
+			m_phone,
+			m_sign,
+			m_lev,
+			m_login_auth,
+			m_reg_dte
+			)
+		VALUES
+			(
+			#{mId},
+			#{mPwd},
+			#{mName},
+			#{mBelong},
+			#{mRank},
+			#{mEmail},
+			#{mPhone},
+			#{mSign},
+			#{mLev},
+			#{mLoginAuth},
+			NOW()
+			)
+	</insert>
 	
-<!-- 	<select id="selectUserInfo" resultType="egovMap"> -->
-<!-- 		SELECT -->
-<!-- 			c_idx, -->
-<!-- 			c_name, -->
-<!-- 			c_addr, -->
-<!-- 			c_tel, -->
-<!-- 			c_fax, -->
-<!-- 			c_regit_no, -->
-<!-- 			c_sector, -->
-<!-- 			c_business, -->
-<!-- 			c_owner, -->
-<!-- 			c_homepage, -->
-<!-- 			c_email, -->
-<!-- 			c_cor_no, -->
-<!-- 			c_pay_bank, -->
-<!-- 			c_pay_account, -->
-<!-- 			c_acc_holder, -->
-<!-- 			c_site_info, -->
-<!-- 			c_note -->
-<!-- 		FROM sm_company -->
-<!-- 		WHERE c_idx = #{cIdx} -->
-<!-- 	</select> -->
+	<select id="selectUserInfo" resultType="egovMap">
+		SELECT
+			m_idx,
+			m_id,
+			m_pwd,
+			m_name,
+			m_belong,
+			m_rank,
+			m_email,
+			m_phone,
+			m_sign,
+			m_lev,
+			m_login_auth,
+			m_reg_dte
+		FROM sm_member_test
+		WHERE m_idx = #{mIdx}
+	</select>
 	
-<!-- 	<update id="modifyUser"> -->
-<!-- 		UPDATE sm_company SET -->
-<!-- 			c_name = #{cName}, -->
-<!-- 			c_addr = #{cAddr}, -->
-<!-- 			c_tel = #{cTel}, -->
-<!-- 			c_fax = #{cFax}, -->
-<!-- 			c_regit_no = #{cRegitNo}, -->
-<!-- 			c_sector = #{cSector}, -->
-<!-- 			c_business = #{cBusiness}, -->
-<!-- 			c_owner = #{cOwner}, -->
-<!-- 			c_homepage = #{cHomepage}, -->
-<!-- 			c_email = #{cEmail}, -->
-<!-- 			c_cor_no = #{cCorNo}, -->
-<!-- 			c_pay_bank = #{cPayBank}, -->
-<!-- 			c_pay_account = #{cPayAccount}, -->
-<!-- 			c_acc_holder = #{cAccHolder}, -->
-<!-- 			c_site_info = #{cSiteInfo}, -->
-<!-- 			c_note = #{cNote} -->
-<!-- 		WHERE c_idx = #{cIdx} -->
-<!-- 	</update> -->
+	<update id="modifyUser">
+		UPDATE sm_member_test SET
+			m_id = #{mId},
+			m_pwd = #{mPwd},
+			m_name = #{mName},
+			m_belong = #{mBelong},
+			m_rank = #{mRank},
+			m_email = #{mEmail},
+			m_phone = #{mPhone},
+			m_sign = #{mSign},
+			m_lev = #{mLev},
+			m_login_auth = #{mLoginAuth}
+		WHERE m_idx = #{mIdx}
+	</update>
 	
-<!-- 	<delete id="deleteUser"> -->
-<!-- 		DELETE FROM sm_company WHERE c_idx = #{cIdx} -->
-<!-- 	</delete> -->
+	<delete id="deleteUser">
+		DELETE FROM sm_member_test WHERE m_idx = #{mIdx}
+	</delete>
 </mapper>
