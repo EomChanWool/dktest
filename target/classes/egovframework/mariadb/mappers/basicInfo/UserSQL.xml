@@ -3,7 +3,7 @@
 <mapper namespace="apc.sl.basicInfo.user.service.impl.UserMapper">
 
 	<select id="selectUserListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_member_test
+		SELECT COUNT(*) FROM sm_member_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND c_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -12,89 +12,84 @@
 	
 	<select id="selectUserList" resultType="egovMap">
 		SELECT
-			m_idx,
-			m_name,
-			m_id,
-			m_belong,
-			m_rank,
-			m_email,
-			m_phone,
-			m_lev,
-			m_login_auth
-		FROM sm_member_test
+			mi_userid,
+			mi_name,
+			mi_id,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_level,
+			mi_login_cnt
+		FROM sm_member_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND m_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND mi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY m_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY mi_userid DESC
+<!-- 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} -->
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+		
 	</select>
 	
 	<insert id="registUser">
-		INSERT INTO sm_member_test
+		INSERT INTO sm_member_info
 			(
-			m_id,
-			m_pwd,
-			m_name,
-			m_belong,
-			m_rank,
-			m_email,
-			m_phone,
-			m_sign,
-			m_lev,
-			m_login_auth,
-			m_reg_dte
+			mi_userid,
+			mi_id,
+			mi_pass,
+			mi_name,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_level
 			)
 		VALUES
 			(
-			#{mId},
-			#{mPwd},
-			#{mName},
-			#{mBelong},
-			#{mRank},
-			#{mEmail},
-			#{mPhone},
-			#{mSign},
-			#{mLev},
-			#{mLoginAuth},
-			NOW()
+			#{miUserid},
+			#{miId},
+			#{miPass},
+			#{miName},
+			#{miDepartment},
+			#{miPosition},
+			#{miEmail},
+			#{miPhone},
+			#{miLevel}
 			)
 	</insert>
 	
 	<select id="selectUserInfo" resultType="egovMap">
 		SELECT
-			m_idx,
-			m_id,
-			m_pwd,
-			m_name,
-			m_belong,
-			m_rank,
-			m_email,
-			m_phone,
-			m_sign,
-			m_lev,
-			m_login_auth,
-			m_reg_dte
-		FROM sm_member_test
-		WHERE m_idx = #{mIdx}
+			mi_userid,
+			mi_id,
+			mi_pass,
+			mi_name,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_level,
+			mi_reg_date
+		FROM sm_member_info
+		WHERE mi_userid = #{miUserid}
 	</select>
 	
 	<update id="modifyUser">
-		UPDATE sm_member_test SET
-			m_id = #{mId},
-			m_pwd = #{mPwd},
-			m_name = #{mName},
-			m_belong = #{mBelong},
-			m_rank = #{mRank},
-			m_email = #{mEmail},
-			m_phone = #{mPhone},
-			m_sign = #{mSign},
-			m_lev = #{mLev},
-			m_login_auth = #{mLoginAuth}
-		WHERE m_idx = #{mIdx}
+		UPDATE sm_member_info SET
+			mi_id = #{miId},
+			mi_pass = #{miPass},
+			mi_name = #{miName},
+			mi_department = #{miDepartment},
+			mi_position = #{miPosition},
+			mi_email = #{miEmail},
+			mi_phone = #{miPhone},
+			mi_level = #{miLevel}
+		WHERE mi_userid = #{miUserid}
 	</update>
 	
 	<delete id="deleteUser">
-		DELETE FROM sm_member_test WHERE m_idx = #{mIdx}
+		DELETE FROM sm_member_info WHERE mi_userid = #{miUserid}
 	</delete>
 </mapper>

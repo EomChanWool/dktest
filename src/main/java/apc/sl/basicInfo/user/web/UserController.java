@@ -40,7 +40,6 @@ public class UserController {
 		List<?> userList = userService.selectUserList(searchVO);
 		model.put("userList", userList);
 		model.put("paginationInfo", paginationInfo);
-		
 		return "sl/basicInfo/user/userList";
 	}
 	
@@ -66,7 +65,6 @@ public class UserController {
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
 	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		System.out.println("확인 : " + map);
 		userService.modifyUser(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";

@@ -41,7 +41,7 @@ public class ActualResultController {
 			redirectAttributes.addFlashAttribute("msg", "아이디가없습니다");
 			return "redirect:/sl/main.do";
 		} else {
-			if(!sha256.encrypt(map.get("password")+"").equals(member.get("mPwd")+"")) {
+			if(!sha256.encrypt(map.get("password")+"").equals(member.get("miPass")+"")) {
 				redirectAttributes.addFlashAttribute("member",member);
 				redirectAttributes.addFlashAttribute("msg", "비밀번호불일치");
 				return "redirect:/sl/main.do";
@@ -56,25 +56,24 @@ public class ActualResultController {
 //		member.put("note", "로그인");
 //		actualResultService.insertSystemLog(member);
 		
-		//메뉴 권한 목록
-		List<?> mLevel = actualResultService.selectMenuLevel();
-		Map<String, Object> mLev = new HashMap<>();
-		for(int i=0;i<mLevel.size();i++) {
-			String[] temp = mLevel.get(i).toString().split(", ");
-			temp[1] = temp[1].replace("}", "");
-			String[] str1 = temp[0].split("=");
-			String[] str2 = temp[1].split("=");
-			mLev.put(str1[1], str2[1]);
-		}
-		session.setAttribute("mLevel", mLev);
-		System.out.println("mLEvel값 확인 : " + mLevel);
-		System.out.println("mLev 확인 : " + mLev);
-		if(Integer.parseInt(member.get("mLev")+"") == 2) {
-			return "redirect:/sl/basicInfo/user/userList.do";
-		}else {
-			return "redirect:/sl/material/income/incomeList.do";
-		}
+//		메뉴 권한 목록
+//		List<?> miLevel = actualResultService.selectMenuLevel();
+//		Map<String, Object> miLev = new HashMap<>();
+//		for(int i=0;i<miLevel.size();i++) {
+//			String[] temp = miLevel.get(i).toString().split(", ");
+//			temp[1] = temp[1].replace("}", "");
+//			String[] str1 = temp[0].split("=");
+//			String[] str2 = temp[1].split("=");
+//			miLev.put(str1[1], str2[1]);
+//		}
+//		session.setAttribute("miLevel", miLev);
+//		if(Integer.parseInt(member.get("miLevel")+"") == 2) {
+//			return "redirect:/sl/basicInfo/user/userList.do";
+//		}else {
+//			return "redirect:/sl/material/income/incomeList.do";
+//		}
 		
+		return "redirect:/sl/basicInfo/user/userList.do";
 	}
 	
 	@RequestMapping("/sl/logout.do")

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.basicInfo.actualResult.service.impl.ActualResultMapper">
 	<select id="selectActualResultListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_member
+		SELECT COUNT(*) FROM sm_member_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND m_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -11,14 +11,14 @@
 	
 	<select id="selectActualResultList" resultType="egovMap">
 		SELECT
-			m_idx,
-			m_name,
-			m_id,
-			m_belong,
-			m_rank,
-			m_lev,
-			m_emplt_dte
-		FROM sm_member
+			mi_userid,
+			mi_name,
+			mi_id,
+			mi_department,
+			mi_position,
+			mi_level,
+			mi_edt_date
+		FROM sm_member_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND m_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -28,7 +28,7 @@
 	</select>
 	
 	<select id="selectActualResult" resultType="egovMap">
-		SELECT m_name, m_id, m_pwd, m_belong, m_lev FROM sm_member WHERE m_id = #{id}
+		SELECT mi_name, mi_id, mi_pass, mi_department, mi_level FROM sm_member_info WHERE mi_id = #{id}
 	</select>
 	
 	<select id="selectId" resultType="String">
@@ -91,14 +91,14 @@
 	
 	<select id="selectMemberInfo" resultType="egovMap">
 		SELECT
-			m_idx,
-			m_name,
-			m_id,
-			m_belong,
-			m_rank,
-			m_lev,
-			m_emplt_dte,
-			m_note
+			mi_idx,
+			mi_name,
+			mi_id,
+			mi_belong,
+			mi_rank,
+			mi_lev,
+			mi_emplt_dte,
+			mi_note
 		FROM sm_member WHERE m_idx = #{mIdx}
 	</select>
 	

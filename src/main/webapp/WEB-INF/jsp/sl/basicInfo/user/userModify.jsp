@@ -49,38 +49,32 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/user/modifyUserOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="mIdx" value="${userVO.mIdx}">
+                            		<input type="hidden" name="miUserid" value="${userVO.miUserid}">
 	                                <table class="table table-bordered" id="dataTable"  >
 	                                    <tbody>
 											<tr>
 												<th>아이디 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mId" value="${userVO.mId}"/></td>
+												<td><input type="text" class="form-control" name="miId" value="${userVO.miId}"/></td>
 												<th>비밀번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mPwd" value="${userVO.mPwd}"/></td>
+												<td><input type="text" class="form-control" name="miPass" value="${userVO.miPass}"/></td>
 											</tr>
 											<tr>
 												<th>이름 </th>
-												<td><input type="text" class="form-control" name="mName" value="${userVO.mName}"/></td>
+												<td><input type="text" class="form-control" name="miName" value="${userVO.miName}"/></td>
 												<th>부서명 </th>
-												<td><input type="text" class="form-control" name="mBelong" value="${userVO.mBelong}"/></td>
+												<td><input type="text" class="form-control" name="miDepartment" value="${userVO.miDepartment}"/></td>
 											</tr>
 											<tr>
 												<th>직급명 </th>
-												<td><input type="text" class="form-control" name="mRank" value="${userVO.mRank}"/></td>
+												<td><input type="text" class="form-control" name="miPosition" value="${userVO.miPosition}"/></td>
 												<th>이메일 </th>
-												<td><input type="text" class="form-control" name="mEmail" value="${userVO.mEmail}"/></td>
+												<td><input type="text" class="form-control" name="miEmail" value="${userVO.miEmail}"/></td>
 											</tr>
 											<tr>
 												<th>전화번호 </th>
-												<td><input type="text" class="form-control" name="mPhone" value="${userVO.mPhone}"/></td>
-												<th>서명 </th>
-												<td><input type="text" class="form-control" name="mSign" value="${userVO.mSign}"/></td>
-											</tr>
-											<tr>
+												<td><input type="text" class="form-control" name="miPhone" value="${userVO.miPhone}"/></td>
 												<th>사용권한</th>
-												<td><input type="text" class="form-control" name="mLev" value="${userVO.mLev}"/></td>
-												<th>접속허용여부</th>
-												<td><input type="text" class="form-control" name="mLoginAuth" value="${userVO.mLoginAuth}"/></td>
+												<td><input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/></td>
 											</tr>
 										</tbody>
 	                                </table>

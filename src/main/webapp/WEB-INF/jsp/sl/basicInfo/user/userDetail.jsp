@@ -56,37 +56,31 @@
                                     <tbody>
 										<tr>
 											<th>아이디</th>
-											<td><span class="form-control val-area">${userVO.mId}</span></td>
+											<td><span class="form-control val-area">${userVO.miUserid}</span></td>
 											<th>비밀번호</th>
-											<td><span class="form-control val-area">${userVO.mPwd}</span></td>
+											<td><span class="form-control val-area">${userVO.miPass}</span></td>
 										</tr>
 										<tr>
 											<th>이름</th>
-											<td><span class="form-control val-area">${userVO.mName}</span></td>
+											<td><span class="form-control val-area">${userVO.miName}</span></td>
 											<th>부서명</th>
-											<td><span class="form-control val-area">${userVO.mBelong}</span></td>
+											<td><span class="form-control val-area">${userVO.miDepartment}</span></td>
 										</tr>
 										<tr>
 											<th>직급명</th>
-											<td><span class="form-control val-area">${userVO.mRank}</span></td>
+											<td><span class="form-control val-area">${userVO.miPosition}</span></td>
 											<th>이메일</th>
-											<td><span class="form-control val-area">${userVO.mEmail}</span></td>
+											<td><span class="form-control val-area">${userVO.miEmail}</span></td>
 										</tr>
 										<tr>
 											<th>전화번호</th>
-											<td><span class="form-control val-area">${userVO.mPhone}</span></td>
-											<th>서명</th>
-											<td><span class="form-control val-area">${userVO.mSign}</span></td>
-										</tr>
-										<tr>
+											<td><span class="form-control val-area">${userVO.miPhone}</span></td>
 											<th>사용권한</th>
-											<td><span class="form-control val-area">${userVO.mLev}</span></td>
-											<th>접속허용여부</th>
-											<td><span class="form-control val-area">${userVO.mLoginAuth}</span></td>
+											<td><span class="form-control val-area">${userVO.miLevel}</span></td>
 										</tr>
 										<tr>
 											<th>등록일</th>
-											<td><span class="form-control val-area">${userVO.mRegDte}</span></td>
+											<td><span class="form-control val-area">${userVO.mRegDate}</span></td>
 										</tr>
 									</tbody>
                                 </table>
