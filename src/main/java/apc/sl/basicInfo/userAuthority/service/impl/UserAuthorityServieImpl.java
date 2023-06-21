@@ -48,4 +48,14 @@ public class UserAuthorityServieImpl implements UserAuthorityService {
 	public int selectAccess(String str) {
 		return userAuthorityMapper.selectAccess(str);
 	}
+
+	@Override
+	public List<?> selectNotPro() {
+		return userAuthorityMapper.selectNotPro();
+	}
+
+	@Override
+	public List<?> selectNotInfo(Map<String, Object> map) {
+		return userAuthorityMapper.selectNotInfo(map);
+	}
 }

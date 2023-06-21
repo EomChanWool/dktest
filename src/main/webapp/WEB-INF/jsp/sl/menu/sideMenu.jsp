@@ -30,7 +30,7 @@
 	<div id="basicInfo" class="collapse" aria-labelledby="headingBasicInfo" data-parent="#accordionSidebar">
 	   	<div class="bg-white py-2 collapse-inner rounded">
 		    <c:if test="${mLevel.P0001 <= memberVO.mLev}"><a class="collapse-item" id="userList" href="${pageContext.request.contextPath}/sl/basicInfo/user/userList.do">사원관리</a></c:if>
-		    <c:if test="${mLevel.P0002 <= memberVO.mLev}"><a class="collapse-item" id="userAuthorityList" href="${pageContext.request.contextPath}/sl/basicInfo/userAuthority/userAuthorityList.do">사원권한관리</a></c:if>
+		    <c:if test="${mLevel.P0002 <= memberVO.mLev}"><a class="collapse-item" id="userAuthorityList" href="${pageContext.request.contextPath}/sl/basicInfo/Authority/userAuthorityList.do">사원권한관리</a></c:if>
 		    <c:if test="${mLevel.P0003 <= memberVO.mLev}"><a class="collapse-item" id="prodInfoList" href="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/prodInfoList.do">제품정보관리</a></c:if>
 		    <c:if test="${mLevel.P0004 <= memberVO.mLev}"><a class="collapse-item" id="actualResultList" href="${pageContext.request.contextPath}/sl/basicInfo/actualResult/actualResultList.do">생산실적관리</a></c:if>
 		    <c:if test="${mLevel.P0005 <= memberVO.mLev}"><a class="collapse-item" id="materialMoveList" href="${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do">자재이동관리</a></c:if>

@@ -46,12 +46,20 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/userAuthority/userAuthorityList.do" method="post">
-									<input type="hidden" name="aIdx">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/Authority/userAuthorityList.do" method="post">
+									<input type="hidden" name="maIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" 
-						    					value="${searchVO.searchKeyword}" placeholder="권한명을 입력해 주세요" 
-						    					style="background-color:#eaecf4; width: 25%; float: left;">
+						    		<select  class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
+							    		<option value="기준정보관리" <c:if test="${searchVO.searchCondition eq '기준정보관리'}">selected="selected"</c:if>>기준정보관리</option>
+							    		<option value="정보수집관리" <c:if test="${searchVO.searchCondition eq '정보수집관리'}">selected="selected"</c:if>>정보수집관리</option>
+							    		<option value="품질관리" <c:if test="${searchVO.searchCondition eq '품질관리'}">selected="selected"</c:if>>품질관리</option>
+							    		<option value="설비관리" <c:if test="${searchVO.searchCondition eq '설비관리'}">selected="selected"</c:if>>설비관리</option>
+							    		<option value="공정관리" <c:if test="${searchVO.searchCondition eq '공정관리'}">selected="selected"</c:if>>공정관리</option>
+							    		<option value="KPI관리" <c:if test="${searchVO.searchCondition eq 'KPI관리'}">selected="selected"</c:if>>KPI관리</option>
+							    		<option value="모니터링" <c:if test="${searchVO.searchCondition eq '모니터링'}">selected="selected"</c:if>>모니터링</option>
+							    		
+					    			</select>
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_userAuthority()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -69,27 +77,29 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>권한명</th>
-                                            <th>등록일</th>
+                                            <th>메뉴그룹</th>
+                                            <th>메뉴</th>
+                                            <th>권한레벨</th>
                                             <th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${acList}" varStatus="status">
+                                    	<c:forEach var="result" items="${atList}" varStatus="status">
                                     		<tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>${result.maGroup}</td>
+                                            <td>${result.maPname}</td>
+                                            <td>${result.miLevel}</td>
                                             <td style="padding: 5px 0px;">
-                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_userAuthority_go('${result.aIdx}')">
+                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_userAuthority_go('${result.maIdx}')">
 			                                        <span class="text">수정</span>
 			                                    </a>
-			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_userAuthority('${result.aIdx}')">
+			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_userAuthority('${result.maIdx}')">
 			                                        <span class="text">삭제</span>
 			                                    </a>
                                             </td>
                                         </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty acList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty atList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -137,26 +147,26 @@
 		}
 	
 		function fn_searchAll_userAuthority(){
-			listForm.searchKeyword.value = "";
+			listForm.searchCondition.value = "";
 			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	
 		function fn_regist_userAuthority(){
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/userAuthority/registUserAuthority.do";
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/Authority/registUserAuthority.do";
 			listForm.submit();
 		}
 	
-		function fn_modify_userAuthority_go(aIdx){
-			listForm.aIdx.value = aIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/userAuthority/modifyUserAuthority.do";
+		function fn_modify_userAuthority_go(maIdx){
+			listForm.maIdx.value = maIdx;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/Authority/modifyUserAuthority.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_userAuthority(aIdx){
+		function fn_delete_userAuthority(maIdx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.aIdx.value = aIdx;
-				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/userAuthority/deleteUserAuthority.do";
+				listForm.maIdx.value = maIdx;
+				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/Authority/deleteUserAuthority.do";
 				listForm.submit();
 			}
 		}
@@ -170,6 +180,7 @@
 			if(msg) {
 				alert(msg);
 			}
+			
 		});
 	</script>
 </body>
