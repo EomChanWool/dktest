@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.basicInfo.userAuthority.service.UserAuthorityService;
@@ -37,21 +39,37 @@ public class UserAuthorityController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> userAuthorityList = userAuthorityService.selectUserAuthorityList(searchVO);
-		model.put("acList", userAuthorityList);
+		System.out.println("확인");
+		model.put("atList", userAuthorityList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/basicInfo/userAuthority/userAuthorityList";
 	}
 	
 	@RequestMapping("/sl/basicInfo/Authority/registUserAuthority.do")
-	public String registUserAuthority() {
+	public String registUserAuthority(ModelMap model) {
+		
+		List<?> notPro = userAuthorityService.selectNotPro();
+		model.put("notPro", notPro);
+		
 		return "sl/basicInfo/userAuthority/userAuthorityRegist";
+	}
+	
+	@RequestMapping(value="/sl/basicInfo/Authority/UserAuthorityAjax.do", method=RequestMethod.POST)
+	public ModelAndView UserAuthorityAjax(@RequestParam Map<String, Object> map) {
+		ModelAndView mav = new ModelAndView();
+		List<?> list = userAuthorityService.selectNotInfo(map);
+		mav.setViewName("jsonView");
+		mav.addObject("pro_info", list);
+		System.out.println("에이젝스 : " + list);
+		return mav;
 	}
 	
 	@RequestMapping("/sl/basicInfo/Authority/registUserAuthorityOk.do")
 	public String registUserAuthorityOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println("맵확인 " + map);
 		userAuthorityService.registUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
-		return "redirect:/sl/basicInfo/userAuthority/userAuthorityList.do";
+		return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
 	}
 	
 	@RequestMapping("/sl/basicInfo/Authority/modifyUserAuthority.do")

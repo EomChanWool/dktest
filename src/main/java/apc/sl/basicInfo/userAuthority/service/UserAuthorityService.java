@@ -20,5 +20,9 @@ public interface UserAuthorityService {
 	void deleteUserAuthority(Map<String, Object> map);
 	
 	int selectAccess(String str);
+	
+	List<?> selectNotPro();
+	
+	List<?> selectNotInfo(Map<String, Object> map);
 
 }

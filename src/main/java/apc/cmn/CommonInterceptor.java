@@ -28,7 +28,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		String[] str2 = str1.split("/");
 		int accessLevel = userAuthorityService.selectAccess(str2[5]);
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");
-		System.out.println("유저맵" + userMap);
+
 		
 		if(session.getAttribute("user_id") == null) {
 			ScriptAlert.alertAndMovePage(response, "접근 권한이 없습니다","/sl/main.do");
