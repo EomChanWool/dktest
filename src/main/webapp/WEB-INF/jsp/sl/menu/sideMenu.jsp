@@ -3,7 +3,7 @@
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/sl/monitoring/dashBoard.do">
     <div class="sidebar-brand-icon rotate-n-15">
 <!--         <i class="fas fa-laugh-wink"></i> -->
-		<img alt="로고" src="/resources/conf/images/jungin.png" style="width: 55px; transform: rotate(15deg);">
+		<!-- <img alt="로고" src="/resources/conf/images/jungin.png" style="width: 55px; transform: rotate(15deg);"> -->
     </div>
     <div class="sidebar-brand-text mx-3">(주)대경벤드</div>
 </a>
