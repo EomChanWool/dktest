@@ -88,6 +88,18 @@ public class UserAuthorityController {
 	
 	@RequestMapping("/sl/basicInfo/Authority/deleteUserAuthority.do")
 	public String deleteUserAuthority(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		if(map.get("maPname").equals("사원권한관리")) {
+			redirectAttributes.addFlashAttribute("msg","사원권한관리는 삭제할수 없습니다.");
+			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
+		}
+		
+		if(map.get("maPname").equals("사원관리")) {
+			redirectAttributes.addFlashAttribute("msg","사원관리는 삭제할수 없습니다.");
+			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
+		}
+		
+		
 		userAuthorityService.deleteUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";

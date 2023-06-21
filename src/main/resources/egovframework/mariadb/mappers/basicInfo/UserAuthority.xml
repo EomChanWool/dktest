@@ -8,6 +8,7 @@
 		<if test="searchCondition != ''">
 			AND ma_group LIKE CONCAT ('%', #{searchCondition}, '%')
 		</if>
+		AND ma_state = 1
 	</select>
 
 	<select id="selectUserAuthorityList" resultType="egovMap">

@@ -48,6 +48,7 @@
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/Authority/userAuthorityList.do" method="post">
 									<input type="hidden" name="maIdx">
+									<input type="hidden" name="maPname">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<select  class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
@@ -93,7 +94,7 @@
                                             	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_userAuthority_go('${result.maIdx}')">
 			                                        <span class="text">수정</span>
 			                                    </a>
-			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_userAuthority('${result.maIdx}')">
+			                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_userAuthority('${result.maIdx}','${result.maPname}')">
 			                                        <span class="text">삭제</span>
 			                                    </a>
                                             </td>
@@ -159,13 +160,15 @@
 	
 		function fn_modify_userAuthority_go(maIdx){
 			listForm.maIdx.value = maIdx;
+			
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/Authority/modifyUserAuthority.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_userAuthority(maIdx){
+		function fn_delete_userAuthority(maIdx, maPname){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
 				listForm.maIdx.value = maIdx;
+				listForm.maPname.value = maPname;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/Authority/deleteUserAuthority.do";
 				listForm.submit();
 			}
