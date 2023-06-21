@@ -55,32 +55,39 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>아이디</th>
+											<th>사원번호</th>
 											<td><span class="form-control val-area">${userVO.miUserid}</span></td>
-											<th>비밀번호</th>
-											<td><span class="form-control val-area">${userVO.miPass}</span></td>
 										</tr>
 										<tr>
+											<th>아이디</th>
+											<td><span class="form-control val-area">${userVO.miId}</span></td>
 											<th>이름</th>
 											<td><span class="form-control val-area">${userVO.miName}</span></td>
+											
+										</tr>
+										<tr>
 											<th>부서명</th>
 											<td><span class="form-control val-area">${userVO.miDepartment}</span></td>
-										</tr>
-										<tr>
 											<th>직급명</th>
 											<td><span class="form-control val-area">${userVO.miPosition}</span></td>
+											
+										</tr>
+										<tr>
 											<th>이메일</th>
 											<td><span class="form-control val-area">${userVO.miEmail}</span></td>
-										</tr>
-										<tr>
 											<th>전화번호</th>
 											<td><span class="form-control val-area">${userVO.miPhone}</span></td>
-											<th>사용권한</th>
-											<td><span class="form-control val-area">${userVO.miLevel}</span></td>
+											
 										</tr>
 										<tr>
+											<th>사용권한</th>
+											<td><span class="form-control val-area">${userVO.miLevel}</span></td>
 											<th>등록일</th>
-											<td><span class="form-control val-area">${userVO.mRegDate}</span></td>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${userVO.miRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+												</span>
+											</td>
 										</tr>
 									</tbody>
                                 </table>

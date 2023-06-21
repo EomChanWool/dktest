@@ -1,10 +1,12 @@
 package apc.sl.basicInfo.user.web;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.python.bouncycastle.jcajce.provider.asymmetric.ec.GMSignatureSpi.sha256WithSM2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.basicInfo.user.service.UserService;
+import apc.util.SHA256;
 import apc.util.SearchVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -21,6 +24,8 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private SHA256 sha256;
 	
 	@RequestMapping("/sl/basicInfo/user/userList.do")
 	public String userList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
@@ -49,22 +54,26 @@ public class UserController {
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/registUserOk.do")
-	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws NoSuchAlgorithmException {
+		String miPass = sha256.encrypt(map.get("miPass").toString());
+		map.put("miPass",miPass);
 		userService.registUser(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUser.do")
-	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) {
+	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) throws NoSuchAlgorithmException {
 		Map<String, Object> detail = userService.selectUserInfo(map);
 		model.put("userVO", detail);
-		System.out.println(map);
 		return "sl/basicInfo/user/userModify";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
-	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws NoSuchAlgorithmException {
+		String miPass = sha256.encrypt(map.get("miPass").toString());
+		map.put("miPass", miPass);
+		System.out.println("miPass 확인 : "+miPass);
 		userService.modifyUser(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";

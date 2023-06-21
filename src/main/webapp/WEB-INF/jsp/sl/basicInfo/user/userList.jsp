@@ -82,28 +82,24 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>사원번호</th>
                                             <th>아이디</th>
                                             <th>이름</th>
                                             <th>부서명</th>
                                             <th>직급</th>
                                             <th>이메일</th>
                                             <th>전화번호</th>
-                                            <th>사용권한</th>
                                             <th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${userList}" varStatus="status">
                                     		<tr onclick="fn_detail_user('${result.miUserid }')" style="cursor: pointer;">
-                                            <td>${result.miUserid}</td>
                                             <td>${result.miId }</td>
                                             <td>${result.miName }</td>
                                             <td>${result.miDepartment }</td>
                                             <td>${result.miPosition }</td>
                                             <td>${result.miEmail }</td>
                                             <td>${result.miPhone }</td>
-                                            <td>${result.miLevel }</td>
                                             <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
                                             	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_user_go('${result.miUserid}')">
 			                                        <span class="text">수정</span>

@@ -55,8 +55,8 @@
 											<tr>
 												<th>아이디 <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="miId" value="${userVO.miId}"/></td>
-												<th>비밀번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="miPass" value="${userVO.miPass}"/></td>
+												<th>새 비밀번호 <span class="req">*</span></th>
+												<td><input type="password" class="form-control" name="miPass" value=""/></td>
 											</tr>
 											<tr>
 												<th>이름 </th>

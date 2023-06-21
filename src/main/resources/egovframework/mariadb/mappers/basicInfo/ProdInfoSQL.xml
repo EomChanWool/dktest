@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.basicInfo.prodInfo.service.impl.ProdInfoMapper">
 	<select id="selectProdInfoListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_item
+		SELECT COUNT(*) FROM sm_product_info
 		WHERE 1=1
 		<if test="searchCondition == '제품'">
 			AND item_type = '제품'
@@ -17,12 +17,14 @@
 	
 	<select id="selectProdInfoList" resultType="egovMap">
 		SELECT
-			item_cd,
-			item_type,
-			item_name,
-			item_std,
-			item_note
-		FROM sm_item
+			pi_id,
+			pi_item_type,
+			pi_item_code01,
+			pi_item_code02,
+			pi_item_code03,
+			pi_item_code04,
+			pi_item_state
+		FROM sm_product_info
 		WHERE 1=1
 		<if test="searchCondition == '제품'">
 			AND item_type = '제품'
@@ -33,8 +35,9 @@
 		<if test="searchKeyword != ''">
 				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY item_cd DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY pi_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
 <!-- 	<insert id="registProdInfo"> -->
@@ -85,7 +88,7 @@
 <!-- 		WHERE item_cd = #{itemCd} -->
 <!-- 	</update> -->
 	
-<!-- 	<delete id="deleteProdInfo"> -->
-<!-- 		DELETE FROM sm_item WHERE item_cd = #{itemCd} -->
-<!-- 	</delete> -->
+	<delete id="deleteProdInfo">
+		DELETE FROM sm_product_info WHERE pi_id= #{piId}
+	</delete>
 </mapper>

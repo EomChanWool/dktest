@@ -77,27 +77,31 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>제품구분</th>
-											<th>제품코드</th>
-											<th>제품약어</th>
-											<th>제품사이즈</th>
-											<th>도면등록여부</th>
+                                            <th>제품코드</th>
+											<th>제품구분</th>
+											<th>재질</th>
+											<th>규격</th>
+											<th>두께</th>
+											<th>길이</th>
+											<th>잔재</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${prodInfoList}" varStatus="status">
 	                                   		<tr>
-	                                            <td></td>
-												<td></td>
-												<td></td>						
-												<td></td>
-												<td></td>
+	                                            <td>${result.piId }</td>
+												<td>${result.piItemType }</td>
+												<td>${result.piItemCode01 }</td>
+												<td>${result.piItemCode02 }</td>
+												<td>${result.piItemCode03 }</td>
+												<td>${result.piItemCode04 }</td>
+												<td>${result.piItemState }</td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prodInfo_go('${result.itemCd}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prodInfo_go('${result.piId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_prodInfo('${result.itemCd}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_prodInfo('${result.piId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -164,15 +168,15 @@
 			listForm.submit();
 		}
 	
-		function fn_modify_prodInfo_go(idx){
-			listForm.prodInfoCd.value = idx;
+		function fn_modify_prodInfo_go(piId){
+			listForm.piId.value = piId;
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prodInfo/modifyProdInfo.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_prodInfo(idx){
+		function fn_delete_prodInfo(piId){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.prodInfoCd.value = idx;
+				listForm.piId.value = piId;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prodInfo/deleteProdInfo.do";
 				listForm.submit();
 			}

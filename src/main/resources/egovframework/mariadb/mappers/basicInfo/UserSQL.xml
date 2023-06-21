@@ -19,7 +19,6 @@
 			mi_position,
 			mi_email,
 			mi_phone,
-			mi_level,
 			mi_login_cnt
 		FROM sm_member_info
 		WHERE 1=1
@@ -44,7 +43,8 @@
 			mi_position,
 			mi_email,
 			mi_phone,
-			mi_level
+			mi_level,
+			mi_reg_date
 			)
 		VALUES
 			(
@@ -56,7 +56,8 @@
 			#{miPosition},
 			#{miEmail},
 			#{miPhone},
-			#{miLevel}
+			#{miLevel},
+			GETDATE()
 			)
 	</insert>
 	
