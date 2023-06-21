@@ -18,5 +18,7 @@ public interface UserAuthorityService {
 	void modifyUserAuthority(Map<String, Object> map);
 
 	void deleteUserAuthority(Map<String, Object> map);
+	
+	int selectAccess(String str);
 
 }

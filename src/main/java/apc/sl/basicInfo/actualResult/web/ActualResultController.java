@@ -49,7 +49,8 @@ public class ActualResultController {
 		}
 		//로그인 성공시 세션값 부여
 		session.setAttribute("memberVO", member);
-		session.setAttribute("user_id", member.get("mId"));
+		session.setAttribute("user_id", member.get("miId"));
+		
 		session.setMaxInactiveInterval(0);
 		
 		//시스템로그 기록
