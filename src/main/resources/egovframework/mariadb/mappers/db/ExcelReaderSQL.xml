@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.db.service.impl.ExcelReaderMapper">
+
+	<insert id="registdb" parameterType="egovMap">
+		INSERT INTO sm_product_info
+		(
+		pi_id,
+		pi_item_type,
+		pi_item_code01,
+		pi_item_code02,
+		pi_item_code03,
+		pi_item_code04,
+		pi_item_state,
+		pi_item_name,
+		pi_cnt,
+		pi_item_remain,
+		pi_price,
+		pi_item_middle,
+		pi_heat,
+		pi_reg_date) VALUES(
+		#{piId},
+		#{piItemType},
+		#{piItemCode1},
+		#{piItemCode2},
+		#{piItemCode3},
+		#{piItemCode4},
+		#{piItemState},
+		#{piItemName},
+		CONVERT(INT,CONVERT(float,#{piCnt})),
+		CONVERT(float,#{piItemRemain}),
+		CONVERT(INT,CONVERT(float,#{piPrice})),
+		CONVERT(float,#{piItemMiddle}),
+		#{piHeat},
+		GETDATE()
+		)
+
+	</insert>
+
+	<insert id="registMm">
+		INSERT INTO sm_material_move (
+		mm_id,
+		pi_id,
+		mm_in,
+		mm_in_kg,
+		mm_out,
+		mm_out_kg,
+		mm_cnt,
+		mm_cnt_kg,
+		mm_reg_id,
+		mm_reg_date
+		)
+		VALUES (
+		'MM' + SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 112), 3, 6) +
+		'-' +
+		RIGHT('0000' + CAST(CAST(
+		COALESCE((
+		SELECT
+		MAX(CAST(SUBSTRING(a.mm_id, 10, 12) AS INT)) + 1
+		FROM sm_material_move
+		a
+		WHERE a.MM_ID LIKE CONCAT(CONCAT('MM', SUBSTRING(CONVERT(VARCHAR(8),
+		GETDATE(), 112), 3, 8)), '%')
+		), '0') AS VARCHAR(4)) AS INT), 4),
+		#{piId},
+		CONVERT(INT,CONVERT(float,#{mmIn})),
+		CONVERT(FLOAT,#{mmInKg}),
+		CONVERT(INT,CONVERT(float,#{mmOut})),
+		CONVERT(FLOAT,#{mmOutKg}),
+		CONVERT(INT,CONVERT(float,#{piCnt})),
+		CONVERT(FLOAT,#{piItemRemain}),
+		#{mmRegId},
+		GETDATE()
+		)
+
+
+
+
+	</insert>
+
+	<delete id="deletedb">
+		DELETE FROM sm_product_info;
+	</delete>
+
+	<delete id="deleteMm">
+		DELETE FROM sm_material_move;
+	</delete>
+
+</mapper>
