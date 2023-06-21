@@ -21,6 +21,8 @@ public interface UserAuthorityService {
 	
 	int selectAccess(String str);
 	
+	int menuState(String str);
+	
 	List<?> selectNotPro();
 	
 	List<?> selectNotInfo(Map<String, Object> map);

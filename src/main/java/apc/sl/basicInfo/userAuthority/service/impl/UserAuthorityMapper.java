@@ -23,6 +23,8 @@ public interface UserAuthorityMapper {
 	
 	int selectAccess(String str);
 	
+	int menuState(String str);
+	
 	List<?> selectNotPro();
 	
 	List<?> selectNotInfo(Map<String, Object> map);

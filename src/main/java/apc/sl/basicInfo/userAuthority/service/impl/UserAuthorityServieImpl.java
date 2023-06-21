@@ -58,4 +58,9 @@ public class UserAuthorityServieImpl implements UserAuthorityService {
 	public List<?> selectNotInfo(Map<String, Object> map) {
 		return userAuthorityMapper.selectNotInfo(map);
 	}
+
+	@Override
+	public int menuState(String str) {
+		return userAuthorityMapper.menuState(str);
+	}
 }

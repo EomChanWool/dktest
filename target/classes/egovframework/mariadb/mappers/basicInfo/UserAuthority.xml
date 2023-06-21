@@ -54,6 +54,15 @@
 		GROUP BY
 		MI_LEVEL
 	</select>
+	
+	<select id="menuState" resultType="int">
+	SELECT ma_state
+		FROM
+		sm_member_auth
+		WHERE MA_URL LIKE CONCAT('%',#{str},'%')
+		GROUP BY
+		MA_STATE
+	</select>
 
 	<select id="selectNotInfo" resultType="egovMap">
 		SELECT ma_group, ma_pname,
