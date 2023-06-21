@@ -1,5 +1,8 @@
 package apc.sl.basicInfo.user.web;
 
+import java.io.BufferedWriter;
+
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.basicInfo.user.service.UserService;
 import apc.util.SearchVO;
+
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
@@ -50,6 +54,7 @@ public class UserController {
 	
 	@RequestMapping("/sl/basicInfo/user/registUserOk.do")
 	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
 		userService.registUser(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
@@ -59,12 +64,15 @@ public class UserController {
 	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = userService.selectUserInfo(map);
 		model.put("userVO", detail);
-		System.out.println(map);
+		
 		return "sl/basicInfo/user/userModify";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
 	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		CreateFile(map);
+		
 		userService.modifyUser(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
@@ -82,5 +90,25 @@ public class UserController {
 		userService.deleteUser(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
+	}
+	
+	private void CreateFile(Map<String, Object> map) {
+		String fileName = "C:\\test\\testout.txt";
+		
+		
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			fw.write(map.toString()+",");
+			fw.flush();
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		
 	}
 }

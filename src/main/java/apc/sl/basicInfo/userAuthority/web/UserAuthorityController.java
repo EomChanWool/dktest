@@ -22,7 +22,7 @@ public class UserAuthorityController {
 	@Autowired
 	private UserAuthorityService userAuthorityService;
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/userAuthorityList.do")
+	@RequestMapping("/sl/basicInfo/Authority/userAuthorityList.do")
 	public String userAuthorityList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		int totCnt = userAuthorityService.selectUserAuthorityListToCnt(searchVO);
 		/** pageing setting */
@@ -42,36 +42,36 @@ public class UserAuthorityController {
 		return "sl/basicInfo/userAuthority/userAuthorityList";
 	}
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/registUserAuthority.do")
+	@RequestMapping("/sl/basicInfo/Authority/registUserAuthority.do")
 	public String registUserAuthority() {
 		return "sl/basicInfo/userAuthority/userAuthorityRegist";
 	}
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/registUserAuthorityOk.do")
+	@RequestMapping("/sl/basicInfo/Authority/registUserAuthorityOk.do")
 	public String registUserAuthorityOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		userAuthorityService.registUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/userAuthority/userAuthorityList.do";
 	}
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/modifyUserAuthority.do")
+	@RequestMapping("/sl/basicInfo/Authority/modifyUserAuthority.do")
 	public String modifyUserAuthority(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = userAuthorityService.selectUserAuthorityInfo(map);
 		model.put("userAuthorityVO", detail);
 		return "sl/basicInfo/userAuthority/userAuthorityModify";
 	}
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/modifyUserAuthorityOk.do")
+	@RequestMapping("/sl/basicInfo/Authority/modifyUserAuthorityOk.do")
 	public String modifyUserAuthorityOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		userAuthorityService.modifyUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
-		return "redirect:/sl/basicInfo/userAuthority/userAuthorityList.do";
+		return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
 	}
 	
-	@RequestMapping("/sl/basicInfo/userAuthority/deleteUserAuthority.do")
+	@RequestMapping("/sl/basicInfo/Authority/deleteUserAuthority.do")
 	public String deleteUserAuthority(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		userAuthorityService.deleteUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
-		return "redirect:/sl/basicInfo/userAuthority/userAuthorityList.do";
+		return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
 	}
 }
