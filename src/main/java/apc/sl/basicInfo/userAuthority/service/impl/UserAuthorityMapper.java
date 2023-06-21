@@ -20,5 +20,7 @@ public interface UserAuthorityMapper {
 	void modifyUserAuthority(Map<String, Object> map);
 
 	void deleteUserAuthority(Map<String, Object> map);
+	
+	int selectAccess(String str);
 
 }

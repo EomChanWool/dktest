@@ -54,7 +54,7 @@
 	                                    <tbody>
 											<tr>
 												<th>아이디 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="miId" value="${userVO.miId}"/></td>
+												<td><input type="text" class="form-control" value="${userVO.miId}" disabled="disabled"/></td>
 												<th>새 비밀번호 <span class="req">*</span></th>
 												<td><input type="password" class="form-control" name="miPass" value=""/></td>
 											</tr>
@@ -74,7 +74,15 @@
 												<th>전화번호 </th>
 												<td><input type="text" class="form-control" name="miPhone" value="${userVO.miPhone}"/></td>
 												<th>사용권한</th>
-												<td><input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/></td>
+												<td>
+													<select class="form-control" name="miLevel">
+														<option value="1" <c:if test="${userVO.miLevel eq '1'}">selected="selected"</c:if>>1</option>
+														<option value="2" <c:if test="${userVO.miLevel eq '2'}">selected="selected"</c:if>>2</option>
+														<option value="3" <c:if test="${userVO.miLevel eq '3'}">selected="selected"</c:if>>3</option>
+														<option value="4" <c:if test="${userVO.miLevel eq '4'}">selected="selected"</c:if>>4</option>
+													</select>
+<%-- 												<input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/> --%>
+												</td>
 											</tr>
 										</tbody>
 	                                </table>

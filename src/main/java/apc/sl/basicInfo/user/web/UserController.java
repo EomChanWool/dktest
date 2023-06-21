@@ -1,12 +1,13 @@
 package apc.sl.basicInfo.user.web;
 
-import java.security.NoSuchAlgorithmException;
+import java.io.BufferedWriter;
+
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.python.bouncycastle.jcajce.provider.asymmetric.ec.GMSignatureSpi.sha256WithSM2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import apc.sl.basicInfo.user.service.UserService;
 import apc.util.SHA256;
 import apc.util.SearchVO;
+
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
@@ -54,7 +56,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/registUserOk.do")
-	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws NoSuchAlgorithmException {
+	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws Exception {
 		String miPass = sha256.encrypt(map.get("miPass").toString());
 		map.put("miPass",miPass);
 		userService.registUser(map);
@@ -63,17 +65,19 @@ public class UserController {
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUser.do")
-	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) throws NoSuchAlgorithmException {
+	public String modifyUser(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = userService.selectUserInfo(map);
 		model.put("userVO", detail);
 		return "sl/basicInfo/user/userModify";
 	}
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
-	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws NoSuchAlgorithmException {
+	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws Exception {
 		String miPass = sha256.encrypt(map.get("miPass").toString());
-		map.put("miPass", miPass);
-		System.out.println("miPass 확인 : "+miPass);
+		map.put("miPass",miPass);
+		
+		CreateFile(map);
+		
 		userService.modifyUser(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
@@ -91,5 +95,25 @@ public class UserController {
 		userService.deleteUser(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
+	}
+	
+	private void CreateFile(Map<String, Object> map) {
+		String fileName = "C:\\test\\testout.txt";
+		
+		
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			fw.write(map.toString()+",");
+			fw.flush();
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		
 	}
 }

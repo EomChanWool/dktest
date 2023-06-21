@@ -3,8 +3,8 @@
 <footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-<!--             <span>Copyright &copy; (주)정인테크</span> -->
-			<span><img src="/resources/conf/images/jungin2.png" style="width: 200px;"></span>
+            <span>Copyright &copy; (주)대경밴드</span>
+			<!-- <span><img src="/resources/conf/images/jungin2.png" style="width: 200px;"></span> -->
         </div>
     </div>
 </footer>

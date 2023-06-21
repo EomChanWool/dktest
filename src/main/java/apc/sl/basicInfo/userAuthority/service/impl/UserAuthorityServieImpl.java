@@ -43,4 +43,9 @@ public class UserAuthorityServieImpl implements UserAuthorityService {
 	public void deleteUserAuthority(Map<String, Object> map) {
 		userAuthorityMapper.deleteUserAuthority(map);
 	}
+
+	@Override
+	public int selectAccess(String str) {
+		return userAuthorityMapper.selectAccess(str);
+	}
 }

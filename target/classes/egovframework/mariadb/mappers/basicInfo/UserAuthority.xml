@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="apc.sl.basicInfo.userAuthority.service.impl.UserAuthorityMapper">
+<mapper
+	namespace="apc.sl.basicInfo.userAuthority.service.impl.UserAuthorityMapper">
 	<select id="selectUserAuthorityListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_account 
+		SELECT COUNT(*) FROM sm_account
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND a_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 	</select>
-	
+
 	<select id="selectUserAuthorityList" resultType="egovMap">
 		SELECT
-			a_idx,
-			a_name,
-			a_addr,
-			a_manager,
-			a_tel,
-			a_regit_no,
-			DATE_FORMAT(a_reg_dte, '%Y/%m/%d %H:%i') AS a_reg_dte
+		a_idx,
+		a_name,
+		a_addr,
+		a_manager,
+		a_tel,
+		a_regit_no,
+		DATE_FORMAT(a_reg_dte, '%Y/%m/%d %H:%i') AS a_reg_dte
 		FROM sm_account
 		WHERE 1=1
 		<if test="searchKeyword != ''">
@@ -26,75 +27,83 @@
 		ORDER BY a_idx DESC
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
-	
-<!-- 	<insert id="registUserAuthority"> -->
-<!-- 		INSERT INTO sm_account -->
-<!-- 			( -->
-<!-- 			a_idx, -->
-<!-- 			a_name, -->
-<!-- 			a_owner, -->
-<!-- 			a_addr, -->
-<!-- 			a_sector, -->
-<!-- 			a_business, -->
-<!-- 			a_manager, -->
-<!-- 			a_tel, -->
-<!-- 			a_fax, -->
-<!-- 			a_regit_no, -->
-<!-- 			a_homepage, -->
-<!-- 			a_email, -->
-<!-- 			a_pay_bank, -->
-<!-- 			a_pay_account, -->
-<!-- 			a_acc_holder, -->
-<!-- 			a_note, -->
-<!-- 			a_reg_dte -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT CONCAT('A', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.a_idx),0) FROM sm_account a),'[a-z]','')))+1,4,0))), -->
-<!-- 			#{aName}, -->
-<!-- 			#{aOwner}, -->
-<!-- 			#{aAddr}, -->
-<!-- 			#{aSector}, -->
-<!-- 			#{aBusiness}, -->
-<!-- 			#{aManager}, -->
-<!-- 			#{aTel}, -->
-<!-- 			#{aFax}, -->
-<!-- 			#{aRegitNo}, -->
-<!-- 			#{aHomepage}, -->
-<!-- 			#{aEmail}, -->
-<!-- 			#{aPayBank}, -->
-<!-- 			#{aPayAccount}, -->
-<!-- 			#{aAccHolder}, -->
-<!-- 			#{aNote}, -->
-<!-- 			NOW() -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
+
+	<!-- <insert id="registUserAuthority"> -->
+	<!-- INSERT INTO sm_account -->
+	<!-- ( -->
+	<!-- a_idx, -->
+	<!-- a_name, -->
+	<!-- a_owner, -->
+	<!-- a_addr, -->
+	<!-- a_sector, -->
+	<!-- a_business, -->
+	<!-- a_manager, -->
+	<!-- a_tel, -->
+	<!-- a_fax, -->
+	<!-- a_regit_no, -->
+	<!-- a_homepage, -->
+	<!-- a_email, -->
+	<!-- a_pay_bank, -->
+	<!-- a_pay_account, -->
+	<!-- a_acc_holder, -->
+	<!-- a_note, -->
+	<!-- a_reg_dte -->
+	<!-- ) -->
+	<!-- VALUES -->
+	<!-- ( -->
+	<!-- (SELECT CONCAT('A', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.a_idx),0) 
+		FROM sm_account a),'[a-z]','')))+1,4,0))), -->
+	<!-- #{aName}, -->
+	<!-- #{aOwner}, -->
+	<!-- #{aAddr}, -->
+	<!-- #{aSector}, -->
+	<!-- #{aBusiness}, -->
+	<!-- #{aManager}, -->
+	<!-- #{aTel}, -->
+	<!-- #{aFax}, -->
+	<!-- #{aRegitNo}, -->
+	<!-- #{aHomepage}, -->
+	<!-- #{aEmail}, -->
+	<!-- #{aPayBank}, -->
+	<!-- #{aPayAccount}, -->
+	<!-- #{aAccHolder}, -->
+	<!-- #{aNote}, -->
+	<!-- NOW() -->
+	<!-- ) -->
+	<!-- </insert> -->
+
 	<select id="selectUserAuthorityInfo" resultType="egovMap">
-		SELECT * from sm_account WHERE a_idx = #{aIdx}
+		SELECT * from
+		sm_account WHERE a_idx = #{aIdx}
 	</select>
-	
-<!-- 	<update id="modifyUserAuthority"> -->
-<!-- 		UPDATE sm_account SET -->
-<!-- 			a_name = #{aName}, -->
-<!-- 			a_owner = #{aOwner}, -->
-<!-- 			a_addr = #{aAddr}, -->
-<!-- 			a_sector = #{aSector}, -->
-<!-- 			a_business = #{aBusiness}, -->
-<!-- 			a_manager = #{aManager}, -->
-<!-- 			a_tel = #{aTel}, -->
-<!-- 			a_fax = #{aFax}, -->
-<!-- 			a_regit_no = #{aRegitNo}, -->
-<!-- 			a_homepage = #{aHomepage}, -->
-<!-- 			a_email = #{aEmail}, -->
-<!-- 			a_pay_bank = #{aPayBank}, -->
-<!-- 			a_pay_account = #{aPayAccount}, -->
-<!-- 			a_acc_holder = #{aAccHolder}, -->
-<!-- 			a_note = #{aNote} -->
-<!-- 		WHERE a_idx = #{aIdx} -->
-<!-- 	</update> -->
-	
-<!-- 	<delete id="deleteUserAuthority"> -->
-<!-- 		DELETE FROM sm_account WHERE a_idx = #{aIdx} -->
-<!-- 	</delete> -->
+
+	<select id="selectAccess" resultType="int">
+		SELECT MI_LEVEL
+		FROM sm_member_auth
+		WHERE MA_URL LIKE CONCAT('%',#{str},'%')
+		GROUP BY MI_LEVEL
+	</select>
+	<!-- <update id="modifyUserAuthority"> -->
+	<!-- UPDATE sm_account SET -->
+	<!-- a_name = #{aName}, -->
+	<!-- a_owner = #{aOwner}, -->
+	<!-- a_addr = #{aAddr}, -->
+	<!-- a_sector = #{aSector}, -->
+	<!-- a_business = #{aBusiness}, -->
+	<!-- a_manager = #{aManager}, -->
+	<!-- a_tel = #{aTel}, -->
+	<!-- a_fax = #{aFax}, -->
+	<!-- a_regit_no = #{aRegitNo}, -->
+	<!-- a_homepage = #{aHomepage}, -->
+	<!-- a_email = #{aEmail}, -->
+	<!-- a_pay_bank = #{aPayBank}, -->
+	<!-- a_pay_account = #{aPayAccount}, -->
+	<!-- a_acc_holder = #{aAccHolder}, -->
+	<!-- a_note = #{aNote} -->
+	<!-- WHERE a_idx = #{aIdx} -->
+	<!-- </update> -->
+
+	<!-- <delete id="deleteUserAuthority"> -->
+	<!-- DELETE FROM sm_account WHERE a_idx = #{aIdx} -->
+	<!-- </delete> -->
 </mapper>

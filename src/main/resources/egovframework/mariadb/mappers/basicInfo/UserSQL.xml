@@ -35,7 +35,6 @@
 	<insert id="registUser">
 		INSERT INTO sm_member_info
 			(
-			mi_userid,
 			mi_id,
 			mi_pass,
 			mi_name,
@@ -48,7 +47,6 @@
 			)
 		VALUES
 			(
-			#{miUserid},
 			#{miId},
 			#{miPass},
 			#{miName},
@@ -79,7 +77,6 @@
 	
 	<update id="modifyUser">
 		UPDATE sm_member_info SET
-			mi_id = #{miId},
 			mi_pass = #{miPass},
 			mi_name = #{miName},
 			mi_department = #{miDepartment},

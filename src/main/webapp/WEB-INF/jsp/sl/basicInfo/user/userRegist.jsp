@@ -52,10 +52,6 @@
 	                                <table class="table table-bordered" id="dataTable"  >
 	                                    <tbody>
 											<tr>
-												<th>사원번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="miUserid" value="${userVO.miUserid}"/></td>
-											</tr>
-											<tr>
 												<th>아이디 <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="miId" value="${userVO.miId}"/></td>
 												<th>비밀번호 <span class="req">*</span></th>
@@ -77,7 +73,16 @@
 												<th>전화번호 </th>
 												<td><input type="text" class="form-control" name="miPhone" value="${userVO.miPhone}"/></td>
 												<th>사용권한</th>
-												<td><input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/></td>
+												<td>
+													<select class="form-control" name="miLevel">
+														<option>선택</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+													</select>
+<%-- 												<input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/> --%>
+												</td>
 											</tr>
 										</tbody>
 	                                </table>
