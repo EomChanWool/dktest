@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/prodInfoList.do" method="post">
-									<input type="hidden" name="prodInfoCd">
+									<input type="hidden" name="piId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -89,7 +89,7 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${prodInfoList}" varStatus="status">
-	                                   		<tr>
+	                                   		<tr onclick="fn_detail_prodInfo('${result.piId }')" style="cursor: pointer;">
 	                                            <td>${result.piId }</td>
 												<td>${result.piItemType }</td>
 												<td>${result.piItemCode01 }</td>
@@ -97,7 +97,7 @@
 												<td>${result.piItemCode03 }</td>
 												<td>${result.piItemCode04 }</td>
 												<td>${result.piItemState }</td>
-	                                            <td style="padding: 5px 0px;">
+	                                            <td style="padding: 5px 0px;" onclick="event.cancelBubble=true">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prodInfo_go('${result.piId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
@@ -160,6 +160,12 @@
 			listForm.searchCondition.value = "";
 			listForm.searchKeyword.value = "";
 			listForm.pageIndex.value = 1;
+			listForm.submit();
+		}
+		
+		function fn_detail_prodInfo(piId){
+			listForm.piId.value = piId;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prodInfo/detailProdInfo.do";
 			listForm.submit();
 		}
 	

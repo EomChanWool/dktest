@@ -58,9 +58,9 @@
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>사원번호</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>사원명</option>
-							    		<option value="자재2" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>연락처</option>
+							    		<option value="아이디" <c:if test="${searchVO.searchCondition eq '아이디'}">selected="selected"</c:if>>아이디</option>
+							    		<option value="이름" <c:if test="${searchVO.searchCondition eq '이름'}">selected="selected"</c:if>>이름</option>
+							    		<option value="전화번호" <c:if test="${searchVO.searchCondition eq '전화번호'}">selected="selected"</c:if>>전화번호</option>
 						    		</select>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" 
 						    					value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요" 

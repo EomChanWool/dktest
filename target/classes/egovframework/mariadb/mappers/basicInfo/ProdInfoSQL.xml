@@ -40,53 +40,79 @@
 		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
-<!-- 	<insert id="registProdInfo"> -->
-<!-- 		INSERT INTO sm_item -->
-<!-- 			( -->
-<!-- 			item_cd, -->
-<!-- 			item_type, -->
-<!-- 			item_name, -->
-<!-- 			item_std, -->
-<!-- 			item_per_price, -->
-<!-- 			item_note -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			<if test="itemType == '제품'"> -->
-<!-- 				(SELECT CONCAT('PD', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.item_cd),0) FROM sm_item a WHERE item_type LIKE CONCAT('%제품%')),'[a-z]','')))+1,2,0))), -->
-<!-- 			</if> -->
-<!-- 			<if test="itemType == '자재' or itemType == '부자재'"> -->
-<!-- 				(SELECT CONCAT('MT', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.item_cd),0) FROM sm_item a WHERE item_type LIKE CONCAT('%자재%')),'[a-z]','')))+1,2,0))), -->
-<!-- 			</if> -->
-<!-- 			#{itemType}, -->
-<!-- 			#{itemName}, -->
-<!-- 			#{itemStd}, -->
-<!-- 			#{itemPerPrice}, -->
-<!-- 			#{itemNote} -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="registProdInfo">
+		INSERT INTO sm_product_info
+			(
+			pi_id,
+			pi_item_type,
+			pi_item_code01,
+			pi_item_code02,
+			pi_item_code03,
+			pi_item_code04,
+			pi_item_state,
+			pi_item_name,
+			pi_cnt,
+			pi_item_remain,
+			pi_price,
+			pi_item_middle,
+			pi_heat,
+			pi_reg_date
+			)
+		VALUES
+			(
+			#{piId}
+			#{piItemType},
+			#{piItemCode01},
+			#{piItemCode02},
+			#{piItemCode03},
+			#{piItemCode04},
+			#{piItemState},
+			#{piItemName},
+			#{piCnt},
+			#{piItemRemain},
+			#{piPrice},
+			#{piItemMiddle},
+			#{piHeat},
+			GETDATE()
+			)
+	</insert>
 	
 	<select id="selectProdInfoInfo" resultType="egovMap">
 		SELECT
-			item_cd,
-			item_type,
-			item_name,
-			item_std,
-			item_per_price,
-			item_note
-		FROM sm_item
-		WHERE item_cd = #{itemCd}
+			pi_id,
+			pi_item_type,
+			pi_item_code01,
+			pi_item_code02,
+			pi_item_code03,
+			pi_item_code04,
+			pi_item_state,
+			pi_item_name,
+			pi_cnt,
+			pi_item_remain,
+			pi_price,
+			pi_item_middle,
+			pi_heat,
+			pi_reg_date
+		FROM sm_product_info
+		WHERE pi_id = #{piId}
 	</select>
 	
-<!-- 	<update id="modifyProdInfo"> -->
-<!-- 		UPDATE sm_item SET -->
-<!-- 			item_type = #{itemType}, -->
-<!-- 			item_name = #{itemName}, -->
-<!-- 			item_std = #{itemStd}, -->
-<!-- 			item_per_price = #{itemPerPrice}, -->
-<!-- 			item_note = #{itemNote} -->
-<!-- 		WHERE item_cd = #{itemCd} -->
-<!-- 	</update> -->
+	<update id="modifyProdInfo">
+		UPDATE sm_product_info SET
+			pi_item_type = #{piItemType},
+			pi_item_code01 = #{piItemCode01},
+			pi_item_code02 = #{piItemCode02},
+			pi_item_code03 = #{piItemCode03},
+			pi_item_code04 = #{piItemCode04},
+			pi_item_state = #{piItemState},
+			pi_item_name = #{piItemName},
+			pi_cnt = #{piCnt},
+			pi_item_remain = #{piItemRemain},
+			pi_price = #{piPrice},
+			pi_item_middle = #{piItemMiddle},
+			pi_heat = #{piHeat}
+		WHERE pi_id = #{piId}
+	</update>
 	
 	<delete id="deleteProdInfo">
 		DELETE FROM sm_product_info WHERE pi_id= #{piId}

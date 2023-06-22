@@ -42,10 +42,18 @@ public class ProdInfoController {
 		return "sl/basicInfo/prodInfo/prodInfoList";
 	}
 	
+	@RequestMapping("/sl/basicInfo/prodInfo/detailProdInfo.do")
+	public String detailProdInfo(@RequestParam Map<String, Object> map, ModelMap model) {
+		Map<String, Object> detail = prodInfoService.selectProdInfoInfo(map);
+		model.put("prodInfoVO", detail);
+		return "sl/basicInfo/prodInfo/prodInfoDetail";
+	}
+
 	@RequestMapping("/sl/basicInfo/prodInfo/registProdInfo.do")
 	public String registProdInfo() {
 		return "sl/basicInfo/prodInfo/prodInfoRegist";
 	}
+	
 	
 	@RequestMapping("/sl/basicInfo/prodInfo/registProdInfoOk.do")
 	public String registProdInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
@@ -63,6 +71,7 @@ public class ProdInfoController {
 	
 	@RequestMapping("/sl/basicInfo/prodInfo/modifyProdInfoOk.do")
 	public String modifyProdInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println("map 확인 : " + map);
 		prodInfoService.modifyProdInfo(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";
