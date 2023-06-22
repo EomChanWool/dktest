@@ -38,6 +38,24 @@
 	</insert>
 
 	<insert id="registMm">
+		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 
+			mm_out_kg, mm_cnt, mm_cnt_kg, mm_reg_id, mm_reg_date ) VALUES ( 'MM' + SUBSTRING(CONVERT(VARCHAR(8), 
+			GETDATE(), 112), 3, 6) + '-' + RIGHT('0000' + CAST(CAST( COALESCE(( SELECT 
+			MAX(CAST(SUBSTRING(a.mm_id, 10, 12) AS INT)) + 1 FROM sm_material_move a 
+			WHERE a.MM_ID LIKE CONCAT(CONCAT('MM', SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 
+			112), 3, 8)), '%') ), '0') AS VARCHAR(4)) AS INT), 4), #{piId}, CONVERT(INT,CONVERT(float,#{mmIn})), 
+			CONVERT(FLOAT,#{mmInKg}), CONVERT(INT,CONVERT(float,#{mmOut})), CONVERT(FLOAT,#{mmOutKg}), 
+			CONVERT(INT,CONVERT(float,#{piCnt})), CONVERT(FLOAT,#{piItemRemain}), #{mmRegId}, 
+			GETDATE() ) -->
+		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112)
+		DECLARE @MaxID INT
+
+		SELECT @MaxID = MAX(CAST(SUBSTRING(a.mm_id, 10, 4) AS INT)) + 1
+		FROM sm_material_move a
+		WHERE a.mm_id LIKE 'MM' + SUBSTRING(@CurrentDate, 3, 8) + '%'
+
+		SET @MaxID = ISNULL(@MaxID, 1)
+
 		INSERT INTO sm_material_move (
 		mm_id,
 		pi_id,
@@ -51,24 +69,15 @@
 		mm_reg_date
 		)
 		VALUES (
-		'MM' + SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 112), 3, 6) +
-		'-' +
-		RIGHT('0000' + CAST(CAST(
-		COALESCE((
-		SELECT
-		MAX(CAST(SUBSTRING(a.mm_id, 10, 12) AS INT)) + 1
-		FROM sm_material_move
-		a
-		WHERE a.MM_ID LIKE CONCAT(CONCAT('MM', SUBSTRING(CONVERT(VARCHAR(8),
-		GETDATE(), 112), 3, 8)), '%')
-		), '0') AS VARCHAR(4)) AS INT), 4),
+		'MM' + SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID AS
+		VARCHAR(4)), 4),
 		#{piId},
-		CONVERT(INT,CONVERT(float,#{mmIn})),
-		CONVERT(FLOAT,#{mmInKg}),
-		CONVERT(INT,CONVERT(float,#{mmOut})),
-		CONVERT(FLOAT,#{mmOutKg}),
-		CONVERT(INT,CONVERT(float,#{piCnt})),
-		CONVERT(FLOAT,#{piItemRemain}),
+		CONVERT(INT, CONVERT(FLOAT, #{mmIn})),
+		CONVERT(FLOAT, #{mmInKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{mmOut})),
+		CONVERT(FLOAT, #{mmOutKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{piCnt})),
+		CONVERT(FLOAT, #{piItemRemain}),
 		#{mmRegId},
 		GETDATE()
 		)

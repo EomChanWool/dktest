@@ -28,6 +28,7 @@ public class MaterialMoveController {
 	@RequestMapping("/sl/basicInfo/materialMove/materialMoveList.do")
 	public String materialMoveList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		int totCnt = materialMoveService.selectMaterialMoveListToCnt(searchVO);
+		
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -40,6 +41,7 @@ public class MaterialMoveController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> materialMoveList = materialMoveService.selectMaterialMoveList(searchVO);
+		
 		model.put("materialMoveList", materialMoveList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/basicInfo/materialMove/materialMoveList";
@@ -52,6 +54,7 @@ public class MaterialMoveController {
 	
 	@RequestMapping("/sl/basicInfo/materialMove/registMaterialMoveOk.do")
 	public String registMaterialMoveOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		map.put("userId", session.getAttribute("user_id"));
 		materialMoveService.registMaterialMove(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/materialMove/materialMoveList.do";
@@ -59,6 +62,7 @@ public class MaterialMoveController {
 	
 	@RequestMapping("/sl/basicInfo/materialMove/modifyMaterialMove.do")
 	public String modifyMaterialMove(@RequestParam Map<String, Object> map, ModelMap model) {
+		
 		Map<String, Object> detail = materialMoveService.selectMaterialMoveInfo(map);
 		model.put("materialMoveVO", detail);
 		return "sl/basicInfo/materialMove/materialMoveModify";
@@ -66,9 +70,17 @@ public class MaterialMoveController {
 	
 	@RequestMapping("/sl/basicInfo/materialMove/modifyMaterialMoveOk.do")
 	public String modifyMaterialMoveOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		map.put("userId", session.getAttribute("user_id"));
 		materialMoveService.modifyMaterialMove(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/basicInfo/materialMove/materialMoveList.do";
+	}
+	
+	@RequestMapping("/sl/basicInfo/user/detailMaterialMove.do")
+	public String detailUser(@RequestParam Map<String, Object> map, ModelMap model) {
+		Map<String, Object> detail = materialMoveService.selectMaterialMoveInfo(map);
+		model.put("materialMoveVO", detail);
+		return "sl/basicInfo/materialMove/materialMoveDetail";
 	}
 	
 	@RequestMapping("/sl/basicInfo/materialMove/deleteMaterialMove.do")

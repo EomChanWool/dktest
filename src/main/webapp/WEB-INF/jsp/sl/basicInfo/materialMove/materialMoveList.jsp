@@ -54,18 +54,14 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do" method="post">
-									<input type="hidden" name="pIdx">
-									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		<select  class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="기준정보관리" <c:if test="${searchVO.searchCondition eq '기준정보관리'}">selected="selected"</c:if>>LOT번호</option>
-							    		<option value="영업관리" <c:if test="${searchVO.searchCondition eq '영업관리'}">selected="selected"</c:if>>발주번호</option>
-							    		
-							    		
-					    			</select>
+									<input type="hidden" name="mmId">
+									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>						    		
 					    			<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="바코드 번호를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
+						    									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
+									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
+									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_materialMove()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -83,25 +79,23 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>지시번호</th>
-											<th>LOT번호</th>
-											<th>발주번호</th>
-											<th>공정정보</th>
+                                            <th>바코드번호</th>
+											<th>입고수량</th>
+											<th>출고수량</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${materialMoveList}" varStatus="status">
-	                                   		<tr>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_materialMove_go('${result.pIdx}')">
+	                                   		<tr onclick="fn_detail_materialMove('${result.mmId}')" style="cursor: pointer;">
+	                                            <td>${result.piId}</td>
+	                                            <td>${result.mmIn}</td>
+	                                            <td>${result.mmOut }</td>
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_materialMove_go('${result.mmId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_materialMove('${result.pIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_materialMove('${result.mmId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -167,15 +161,21 @@
 		listForm.submit();
 	}
 	
-	function fn_modify_materialMove_go(idx){
-		listForm.pIdx.value = idx;
+	function fn_modify_materialMove_go(mmId){
+		listForm.mmId.value = mmId;
 		listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/materialMove/modifyMaterialMove.do";
+		listForm.submit();
+	}
+	
+	function fn_detail_materialMove(mmId){
+		listForm.mmId.value = mmId;
+		listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/user/detailMaterialMove.do";
 		listForm.submit();
 	}
 	
 	function fn_delete_materialMove(idx){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.pIdx.value = idx;
+			listForm.mmId.value = idx;
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/materialMove/deleteMaterialMove.do";
 			listForm.submit();
 		}

@@ -43,7 +43,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">프로그램 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">자재이동 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -52,29 +52,26 @@
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>메뉴그룹 <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="pGroup" id="pGroup">
-														<option value="기준정보관리">기준정보관리</option>
-														<option value="영업관리">영업관리</option>
-														<option value="자재/출하관리">자재/출하관리</option>
-														<option value="생산관리">생산관리</option>
-														<option value="모니터링">모니터링</option>
-													</select>
-												</td>
-												<th>메뉴명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="pName" id="pName"/></td>
+												<th>바코드 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="piId" id="piId"/></td>
+												<th>입고수량 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mmIn" id="mmIn"/></td>
 											</tr>
 											<tr>
-												<th>메뉴 URL <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="pUrl" id="pUrl"/></td>
-												<th>사용여부</th>
-												<td>
-													<select class="form-control" name="pUseFlag" id="pUseFlag">
-														<option value="Y">사용</option>
-														<option value="N">미사용</option>
-													</select>
-												</td>
+												<th>입고중량(kg) <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mmInKg" id="mmInKg"/></td>
+												<th>출고수량</th>
+												<td><input type="text" class="form-control" name="mmOut" id="mmOut"/></td>
+											</tr>
+											<tr>
+												<th>출고중량(kg) <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mmOutKg" id="mmOutKg"/></td>
+												<th>재고수량</th>
+												<td><input type="text" class="form-control" name="mmCnt" id="mmCnt"/></td>
+											</tr>
+											<tr>
+												<th>재고중량(kg) <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mmCntKg" id="mmCntKg"/></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -118,15 +115,11 @@
 
 	<script>
 	function fn_regist_materialMove(){
-		if($('#pName').val() == ''){
-			alert("메뉴명을 확인 바랍니다.");
+		if($('#piId').val() == ''){
+			alert("바코드를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#pUrl').val() == ''){
-			alert("메뉴URL을 확인 바랍니다.");
-			return;
-		}
 		
 		registForm.submit();
 	}
