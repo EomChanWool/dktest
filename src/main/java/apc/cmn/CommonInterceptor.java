@@ -40,7 +40,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		}else {
 			if(accessLevel > Integer.parseInt(userMap.get("miLevel")+"")) {
-				ScriptAlert.alertAndMovePage(response, "접근 권한이 없습니다","/sl/main.do");
+				ScriptAlert.alertAndMovePage(response, "접근 권한이 없습니다","/sl/basicInfo/prodInfo/prodInfoList.do");
 				return false;
 			}
 		}

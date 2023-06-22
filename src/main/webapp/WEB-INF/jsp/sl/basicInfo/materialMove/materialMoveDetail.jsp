@@ -43,43 +43,65 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">자재이동 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">자재이동 상세보기</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
-                            <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/basicInfo/materialMove/modifyMaterialMoveOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="mmId" value="${materialMoveVO.mmId}">
-	                                <table class="table table-bordered" id="dataTable">
-	                                    <tbody>
-											<tr>
-												<th>바코드 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="piId" id="piId" value="${materialMoveVO.piId}"/></td>
-												<th>입고수량 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmIn" id="mmIn" value="${materialMoveVO.mmIn}"/></td>
-											</tr>
-											<tr>
-												<th>입고중량(kg) <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmInKg" id="mmInKg" value="${materialMoveVO.mmInKg}"/></td>
-												<th>출고수량 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmOut" id="mmOut" value="${materialMoveVO.mmOut}"/></td>
-											</tr>
-											<tr>
-												<th>출고중량(kg) <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmOutKg" id="mmOutKg" value="${materialMoveVO.mmOutKg}"/></td>
-												<th>재고수량 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmCnt" id="mmCnt" value="${materialMoveVO.mmCnt}"/></td>
-											</tr>
-											<tr>
-												<th>재고중량(kg) <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mmCntKg" id="mmCntKg" value="${materialMoveVO.mmCntKg}"/></td>
-											</tr>
-										</tbody>
-	                                </table>
-                                </form>
+                          <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable">
+                                    <tbody>
+										<tr>
+											<th>이동정보ID</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmId}</span></td>
+											<th>바코드</th>
+											<td><span class="form-control val-area">${materialMoveVO.piId}</span></td>
+										</tr>
+										<tr>
+											<th>입고수량</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmIn}</span></td>
+											<th>입고중량(kg)</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmInKg}kg</span></td>
+											
+										</tr>
+										<tr>
+											<th>출고수량</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmOut}</span></td>
+											<th>출고중량(kg)</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmOutKg}kg</span></td>
+											
+										</tr>
+										<tr>
+											<th>재고수량</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmCnt}</span></td>
+											<th>재고중량(kg)</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmCntKg}kg</span></td>
+											
+										</tr>
+										<tr>
+											<th>등록ID</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmRegId}</span></td>
+											<th>등록일</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${materialMoveVO.mmRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+												</span>
+											</td>
+										</tr>
+										<c:if test="${not empty materialMoveVO.mmEdtId}">
+										<tr>
+											<th>수정ID</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmEdtId}</span></td>
+											<th>수정일</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${materialMoveVO.mmEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+												</span>
+											</td>
+										</tr></c:if>
+									</tbody>
+                                </table>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_materialMove()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do'">목록</span>
 								</div>
                             </div>
                         </div>
