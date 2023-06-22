@@ -18,5 +18,7 @@ public interface MaterialMoveService {
 	void modifyMaterialMove(Map<String, Object> map);
 
 	void deleteMaterialMove(Map<String, Object> map);
+	
+	int selectExistCode(Map<String, Object> map);
 
 }

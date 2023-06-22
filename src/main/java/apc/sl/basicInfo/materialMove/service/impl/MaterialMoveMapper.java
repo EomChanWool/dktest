@@ -21,4 +21,5 @@ public interface MaterialMoveMapper {
 
 	void deleteMaterialMove(Map<String, Object> map);
 
+	int selectExistCode(Map<String, Object> map);
 }

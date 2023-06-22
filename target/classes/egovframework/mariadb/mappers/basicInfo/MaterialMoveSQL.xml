@@ -79,20 +79,32 @@
 	
 	<select id="selectMaterialMoveInfo" resultType="egovMap">
 		SELECT
-			mm_id,
-			pi_id,
-			mm_in,
-			mm_in_kg,
-			mm_out,
-			mm_out_kg,
-			mm_cnt,
-			mm_cnt_kg,
-			mm_reg_id,
-			mm_reg_date,
-			mm_edt_id,
-			mm_edt_date
-		FROM sm_material_move
+			a.mm_id,
+			a.pi_id,
+			a.mm_in,
+			a.mm_in_kg,
+			a.mm_out,
+			a.mm_out_kg,
+			a.mm_cnt,
+			a.mm_cnt_kg,
+			a.mm_reg_id,
+			a.mm_reg_date,
+			a.mm_edt_id,
+			a.mm_edt_date,
+			b.pi_item_type,
+			b.pi_item_code01,
+			b.pi_item_code02,
+			b.pi_item_code03,
+			b.pi_item_code04,
+			b.pi_item_state
+		FROM sm_material_move a
+		JOIN sm_product_info b
+		ON a.PI_ID = b.PI_ID
 		WHERE mm_id = #{mmId}
+	</select>
+	
+	<select id="selectExistCode" resultType="int">
+	SELECT COUNT(*) FROM sm_product_info where pi_id = #{piId}
 	</select>
 	
 	<update id="modifyMaterialMove">
