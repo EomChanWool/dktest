@@ -4,15 +4,18 @@
 	<select id="selectProdInfoListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_product_info
 		WHERE 1=1
-		<if test="searchCondition == '제품'">
-			AND item_type = '제품'
+		<if test="searchCondition == '제품코드'">
+			AND pi_id LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchCondition == '자재'">
-			AND item_type = '자재'
+		<if test="searchCondition == '제품구분'">
+			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchKeyword != ''">
-				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		<if test="searchCondition == '상태조건'">
+			AND pi_item_state LIKE '%' + #{searchKeyword} + '%'
 		</if>
+<!-- 		<if test="searchKeyword != ''"> -->
+<!-- 				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%') -->
+<!-- 		</if> -->
 	</select>
 	
 	<select id="selectProdInfoList" resultType="egovMap">
@@ -26,14 +29,14 @@
 			pi_item_state
 		FROM sm_product_info
 		WHERE 1=1
-		<if test="searchCondition == '제품'">
-			AND item_type = '제품'
+		<if test="searchCondition == '제품코드'">
+			AND pi_id LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchCondition == '자재'">
-			AND item_type = '자재'
+		<if test="searchCondition == '제품구분'">
+			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchKeyword != ''">
-				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		<if test="searchCondition == '상태조건'">
+			AND pi_item_state LIKE '%' + #{searchKeyword} + '%'
 		</if>
 		ORDER BY pi_id DESC
 		OFFSET #{firstIndex} ROWS
@@ -56,11 +59,12 @@
 			pi_price,
 			pi_item_middle,
 			pi_heat,
+			mi_reg_id,
 			pi_reg_date
 			)
 		VALUES
 			(
-			#{piId}
+			#{piId},
 			#{piItemType},
 			#{piItemCode01},
 			#{piItemCode02},
@@ -73,6 +77,7 @@
 			#{piPrice},
 			#{piItemMiddle},
 			#{piHeat},
+			#{userId},
 			GETDATE()
 			)
 	</insert>
@@ -92,6 +97,7 @@
 			pi_price,
 			pi_item_middle,
 			pi_heat,
+			mi_reg_id,
 			pi_reg_date
 		FROM sm_product_info
 		WHERE pi_id = #{piId}

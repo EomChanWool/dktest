@@ -55,7 +55,7 @@
 											<tr>
 												<th>제품코드</th>
 												<td><input type="text" class="form-control" name="piId" value="${prodInfoVO.piId}" disabled="disabled"/></td>
-												<th>제품구분</th>
+												<th>구분</th>
 												<td><input type="text" class="form-control" name="piItemType" value="${prodInfoVO.piItemType}"/></td>
 											</tr>
 											<tr>
@@ -96,9 +96,6 @@
 											<tr>
 												<th>히트</th>
 												<td><input type="text" class="form-control" name="piHeat" value="${prodInfoVO.piHeat}"/></td>
-												<th>등록일</th>
-												<td><input type="text" class="form-control" name="piRegDate"
-												 value="<fmt:formatDate value="${prodInfoVO.piRegDate}" pattern="yyyy-MM-dd HH:mm"/>" disabled="disabled"/></td>
 											</tr>
 										</tbody>
 	                                </table>

@@ -57,7 +57,7 @@
 										<tr>
 											<th>제품코드</th>
 											<td><span class="form-control val-area">${prodInfoVO.piId}</span></td>
-											<th>제품구분</th>
+											<th>구분</th>
 											<td><span class="form-control val-area">${prodInfoVO.piItemType}</span></td>
 										</tr>
 										<tr>
@@ -98,6 +98,10 @@
 										<tr>
 											<th>히트</th>
 											<td><span class="form-control val-area">${prodInfoVO.piHeat}</span></td>
+											<th>등록ID</th>
+											<td><span class="form-control val-area">${prodInfoVO.miRegId}</span></td>
+										</tr>
+										<tr>
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">

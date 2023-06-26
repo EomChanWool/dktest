@@ -36,6 +36,7 @@ public class ProdInfoController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		
 		List<?> prodInfoList = prodInfoService.selectProdInfoList(searchVO);
 		model.put("prodInfoList", prodInfoList);
 		model.put("paginationInfo", paginationInfo);
@@ -57,6 +58,8 @@ public class ProdInfoController {
 	
 	@RequestMapping("/sl/basicInfo/prodInfo/registProdInfoOk.do")
 	public String registProdInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		map.put("userId", session.getAttribute("user_id"));
+		System.out.println("map 확인 : " + map);
 		prodInfoService.registProdInfo(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";

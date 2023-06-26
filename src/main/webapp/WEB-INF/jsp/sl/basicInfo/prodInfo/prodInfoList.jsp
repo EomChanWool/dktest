@@ -56,10 +56,15 @@
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/prodInfoList.do" method="post">
 									<input type="hidden" name="piId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-						    		
-						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="품목명을 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;">
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
+							    		<option value="제품코드" <c:if test="${searchVO.searchCondition eq '제품코드'}">selected="selected"</c:if>>제품코드</option>
+							    		<option value="제품구분" <c:if test="${searchVO.searchCondition eq '제품구분'}">selected="selected"</c:if>>제품구분</option>
+							    		<option value="상태조건" <c:if test="${searchVO.searchCondition eq '상태조건'}">selected="selected"</c:if>>상태조건</option>
+						    		</select>
+						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" 
+						    					value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요" 
+						    					style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_prodInfo()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -83,7 +88,7 @@
 											<th>규격</th>
 											<th>두께</th>
 											<th>길이</th>
-											<th>잔재</th>
+											<th>상태조건</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -107,7 +112,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty prodInfoList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty prodInfoList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -198,9 +203,9 @@
 				alert(msg);
 			}
 			
-			$('#searchCondition').change(function(){
-				listForm.submit();
-			});
+// 			$('#searchCondition').change(function(){
+// 				listForm.submit();
+// 			});
 		});
 	</script>
 </body>

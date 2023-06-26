@@ -54,7 +54,7 @@
 											<tr>
 												<th>제품코드</th>
 												<td><input type="text" class="form-control" name="piId" value="${prodInfoVO.piId}"/></td>
-												<th>제품구분</th>
+												<th>구분</th>
 												<td><input type="text" class="form-control" name="piItemType" value="${prodInfoVO.piItemType}"/></td>
 											</tr>
 											<tr>
