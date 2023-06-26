@@ -151,7 +151,9 @@
 	}
 	
 	function fn_searchAll_materialMove(){
-		listForm.searchCondition.value = "";
+		listForm.searchKeyword.value = "";
+		listForm.searchStDate.value = "";
+		listForm.searchEdDate.value = "";
 		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
@@ -191,7 +193,11 @@
 			alert(msg);
 		}
 		
-		$('#searchCondition').change(function(){
+		$('#searchStDate').change(function(){
+			listForm.submit();
+		});
+		
+		$('#searchEdDate').change(function(){
 			listForm.submit();
 		});
 	});

@@ -54,6 +54,15 @@ public class MaterialMoveController {
 	
 	@RequestMapping("/sl/basicInfo/materialMove/registMaterialMoveOk.do")
 	public String registMaterialMoveOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		int exist = materialMoveService.selectExistCode(map);
+		
+		if(exist == 0) {
+			redirectAttributes.addFlashAttribute("msg","존재하지 않는 바코드 입니다.");
+			redirectAttributes.addFlashAttribute("materialMoveVO", map);
+			return "redirect:/sl/basicInfo/materialMove/registMaterialMove.do";
+		}
+		
 		map.put("userId", session.getAttribute("user_id"));
 		materialMoveService.registMaterialMove(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");

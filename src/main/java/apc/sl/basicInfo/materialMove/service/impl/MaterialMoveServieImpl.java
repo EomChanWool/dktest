@@ -44,4 +44,9 @@ public class MaterialMoveServieImpl implements MaterialMoveService {
 		materialMoveMapper.deleteMaterialMove(map);
 	}
 
+	@Override
+	public int selectExistCode(Map<String, Object> map) {
+		return materialMoveMapper.selectExistCode(map);
+	}
+
 }
