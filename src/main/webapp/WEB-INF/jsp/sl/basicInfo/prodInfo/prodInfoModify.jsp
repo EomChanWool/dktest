@@ -43,35 +43,59 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">품목코드 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">제품정보 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/modifyProdInfoOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="prodInfoCd" value="${prodInfoVO.prodInfoCd}">
+                            		<input type="hidden" name="piId" value="${prodInfoVO.piId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>분류 <span class="req">*</span></th>
-												<td>
-													<select name="prodInfoType" id="prodInfoType" class="form-control">
-														<option value="제품" <c:if test="${prodInfoVO.prodInfoType eq '제품'}">selected="selected"</c:if>>제품</option>
-														<option value="자재" <c:if test="${prodInfoVO.prodInfoType eq '자재'}">selected="selected"</c:if>>자재</option>
-													</select>
-												</td>
-												<th>품목명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="prodInfoName" id="prodInfoName" value="${prodInfoVO.prodInfoName}"/></td>
+												<th>제품코드</th>
+												<td><input type="text" class="form-control" name="piId" value="${prodInfoVO.piId}" disabled="disabled"/></td>
+												<th>구분</th>
+												<td><input type="text" class="form-control" name="piItemType" value="${prodInfoVO.piItemType}"/></td>
 											</tr>
 											<tr>
+												<th>재질</th>
+												<td><input type="text" class="form-control" name=piItemCode01 value="${prodInfoVO.piItemCode01}"/></td>
 												<th>규격</th>
-												<td><input type="text" class="form-control" name="prodInfoStd" value="${prodInfoVO.prodInfoStd}"/></td>
-												<th>단가</th>
-												<td><input type="text" class="form-control" name="prodInfoPerPrice" value="${prodInfoVO.prodInfoPerPrice}"/></td>
+												<td><input type="text" class="form-control" name="piItemCode02" value="${prodInfoVO.piItemCode02}"/></td>
+												
 											</tr>
 											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="prodInfoNote">${prodInfoVO.prodInfoNote}</textArea></td>
+												<th>두께</th>
+												<td><input type="text" class="form-control" name="piItemCode03" value="${prodInfoVO.piItemCode03}"/></td>
+												<th>길이</th>
+												<td><input type="text" class="form-control" name="piItemCode04" value="${prodInfoVO.piItemCode04}"/></td>
+												
+											</tr>
+											<tr>
+												<th>상태조건</th>
+												<td><input type="text" class="form-control" name="piItemState" value="${prodInfoVO.piItemState}"/></td>
+												<th>제품명</th>
+												<td><input type="text" class="form-control" name="piItemName" value="${prodInfoVO.piItemName}"/></td>
+												
+											</tr>
+											<tr>
+												<th>재고</th>
+												<td><input type="text" class="form-control" name="piCnt" value="${prodInfoVO.piCnt}"/></td>
+												<th>잔량</th>
+												<td><input type="text" class="form-control" name="piItemRemain" value="${prodInfoVO.piItemRemain}"/></td>
+												
+											</tr>
+											<tr>
+												<th>단가</th>
+												<td><input type="text" class="form-control" name="piPrice" value="${prodInfoVO.piPrice}"/></td>
+												<th>단중</th>
+												<td><input type="text" class="form-control" name="piItemMiddle" value="${prodInfoVO.piItemMiddle}"/></td>
+												
+											</tr>
+											<tr>
+												<th>히트</th>
+												<td><input type="text" class="form-control" name="piHeat" value="${prodInfoVO.piHeat}"/></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -115,15 +139,15 @@
 
 	<script>
 	function fn_modify_prodInfo(){
-		if($('#prodInfoType').val() == ''){
-			alert("분류를 확인 바랍니다.");
-			return;
-		}
+// 		if($('#prodInfoType').val() == ''){
+// 			alert("분류를 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#prodInfoName').val() == ''){
-			alert("품목명을 확인 바랍니다.");
-			return;
-		}
+// 		if($('#prodInfoName').val() == ''){
+// 			alert("품목명을 확인 바랍니다.");
+// 			return;
+// 		}
 		modifyForm.submit();
 	}
 	

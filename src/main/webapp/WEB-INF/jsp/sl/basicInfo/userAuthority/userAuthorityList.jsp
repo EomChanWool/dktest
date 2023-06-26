@@ -59,7 +59,6 @@
 							    		<option value="공정관리" <c:if test="${searchVO.searchCondition eq '공정관리'}">selected="selected"</c:if>>공정관리</option>
 							    		<option value="KPI관리" <c:if test="${searchVO.searchCondition eq 'KPI관리'}">selected="selected"</c:if>>KPI관리</option>
 							    		<option value="모니터링" <c:if test="${searchVO.searchCondition eq '모니터링'}">selected="selected"</c:if>>모니터링</option>
-							    		
 					    			</select>
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_userAuthority()" style="margin-left: 0.3rem;">
