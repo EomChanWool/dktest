@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.facility.failReport.service.impl.FailReportMapper">
 	<select id="selectFailReportListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_prod_result
+		SELECT COUNT(*) FROM sm_trouble_report
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND wo_idx LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -11,26 +11,26 @@
 	
 	<select id="selectFailReportList" resultType="egovMap">
 		SELECT
-			a.pr_re_idx,
-			a.wo_idx,
-			a.pr_list_nm,
-			a.pr_re_manager,
-			a.pr_re_cnt,
-			a.pr_re_state,
-			b.wo_name
-		FROM sm_prod_result a
-		JOIN sm_work_order b
-		ON a.wo_idx = b.wo_idx
+			a.tr_id,
+			b.eq_id,
+			a.tr_type,
+			a.tr_date,
+			a.tr_comment,
+			a.tr_iscomp
+		FROM sm_trouble_report a
+		JOIN sm_equipment b
+		ON a.eq_id = b.eq_id
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND wo_idx LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY pr_re_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY tr_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
-	<select id="selectWorkOrderList" resultType="egovMap">
-		SELECT wo_idx, wo_name FROM sm_work_order WHERE wo_state = '1'
+	<select id="selectFacMasterList" resultType="egovMap">
+		SELECT eq_id FROM sm_equipment WHERE eq_op_state = '고장'
 	</select>
 	
 	<select id="selectWorkOrderInfo" resultType="egovMap">
@@ -52,38 +52,35 @@
 		SELECT COUNT(*) FROM sm_prod_result WHERE wo_idx = #{woIdx} AND pr_list_nm = #{prListNm}
 	</select>
 	
-<!-- 	<insert id="registFailReport"> -->
-<!-- 		INSERT INTO sm_prod_result -->
-<!-- 			( -->
-<!-- 			pr_re_idx, -->
-<!-- 			wo_idx, -->
-<!-- 			pr_list_nm, -->
-<!-- 			pr_list_seq, -->
-<!-- 			<if test="prReStTime != ''">pr_re_st_time,</if> -->
-<!-- 			<if test="prReEdTime != ''">pr_re_ed_time,</if> -->
-<!-- 			pr_re_cnt, -->
-<!-- 			<if test="prReFaultyCnt != ''">pr_re_faulty_cnt,</if> -->
-<!-- 			<if test="prReManager != ''">pr_re_manager,</if> -->
-<!-- 			pr_re_state, -->
-<!-- 			pr_re_reg_mem, -->
-<!-- 			pr_re_reg_dte -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT CONCAT('PR', (SELECT REGEXP_REPLACE(#{woIdx},'[a-z]','')),'-',LPAD((SELECT COUNT(a.pr_re_idx) FROM sm_prod_result a WHERE a.wo_idx = #{woIdx})+1,3,0))), -->
-<!-- 			#{woIdx}, -->
-<!-- 			#{prListNm}, -->
-<!-- 			#{curSeq}, -->
-<!-- 			<if test="prReStTime != ''">#{prReStTime},</if> -->
-<!-- 			<if test="prReEdTime != ''">#{prReEdTime},</if> -->
-<!-- 			#{prReCnt}, -->
-<!-- 			<if test="prReFaultyCnt != ''">#{prReFaultyCnt},</if> -->
-<!-- 			<if test="prReManager != ''">#{prReManager},</if> -->
-<!-- 			#{prReState}, -->
-<!-- 			#{userId}, -->
-<!-- 			NOW() -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="registFailReport">
+		DECLARE @str NVARCHAR(50)
+		DECLARE @seq INT
+		
+		SET @str = 'TR000'
+	
+		INSERT INTO sm_trouble_report
+			(
+			tr_id,
+			eq_id,
+			tr_type,
+			tr_comment,
+			tr_date,
+			tr_iscomp,
+			tr_reg_id,
+			tr_reg_date
+			)
+		VALUES
+			(
+			@str + CAST(NEXT VALUE FOR tr_seq AS NVARCHAR(50)),
+			#{eqId},
+			#{trType},
+			#{trComment},
+			#{trDate},
+			#{trIscomp},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
 	
 	<select id="selectProcessSeqInfo" resultType="egovMap">
 		SELECT pr_cur_seq, pr_list_cur_idx, pr_list_cur_nm FROM sm_process WHERE wo_idx = #{woIdx}
@@ -108,35 +105,26 @@
 	
 	<select id="selectFailReportInfo" resultType="egovMap">
 		SELECT
-			a.pr_re_idx,
-			a.wo_idx,
-			a.pr_list_nm,
-			a.pr_list_seq,
-			a.pr_re_st_time,
-			a.pr_re_ed_time,
-			a.pr_re_cnt,
-			a.pr_re_faulty_cnt,
-			a.pr_re_manager,
-			a.pr_re_state,
-			b.wo_name
-		FROM sm_prod_result a
-		JOIN sm_work_order b
-		ON a.wo_idx = b.wo_idx
-		WHERE pr_re_idx = #{prReIdx}
+			a.tr_id,
+			b.eq_id,
+			a.tr_type,
+			a.tr_date,
+			a.tr_comment,
+			a.tr_iscomp
+		FROM sm_trouble_report a
+		JOIN sm_equipment b
+		ON a.eq_id = b.eq_id
+		WHERE a.tr_id = #{trId}
 	</select>
 	
-<!-- 	<update id="modifyFailReport"> -->
-<!-- 		UPDATE sm_prod_result SET -->
-<!-- 			<if test="prReStTime != ''">pr_re_st_time = #{prReStTime},</if> -->
-<!-- 			pr_re_ed_time = #{prReEdTime}, -->
-<!-- 			pr_re_cnt = #{prReCnt}, -->
-<!-- 			<if test="prReFaultyCnt != ''">pr_re_faulty_cnt = #{prReFaultyCnt},</if> -->
-<!-- 			<if test="prReManager != ''">pr_re_manager = #{prReManager},</if> -->
-<!-- 			pr_re_state = #{prReState}, -->
-<!-- 			pr_re_edt_mem = #{userId}, -->
-<!-- 			pr_re_edt_dte = NOW() -->
-<!-- 		WHERE pr_re_idx = #{prReIdx} -->
-<!-- 	</update> -->
+	<update id="modifyFailReport">
+		UPDATE sm_trouble_report SET
+			tr_type = #{trType},
+			tr_comment = #{trComment},
+			tr_date = #{trDate},
+			tr_iscomp = #{trIscomp}
+		WHERE tr_id = #{trId}
+	</update>
 	
 	<select id="selectLastProcessNm" resultType="String">
 		SELECT 
@@ -163,9 +151,9 @@
 <!-- 		WHERE item_cd = (SELECT item_cd FROM sm_work_order WHERE wo_idx = #{woIdx}) -->
 <!-- 	</update> -->
 	
-<!-- 	<delete id="deleteFailReport"> -->
-<!-- 		DELETE FROM sm_prod_result WHERE pr_re_idx = #{prReIdx} -->
-<!-- 	</delete> -->
+	<delete id="deleteFailReport">
+		DELETE FROM sm_trouble_report WHERE tr_id = #{trId}
+	</delete>
 	
 	<select id="selectItemCd" resultType="String">
 		SELECT SUBSTRING(item_cd,1,2) AS itemType FROM sm_work_order WHERE wo_idx = #{woIdx}

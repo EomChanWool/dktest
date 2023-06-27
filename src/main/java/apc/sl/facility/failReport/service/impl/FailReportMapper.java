@@ -13,7 +13,7 @@ public interface FailReportMapper {
 
 	List<?> selectFailReportList(SearchVO searchVO);
 
-	List<?> selectWorkOrderList();
+	List<?> selectFacMasterList();
 
 	List<?> selectWorkOrderInfo(Map<String, Object> map);
 

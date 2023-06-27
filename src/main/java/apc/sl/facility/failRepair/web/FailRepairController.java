@@ -44,24 +44,27 @@ public class FailRepairController {
 	
 	@RequestMapping("/sl/facility/failRepair/registFailRepair.do")
 	public String registFailRepair(ModelMap model) {
-		List<?> processList = failRepairService.selectProcessList();
-		model.put("processList", processList);
+		List<?> failList = failRepairService.selectFailList();
+		model.put("failList", failList);
 		return "sl/facility/failRepair/failRepairRegist";
 	}
 	
 	@RequestMapping("/sl/facility/failRepair/registFailRepairOk.do")
 	public String registFailRepairOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		map.put("userId", session.getAttribute("user_id"));
+		System.out.println("map : "+ map);
 		failRepairService.registFailRepair(map);
+		
+		failRepairService.failReportIscomp(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/facility/failRepair/failRepairList.do";
 	}
 	
 	@RequestMapping("/sl/facility/failRepair/modifyFailRepair.do")
 	public String modifyFailRepair(@RequestParam Map<String, Object> map, ModelMap model) {
-		List<?> processList = failRepairService.selectProcessList();
-		model.put("processList", processList);
 		
 		Map<String, Object> detail = failRepairService.selectFailRepairInfo(map);
+		System.out.println(failRepairService.selectFailRepairInfo(map));
 		model.put("failRepairVO", detail);
 		return "sl/facility/failRepair/failRepairModify";
 	}

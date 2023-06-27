@@ -8,10 +8,6 @@
 	.table th{
 		padding-top: 1.3rem;
 	}
-	
-	.val-area{
-		text-align: left;
-	}
 </style>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -38,7 +34,7 @@
                     </form>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav WorkOrder - User Information -->
+                        <!-- Nav FacMaster - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
                     </ul>
                 </nav>
@@ -47,92 +43,55 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <div class="btn_bottom_wrap">
-                   		<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">생산계획/지시 수정</h1>
-                   		<div style="display: inline-block; float: right; margin-top: -5px;">
-                   			<button type="button" class="btn btn-success btn-icon-split" onclick="addRow()" style="border:none;"><span class="text">추가</span></button>
-							<button type="button" class="btn btn-danger btn-icon-split" onclick="delRow()" style="border:none;"><span class="text">삭제</span></button>
-                   		</div>
-					</div>
+                    <h1 class="h3 mb-2 text-gray-800">제품정보 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/production/workOrder/modifyWorkOrderOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="woIdx" value="${workOrderVO.woIdx}">
-	                                <table class="table table-bordered">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/facMaster/modifyFacMasterOk.do" name="modifyForm" method="post">
+                            		<input type="hidden" name="eqId" value="${facMasterVO.eqId}">
+	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>작업지시명  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="woName" id="woName" value="${workOrderVO.woName}"></td>
-												<th>제품코드  <span class="req">*</span></th>
+												<th>설비ID</th>
+												<td><input type="text" class="form-control" name="eqId" value="${facMasterVO.eqId}" disabled="disabled"/></td>
+												<th>설비구분</th>
+												<td><input type="text" class="form-control" name="eqType" value="${facMasterVO.eqType}"/></td>
+											</tr>
+											<tr>
+												<th>설비명</th>
+												<td><input type="text" class="form-control" name=eqName value="${facMasterVO.eqName}"/></td>
+												<th>센서ID</th>
+												<td><input type="text" class="form-control" name="eqSensorid" value="${facMasterVO.eqSensorid}"/></td>
+												
+											</tr>
+											<tr>
+												<th>설치장소</th>
+												<td><input type="text" class="form-control" name="eqPlace" value="${facMasterVO.eqPlace}"/></td>
+												<th>설비상태</th>
 												<td>
-													<select class="form-control" name="itemCd" id="itemCd">
-														<option value="">선택</option>
-														<c:forEach var="list" items="${prodList}" varStatus="status">
-															<option value="${list.itemCd}" <c:if test="${workOrderVO.itemCd eq list.itemCd}">selected="selected"</c:if>>${list.itemCd} (${list.itemName})</option>
-														</c:forEach>
+													<select class="form-control" name="eqOpState">
+														<option value="정상" <c:if test="${facMasterVO.eqOpState eq '정상'}">selected="selected"</c:if>>정상</option>
+														<option value="고장" <c:if test="${facMasterVO.eqOpState eq '고장'}">selected="selected"</c:if>>고장</option>
+													</select>
+												</td>
+												
+											</tr>
+											<tr>
+												<th>사용여부</th>
+												<td>
+													<select class="form-control" name="eqIsuse">
+														<option value="0" <c:if test="${facMasterVO.eqIsuse eq '0'}">selected="selected"</c:if>>사용</option>
+														<option value="1" <c:if test="${facMasterVO.eqIsuse eq '1'}">selected="selected"</c:if>>미사용</option>
 													</select>
 												</td>
 											</tr>
-											<tr>
-												<th>계획수량  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="woPdtCnt" id="woPdtCnt" value="${workOrderVO.woPdtCnt}"></td>
-												<th>작업지시일  <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="woItnDte" id="woItnDte" value="${workOrderVO.woItnDte}"></td>
-											</tr>
-											<tr>
-												<th>작업완료요구일</th>
-												<td><input type="date" class="form-control" name="woCmtDte" id="woCmtDte" value="${workOrderVO.woCmtDte}"></td>
-												<th>납품예정일</th>
-												<td><input type="date" class="form-control" name="woDlvDte" id="woDlvDte" value="${workOrderVO.woDlvDte}"></td>
-											</tr>
-											<tr>
-												<th>비고</th>
-												<td colspan="3"><textarea name="woNote">${workORderVO.woNote}</textarea></td>
-											</tr>
 										</tbody>
-	                                </table>
-	                                <h1 class="h5 mb-2 text-gray-800" style="display: inline-block;">투입 원자재</h1>
-	                                <table class="table table-bordered" id="dataTable">
-	                                	<thead>
-	                                		<tr>
-                                   		 	 	<th style="padding-top: 1rem; width: 35%;">품목코드</th>
-	                                            <th style="padding-top: 1rem; width: 35%;">규격</th>
-												<th style="padding-top: 1rem;">수량</th>
-	                                        </tr>
-	                                	</thead>
-                                   		<tbody>
-                                   			<c:forEach var="list" items="${mtList}" varStatus="status">
-                                   				<tr>
-	                                   				<td>
-	                                   					<select class="form-control" name="itemCd${status.count}" id="itemCd${status.count}" style="text-align: center;">
-	                                   						<option value="">선택</option>
-	                                   						<c:forEach var="list2" items="${itemList}">
-	                                   							<option value="${list2.itemCd}" <c:if test="${list.itemCd eq list2.itemCd}">selected="selected"</c:if>>${list2.itemName}</option>
-	                                   						</c:forEach>
-	                                   					</select>
-	                                   					<input type="hidden" name="itemName${status.count}" id="itemName${status.count}" value="${list.itemName}">
-	                                   				</td>
-	                                   				<td>
-	                                   					<span class="form-control" id="std${status.count}">${list.std}</span>
-	                                   					<input type="hidden" name="itemStd${status.count}" id="itemStd${status.count}" value="${list.std}">
-	                                   				</td>
-	                                   				<td>
-	                                   					<input type="text" class="form-control" name="cnt${status.count}" id="cnt${status.count}" value="${list.cnt}" style="text-align: right;">
-	                                   				</td>
-                                   				</tr>
-                                   			</c:forEach>
-                                   			<c:forEach var="list" items="${mtList}" varStatus="status">
-                                   				<input type="hidden" name="curItemCd${status.count}" value="${list.itemCd}">
-                                   				<input type="hidden" name="curCnt${status.count}" value="${list.cnt}">
-                                   			</c:forEach>
-                                   		</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_workOrder()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/production/workOrder/workOrderList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_facMaster()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/facMaster/facMasterList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -168,125 +127,28 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_workOrder(){
-		var num = /^\d+$/;
+	function fn_modify_facMaster(){
+// 		if($('#facMasterType').val() == ''){
+// 			alert("분류를 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#woName').val() == ''){
-			alert("작업지시명을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#itemCd').val() == ''){
-			alert("제품코드를 확인 바랍니다.");
-			return;
-		}
-		
-		if(!num.test($('#woPdtCnt').val())){
-			alert("계획수량을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#woItnDte').val() == ''){
-			alert("작업지시일을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#itemCd1').val() == '' || $('#cnt1').val() == ''){
-			alert("투입 원자재를 확인 바랍니다.");
-			return;
-		}
-		
+// 		if($('#facMasterName').val() == ''){
+// 			alert("품목명을 확인 바랍니다.");
+// 			return;
+// 		}
 		modifyForm.submit();
 	}
 	
-	function addRow(){
-		var trCnt = $('#dataTable tr').length;
-		if(trCnt <= 15){
-			var innerHtml = "";
-			innerHtml += '<tr>';
-			innerHtml += '	<td>';
-			innerHtml += '		<select class="form-control" name="itemCd'+(trCnt)+'" id="itemCd'+(trCnt)+'"style="text-align: center;">';
-			innerHtml += '			<option value="">선택</option>';
-			innerHtml += '			<c:forEach var="list" items="${materialList}">';
-			innerHtml += '				<option value="${list.itemCd}">${list.itemName}</option>';
-			innerHtml += '			</c:forEach>';
-			innerHtml += '		</select>';
-			innerHtml += '		<input type="hidden" name="itemName'+(trCnt)+'" id="itemName'+(trCnt)+'">';
-			innerHtml += '	</td>';
-			innerHtml += '	<td><input type="text" class="form-control" name="itemStd'+(trCnt)+'" id="itemStd'+(trCnt)+'" style="text-align: center;"></td>';
-			innerHtml += '	<td><input type="text" class="form-control" name="cnt'+(trCnt)+'" id="cnt'+(trCnt)+'" style="text-align: right;"></td>';
-			innerHtml += '</tr>';
-			
-			$('#dataTable > tbody:last').append(innerHtml);
-		}else{
-			alert("최대 15개까지만 가능합니다.");
-			return;
-		}
-		
-		changeChk();
-	}
-	
-	function delRow(){
-		var trCnt = $('#dataTable tr').length;
-		if(trCnt > 2){
-			$('#dataTable > tbody:last > tr:last').remove();
-		}else{
-			return;
-		}
-		changeChk();
-	}
-	
-	function changeChk(){
-		$('#itemCd1').change(function(){ materialInfoAjax($('#itemCd1').val(),1);	});
-		$('#itemCd2').change(function(){ materialInfoAjax($('#itemCd2').val(),2);	});
-		$('#itemCd3').change(function(){ materialInfoAjax($('#itemCd3').val(),3);	});
-		$('#itemCd4').change(function(){ materialInfoAjax($('#itemCd4').val(),4);	});
-		$('#itemCd5').change(function(){ materialInfoAjax($('#itemCd5').val(),5);	});
-		$('#itemCd6').change(function(){ materialInfoAjax($('#itemCd6').val(),6);	});
-		$('#itemCd7').change(function(){ materialInfoAjax($('#itemCd7').val(),7);	});
-		$('#itemCd8').change(function(){ materialInfoAjax($('#itemCd8').val(),8);	});
-		$('#itemCd9').change(function(){ materialInfoAjax($('#itemCd9').val(),9);	});
-		$('#itemCd10').change(function(){ materialInfoAjax($('#itemCd10').val(),10);	});
-		$('#itemCd11').change(function(){ materialInfoAjax($('#itemCd11').val(),11);	});
-		$('#itemCd12').change(function(){ materialInfoAjax($('#itemCd12').val(),12);	});
-		$('#itemCd13').change(function(){ materialInfoAjax($('#itemCd13').val(),13);	});
-		$('#itemCd14').change(function(){ materialInfoAjax($('#itemCd14').val(),14);	});
-		$('#itemCd15').change(function(){ materialInfoAjax($('#itemCd15').val(),15);	});
-	}
-	
-	function materialInfoAjax(value, index){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/production/workOrder/woMaterialInfoAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'itemCd':value
-			  },
-			  success:function(result){
-				  var sp_std = '#std'+index;
-				  var in_std = '#itemStd'+index;
-				  var name = '#itemName'+index;
-				  $(sp_std).text(result.mt_info.itemStd);
-				  $(in_std).val(result.mt_info.itemStd);
-				  $(name).val(result.mt_info.itemName);
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
-	
 	$(function() {
-		$('#productionMenu').addClass("active");
-		$('#production').addClass("show");
-		$('#workOrderList').addClass("active");
+		$('#facilityMenu').addClass("active");
+		$('#facility').addClass("show");
+		$('#facMasterList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
-		
-		changeChk();
 	});
 	</script>
 </body>

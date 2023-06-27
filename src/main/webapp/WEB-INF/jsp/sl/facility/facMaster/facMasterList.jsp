@@ -54,8 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/facMaster/facMasterList.do" method="post">
-									<input type="hidden" name="woIdx">
-									<input type="hidden" name="orIdx">
+									<input type="hidden" name="eqId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
@@ -91,11 +90,9 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>번호</th>
+											<th>설비ID</th>
 											<th>설비구분</th>
-											<th>설비코드</th>
 											<th>설비명</th>
-											<th>센서ID</th>
 											<th>설치장소</th>
 											<th>설비상태</th>
 											<th>수정/삭제</th>
@@ -103,19 +100,17 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${facMasterList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_facMaster('${result.woIdx}','${result.orIdx}')" style="cursor: pointer;">
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
+	                                   		<tr onclick="fn_detail_facMaster('${result.eqId}')" style="cursor: pointer;">
+												<td>${result.eqId}</td>
+												<td>${result.eqType}</td>
+												<td>${result.eqName}</td>
+												<td>${result.eqPlace}</td>
+												<td>${result.eqOpState}</td>
 	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_facMaster_go('${result.woIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_facMaster_go('${result.eqId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_facMaster('${result.woIdx}', '${result.orIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_facMaster('${result.eqId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -183,23 +178,21 @@
 		listForm.submit();
 	}
 	
-	function fn_modify_facMaster_go(woIdx){
-		listForm.woIdx.value = woIdx;
+	function fn_modify_facMaster_go(eqId){
+		listForm.eqId.value = eqId;
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/facMaster/modifyFacMaster.do";
 		listForm.submit();
 	}
 	
-	function fn_detail_facMaster(woIdx,orIdx){
-		listForm.woIdx.value = woIdx;
-		listForm.orIdx.value = orIdx;
+	function fn_detail_facMaster(eqId){
+		listForm.eqId.value = eqId;
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/facMaster/detailFacMaster.do";
 		listForm.submit();
 	}
 	
-	function fn_delete_facMaster(woIdx,orIdx){
+	function fn_delete_facMaster(eqId){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.woIdx.value = woIdx;
-			listForm.orIdx.value = orIdx;
+			listForm.eqId.value = eqId;
 			listForm.action = "${pageContext.request.contextPath}/sl/facility/facMaster/deleteFacMaster.do";
 			listForm.submit();
 		}

@@ -25,10 +25,15 @@ public class FailRepairServieImpl implements FailRepairService {
 	}
 
 	@Override
-	public List<?> selectProcessList() {
-		return failRepairMapper.selectProcessList();
+	public List<?> selectFailList() {
+		return failRepairMapper.selectFailList();
 	}
 
+	@Override
+	public void failReportIscomp(Map<String, Object> map) {
+		failRepairMapper.failReportIscomp(map);
+	}
+	
 	@Override
 	public void registFailRepair(Map<String, Object> map) {
 		failRepairMapper.registFailRepair(map);
@@ -48,5 +53,7 @@ public class FailRepairServieImpl implements FailRepairService {
 	public void deleteFailRepair(Map<String, Object> map) {
 		failRepairMapper.deleteFailRepair(map);
 	}
+
+
 
 }

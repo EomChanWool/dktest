@@ -25,8 +25,8 @@ public class FailReportServieImpl implements FailReportService {
 	}
 
 	@Override
-	public List<?> selectWorkOrderList() {
-		return failReportMapper.selectWorkOrderList();
+	public List<?> selectFacMasterList() {
+		return failReportMapper.selectFacMasterList();
 	}
 
 	@Override
@@ -113,5 +113,7 @@ public class FailReportServieImpl implements FailReportService {
 	public void updateMaterialStock(Map<String, Object> temp2) {
 		failReportMapper.updateMaterialStock(temp2);
 	}
+
+	
 
 }

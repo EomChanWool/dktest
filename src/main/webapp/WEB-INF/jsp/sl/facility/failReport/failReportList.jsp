@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do" method="post">
-									<input type="hidden" name="prReIdx">
+									<input type="hidden" name="trId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
@@ -82,33 +82,37 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>설비구분</th>
-											<th>설비코드</th>
-											<th>설비명</th>
+                                            <th>신고ID</th>
+                                            <th>설비ID</th>
 											<th>고장구분</th>
-											<th>고장신고일자</th>
+											<th>고장내용</th>
+											<th>처리여부</th>
+											<th>신고일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${prResultList}" varStatus="status">
+                                    	<c:forEach var="result" items="${failReportList}" varStatus="status">
 	                                   		<tr>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
+	                                            <td>${result.trId}</td>
+	                                            <td>${result.eqId}</td>
+	                                            <td>${result.trType}</td>
+	                                            <td>${result.trComment}</td>
+	                                            <td>${result.trIscomp}</td>
+	                                            <td>
+	                                            	<fmt:formatDate value="${result.trDate}" pattern="yyyy-MM-dd"/>
+	                                            </td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_FailReport_go('${result.prReIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_FailReport_go('${result.trId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_FailReport('${result.prReIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_FailReport('${result.trId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty prResultList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty failReportList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -168,15 +172,15 @@
 		listForm.submit();
 	}
 	
-	function fn_modify_FailReport_go(prReIdx){
-		listForm.prReIdx.value = prReIdx;
+	function fn_modify_FailReport_go(trId){
+		listForm.trId.value = trId;
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/modifyFailReport.do";
 		listForm.submit();
 	}
 	
-	function fn_delete_FailReport(prReIdx){
+	function fn_delete_FailReport(trId){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.prReIdx.value = prReIdx;
+			listForm.trId.value = trId;
 			listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/deleteFailReport.do";
 			listForm.submit();
 		}

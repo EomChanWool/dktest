@@ -1,6 +1,5 @@
 package apc.sl.facility.failReport.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +38,17 @@ public class FailReportController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		List<?> prResultList = failReportService.selectFailReportList(searchVO);
-		model.put("prResultList", prResultList);
+		
+		List<?> failReportList = failReportService.selectFailReportList(searchVO);
+		model.put("failReportList", failReportList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/facility/failReport/failReportList";
 	}
 	
 	@RequestMapping("/sl/facility/failReport/registFailReport.do")
 	public String registFailReport(ModelMap model) {
-		List<?> woList = failReportService.selectWorkOrderList();
-		model.put("woList", woList);
+		List<?> fmList = failReportService.selectFacMasterList();
+		model.put("fmList", fmList);
 		return "sl/facility/failReport/failReportRegist";
 	}
 	
@@ -63,50 +63,14 @@ public class FailReportController {
 	
 	@RequestMapping("/sl/facility/failReport/registFailReportOk.do")
 	public String registFailReportOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//작업지시번호 체크
-		int exists = failReportService.selectExistsWorkOrderIdx(map);
-		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg","존재하지 않는 작업지시번호 입니다.");
-			redirectAttributes.addFlashAttribute("failReportVO", map);
-			return "redirect:/sl/facility/failReport/registFailReport.do";
-		}
-		
-		//이미 등록되었는지 체크
-		exists = failReportService.selectExistsFailReport(map);
-		if(exists != 0) {
-			redirectAttributes.addFlashAttribute("msg", "이미 존재하는 내역입니다.");
-			redirectAttributes.addFlashAttribute("failReportVO", map);
-			return "redirect:/sl/facility/failReport/registFailReport.do";
-		}
 		map.put("userId", session.getAttribute("user_id"));
 		failReportService.registFailReport(map);
-		
-		//작업상태가 작업종료일때 sm_process갱신
-		if(map.get("prReState").equals("1")) {
-			//modify = true --> sm_process에서 현재 공정 순서,idx,nm 등 수정하겠음.
-			map.put("modify","true");
-			Map<String, Object> process = failReportService.selectProcessSeqInfo(map);
-			int processSeq = Integer.parseInt(process.get("prCurSeq")+"");
-			map.put("curStTime", "pr_st_time"+processSeq);
-			map.put("curEdTime", "pr_ed_time"+processSeq);
-			map.put("curCnt", "pr_cnt"+processSeq);
-			map.put("curFaulty", "pr_faulty"+processSeq);
-			map.put("nextIdx", "pr_list_idx"+(processSeq+1));
-			map.put("nextNm", "pr_list_nm"+(processSeq+1));
-			
-			map.put("userId", session.getAttribute("user_id"));
-			failReportService.updateProcess(map);
-			updateProcess(process,map);
-		}
-		
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/facility/failReport/failReportList.do";
 	}
 	
 	@RequestMapping("/sl/facility/failReport/modifyFailReport.do")
 	public String modifyFailReport(@RequestParam Map<String, Object> map, ModelMap model) {
-		List<?> woList = failReportService.selectWorkOrderList();
-		model.put("woList", woList);
 		Map<String, Object> detail = failReportService.selectFailReportInfo(map);
 		model.put("failReportVO", detail);
 		return "sl/facility/failReport/failReportModify";
@@ -117,29 +81,29 @@ public class FailReportController {
 		map.put("userId", session.getAttribute("user_id"));
 		failReportService.modifyFailReport(map);
 		//작업상태가 작업종료일때 sm_process갱신
-		if(map.get("prReState").equals("1")) {
-			//modify = false --> sm_process에서 수정하고자 하는 순서의 공정시작시간, 공정종료시간, 생산수량, 불량수량만 갱신
-			map.put("modify","false");
-			Map<String, Object> process = failReportService.selectProcessSeqInfo(map);
-			int processSeq = Integer.parseInt(map.get("curSeq")+"");
-			map.put("curStTime", "pr_st_time"+processSeq);
-			map.put("curEdTime", "pr_ed_time"+processSeq);
-			map.put("curCnt", "pr_cnt"+processSeq);
-			map.put("curFaulty", "pr_faulty"+processSeq);
-			
-			if(map.get("curPrReState").equals("0") && map.get("prReState").equals("1")) {
-				//이전 상태가 작업중이였다가 작업완료로 변경되었을 경우
-				map.replace("modify", "true");
-				map.put("nextIdx", "pr_list_idx"+(processSeq+1));
-				map.put("nextNm", "pr_list_nm"+(processSeq+1));
-			}
-			
-			map.put("userId", session.getAttribute("user_id"));
-			failReportService.updateProcess(map);
-			if(map.get("curPrReState").equals("0") && map.get("prReState").equals("1")) {
-				updateProcess(process,map);
-			}
-		}
+//		if(map.get("prReState").equals("1")) {
+//			//modify = false --> sm_process에서 수정하고자 하는 순서의 공정시작시간, 공정종료시간, 생산수량, 불량수량만 갱신
+//			map.put("modify","false");
+//			Map<String, Object> process = failReportService.selectProcessSeqInfo(map);
+//			int processSeq = Integer.parseInt(map.get("curSeq")+"");
+//			map.put("curStTime", "pr_st_time"+processSeq);
+//			map.put("curEdTime", "pr_ed_time"+processSeq);
+//			map.put("curCnt", "pr_cnt"+processSeq);
+//			map.put("curFaulty", "pr_faulty"+processSeq);
+//			
+//			if(map.get("curPrReState").equals("0") && map.get("prReState").equals("1")) {
+//				//이전 상태가 작업중이였다가 작업완료로 변경되었을 경우
+//				map.replace("modify", "true");
+//				map.put("nextIdx", "pr_list_idx"+(processSeq+1));
+//				map.put("nextNm", "pr_list_nm"+(processSeq+1));
+//			}
+//			
+//			map.put("userId", session.getAttribute("user_id"));
+//			failReportService.updateProcess(map);
+//			if(map.get("curPrReState").equals("0") && map.get("prReState").equals("1")) {
+//				updateProcess(process,map);
+//			}
+//		}
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
 		return "redirect:/sl/facility/failReport/failReportList.do";
@@ -152,47 +116,47 @@ public class FailReportController {
 		return "redirect:/sl/facility/failReport/failReportList.do";
 	}
 	
-	private void updateProcess(Map<String, Object> process, Map<String, Object> map) {
-		//완료된 공정이 마지막 공정이면 sm_work_order, sm_orders 상태를 작업 완료로
-		String lastProcessNm = failReportService.selectLastProcessNm(map);
-		if(process.get("prListCurNm") != null) {
-			if(process.get("prListCurNm").equals(lastProcessNm)) {
-				map.put("state", "2");
-				failReportService.updateWorkOrder(map);
-				//실제 완제품(밸런싱 통과 수량)을 기반으로 투입 자재 재조정
-				if(map.get("prReFaultyCnt") == "") {
-					map.replace("prReFaultyCnt", 0);
-				}
-				int prodCnt = Integer.parseInt(map.get("prReCnt")+"") + Integer.parseInt(map.get("prReFaultyCnt")+"");
-				Map<String, Object> in_mt = failReportService.selectMaterialList(map);
-				Map<String, Object> temp = new HashMap<>();
-				temp.put("woIdx", map.get("woIdx"));
-				for(int i=1;i<=15;i++) {
-					Map<String, Object> temp2 = new HashMap<>();
-					String itemCd = "itemCd"+i;
-					String cnt = "cnt"+i;
-					
-					if(in_mt.get(itemCd) == null) break;
-					temp.put(itemCd, in_mt.get(itemCd));
-					temp2.put("itemCd", in_mt.get(itemCd));
-					
-					if(in_mt.get(itemCd).equals("MT01") || in_mt.get(itemCd).equals("MT02")) {
-						temp.put(cnt, prodCnt*2);
-						temp2.put("cnt", prodCnt*2);
-					}else {
-						temp.put(cnt, prodCnt);
-						temp2.put("cnt", prodCnt);
-					}
-					int realCnt = Integer.parseInt(in_mt.get(cnt)+"") - Integer.parseInt(temp2.get("cnt")+"");
-					temp2.replace("cnt", realCnt);
-					
-					failReportService.updateMaterialStock(temp2);
-				}
-				failReportService.updateInMaterial(temp);
-				
-				//제품 재고에 추가해줌
-				failReportService.addItemStock(map);
-			}
-		}
-	}
+//	private void updateProcess(Map<String, Object> process, Map<String, Object> map) {
+//		//완료된 공정이 마지막 공정이면 sm_work_order, sm_orders 상태를 작업 완료로
+//		String lastProcessNm = failReportService.selectLastProcessNm(map);
+//		if(process.get("prListCurNm") != null) {
+//			if(process.get("prListCurNm").equals(lastProcessNm)) {
+//				map.put("state", "2");
+//				failReportService.updateWorkOrder(map);
+//				//실제 완제품(밸런싱 통과 수량)을 기반으로 투입 자재 재조정
+//				if(map.get("prReFaultyCnt") == "") {
+//					map.replace("prReFaultyCnt", 0);
+//				}
+//				int prodCnt = Integer.parseInt(map.get("prReCnt")+"") + Integer.parseInt(map.get("prReFaultyCnt")+"");
+//				Map<String, Object> in_mt = failReportService.selectMaterialList(map);
+//				Map<String, Object> temp = new HashMap<>();
+//				temp.put("woIdx", map.get("woIdx"));
+//				for(int i=1;i<=15;i++) {
+//					Map<String, Object> temp2 = new HashMap<>();
+//					String itemCd = "itemCd"+i;
+//					String cnt = "cnt"+i;
+//					
+//					if(in_mt.get(itemCd) == null) break;
+//					temp.put(itemCd, in_mt.get(itemCd));
+//					temp2.put("itemCd", in_mt.get(itemCd));
+//					
+//					if(in_mt.get(itemCd).equals("MT01") || in_mt.get(itemCd).equals("MT02")) {
+//						temp.put(cnt, prodCnt*2);
+//						temp2.put("cnt", prodCnt*2);
+//					}else {
+//						temp.put(cnt, prodCnt);
+//						temp2.put("cnt", prodCnt);
+//					}
+//					int realCnt = Integer.parseInt(in_mt.get(cnt)+"") - Integer.parseInt(temp2.get("cnt")+"");
+//					temp2.replace("cnt", realCnt);
+//					
+//					failReportService.updateMaterialStock(temp2);
+//				}
+//				failReportService.updateInMaterial(temp);
+//				
+//				//제품 재고에 추가해줌
+//				failReportService.addItemStock(map);
+//			}
+//		}
+//	}
 }

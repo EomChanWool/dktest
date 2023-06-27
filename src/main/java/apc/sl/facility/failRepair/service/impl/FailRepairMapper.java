@@ -13,7 +13,9 @@ public interface FailRepairMapper {
 
 	List<?> selectFailRepairList(SearchVO searchVO);
 
-	List<?> selectProcessList();
+	List<?> selectFailList();
+
+	void failReportIscomp(Map<String, Object> map);
 
 	void registFailRepair(Map<String, Object> map);
 

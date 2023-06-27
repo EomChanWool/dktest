@@ -38,7 +38,7 @@
                     </form>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav FacMaster - User Information -->
+                        <!-- Nav FailReport - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
                     </ul>
                 </nav>
@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">설비 상세</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장신고 상세</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -56,51 +56,51 @@
                                     <tbody>
 										<tr>
 											<th>설비ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqId}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqId}</span></td>
 											<th>설비구분</th>
-											<td><span class="form-control val-area">${facMasterVO.eqType}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqType}</span></td>
 										</tr>
 										<tr>
 											<th>설비명</th>
-											<td><span class="form-control val-area">${facMasterVO.eqName}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqName}</span></td>
 											<th>센서ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqSensorid}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqSensorid}</span></td>
 										</tr>
 										<tr>
 											<th>설치장소</th>
-											<td><span class="form-control val-area">${facMasterVO.eqPlace}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqPlace}</span></td>
 											<th>설비상태</th>
-											<td><span class="form-control val-area">${facMasterVO.eqOpState}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqOpState}</span></td>
 										</tr>
 										<tr>
 											<th>사용여부</th>
-											<td><span class="form-control val-area">${facMasterVO.eqIsuse}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqIsuse}</span></td>
 											
 										</tr>
 										<tr>
 											<th>등록ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqRegId}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqRegId}</span></td>
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${failReportVO.eqRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
 										<tr>
 											<th>수정ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqEdtId}</span></td>
+											<td><span class="form-control val-area">${failReportVO.eqEdtId}</span></td>
 											<th>수정일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${failReportVO.eqEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
 									</tbody>
                                 </table>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/facMaster/facMasterList.do'">목록</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#facMasterList').addClass("active");
+		$('#failReportList').addClass("active");
 	});
 	</script>
 </body>

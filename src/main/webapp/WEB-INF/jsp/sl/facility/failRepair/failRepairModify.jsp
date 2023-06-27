@@ -47,44 +47,33 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">생산설비정보 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/production/prodEquip/modifyProdEquipOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="faCd" value="${prodEquipVO.faCd}">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/failRepair/modifyFailRepairOk.do" name="modifyForm" method="post">
+                            		<input type="hidden" name="tsId" value="${failRepairVO.tsId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>설비명  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="faName" id="faName" value="${prodEquipVO.faName}"></td>
-												<th>적용공정  <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="faCtlVal" id="faCtlVal">
-														<option value="">선택</option>
-														<c:forEach var="list" items="${processList}" varStatus="status">
-															<option value="${list.prListIdx}" <c:if test="${prodEquipVO.faCtlVal eq list.prListIdx}">selected="selected"</c:if>>${list.prListNm}</option>
-														</c:forEach>
-													</select>
-												</td>
+												<th>신고ID <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="trId" value="${failRepairVO.trId}" disabled="disabled"></td>
+												<th>조치구분</th>
+												<td><input type="text" class="form-control" name="tsType" value="${failRepairVO.tsType}"></td>
 											</tr>
 											<tr>
-												<th>상태  <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="faStatus" id="faStatus">
-														<option value="">선택</option>
-														<option value="정상" <c:if test="${prodEquipVO.faStatus eq '정상'}">selected="selected"</c:if>>정상</option>
-														<option value="고장" <c:if test="${prodEquipVO.faStatus eq '고장'}">selected="selected"</c:if>>고장</option>
-													</select>
-												</td>
+												<th>조치내용</th>
+												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failRepairVO.tsComment}"></td>
+												<th>조치일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="<fmt:formatDate value='${failRepairVO.tsDate}' pattern='yyyy-MM-dd' />"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_prodEquip()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/production/prodEquip/prodEquipList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_failRepair()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -120,29 +109,29 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_prodEquip(){
-		if($('#faName').val() == ''){
-			alert("설비명을 확인 바랍니다.");
-			return;
-		}
+	function fn_modify_failRepair(){
+// 		if($('#faName').val() == ''){
+// 			alert("설비명을 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#faCtlVal').val() == ''){
-			alert("설정값을 확인 바랍니다.");
-			return;
-		}
+// 		if($('#faCtlVal').val() == ''){
+// 			alert("설정값을 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#faStatus').val() == ''){
-			alert("상태를 확인 바랍니다.");
-			return;
-		}
+// 		if($('#faStatus').val() == ''){
+// 			alert("상태를 확인 바랍니다.");
+// 			return;
+// 		}
 		
 		modifyForm.submit();
 	}
 	
 	$(function() {
-		$('#productionMenu').addClass("active");
-		$('#production').addClass("show");
-		$('#prodEquipList').addClass("active");
+		$('#facilityMenu').addClass("active");
+		$('#facility').addClass("show");
+		$('#failRepairList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {

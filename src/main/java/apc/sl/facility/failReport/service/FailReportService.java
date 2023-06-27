@@ -10,8 +10,8 @@ public interface FailReportService {
 	int selectFailReportListToCnt(SearchVO searchVO);
 
 	List<?> selectFailReportList(SearchVO searchVO);
-
-	List<?> selectWorkOrderList();
+	
+	List<?> selectFacMasterList();
 
 	List<?> selectWorkOrderInfo(Map<String, Object> map);
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.facility.failRepair.service.impl.FailRepairMapper">
 	<select id="selectFailRepairListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_facility
+		SELECT COUNT(*) FROM sm_troubleshooting
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -11,71 +11,87 @@
 	
 	<select id="selectFailRepairList" resultType="egovMap">
 		SELECT
-			a.fa_cd,
-			a.fa_name,
-			a.fa_ctl_val,
-			a.fa_status,
-			b.pr_list_nm
-		FROM sm_facility a
-		JOIN sm_process_list b
-		ON a.fa_ctl_val = b.pr_list_idx
+			a.ts_id,
+			b.tr_id,
+			a.ts_type,
+			a.ts_date,
+			a.ts_comment
+		FROM sm_troubleshooting a
+		JOIN sm_trouble_report b
+		ON a.tr_id = b.tr_id
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY fa_cd DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY ts_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
-	<select id="selectProcessList" resultType="egovMap">
+	<select id="selectFailList" resultType="egovMap">
 		SELECT
-			pr_list_idx,
-			pr_list_nm
-		FROM sm_process_list
+			tr_id
+		FROM sm_trouble_report
+		WHERE tr_iscomp = 1
 	</select>
 	
-<!-- 	<insert id="registFailRepair"> -->
-<!-- 		INSERT INTO sm_facility -->
-<!-- 			( -->
-<!-- 			fa_cd, -->
-<!-- 			fa_name, -->
-<!-- 			fa_ctl_val, -->
-<!-- 			fa_status, -->
-<!-- 			fa_reg_dte, -->
-<!-- 			fa_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT CONCAT('FA', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.fa_cd),0) FROM sm_facility a),'[a-z]','')))+1,3,0))), -->
-<!-- 			#{faName}, -->
-<!-- 			#{faCtlVal}, -->
-<!-- 			#{faStatus}, -->
-<!-- 			#{faRegDte}, -->
-<!-- 			#{faRegMem} -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="registFailRepair">
+	
+		DECLARE @str NVARCHAR(50)
+		DECLARE @seq INT
+		
+		SET @str = 'TS000'
+	
+		INSERT INTO sm_troubleshooting
+			(
+			ts_id,
+			tr_id,
+			ts_type,
+			ts_comment,
+			ts_date,
+			ts_reg_id,
+			ts_reg_date
+			)
+		VALUES
+			(
+			@str + CAST(NEXT VALUE FOR ts_seq AS NVARCHAR(50)),
+			#{trId},
+			#{tsType},
+			#{tsComment},
+			#{tsDate},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
 	
 	<select id="selectFailRepairInfo" resultType="egovMap">
 		SELECT
-			fa_cd,
-			fa_name,
-			fa_ctl_val,
-			fa_status
-		FROM sm_facility
-		WHERE fa_cd = #{faCd}
+			a.ts_id,
+			b.tr_id,
+			a.ts_type,
+			a.ts_comment,
+			a.ts_date
+		FROM sm_trouble_report b
+		JOIN sm_troubleshooting a
+		ON a.tr_id = b.tr_id
+		WHERE a.ts_id = #{tsId}
 	</select>
 	
-<!-- 	<update id="modifyFailRepair"> -->
-<!-- 		UPDATE sm_facility SET -->
-<!-- 			fa_name = #{faName}, -->
-<!-- 			fa_ctl_val = #{faCtlVal}, -->
-<!-- 			fa_status = #{faStatus}, -->
-<!-- 			fa_edt_dte = NOW(), -->
-<!-- 			fa_edt_mem = #{userId} -->
-<!-- 		WHERE fa_cd = #{faCd} -->
-<!-- 	</update> -->
+	<update id="failReportIscomp">
+		UPDATE sm_trouble_report SET
+			tr_iscomp = 0
+		WHERE tr_id = #{trId}
+	</update>
 	
-<!-- 	<delete id="deleteFailRepair"> -->
-<!-- 		DELETE FROM sm_facility WHERE fa_cd = #{faCd} -->
-<!-- 	</delete> -->
+	<update id="modifyFailRepair">
+		UPDATE sm_troubleshooting SET
+			ts_type = #{tsType},
+			ts_comment = #{tsComment},
+			ts_date = #{tsDate}
+		WHERE ts_id = #{tsId}
+	</update>
+	
+	<delete id="deleteFailRepair">
+		DELETE FROM sm_troubleshooting WHERE ts_id = #{tsId}
+	</delete>
 </mapper>

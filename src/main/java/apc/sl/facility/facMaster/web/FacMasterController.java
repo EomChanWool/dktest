@@ -1,7 +1,5 @@
 package apc.sl.facility.facMaster.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,18 +45,14 @@ public class FacMasterController {
 	}
 	
 	@RequestMapping("/sl/facility/facMaster/registFacMaster.do")
-	public String registFacMaster(ModelMap model) {
-		List<?> materialList = facMasterService.selectMaterialList();
-		model.put("materialList", materialList);
-		List<?> prodList = facMasterService.selectProductList();
-		model.put("prodList", prodList);
+	public String registFacMaster() {
 		return "sl/facility/facMaster/facMasterRegist";
 	}
 	
-	@RequestMapping(value="/sl/facility/facMaster/woMaterialInfoAjax.do", method=RequestMethod.POST)
-	public ModelAndView woMaterialInfoAjax(@RequestParam Map<String, Object> map) {
+	@RequestMapping(value="/sl/facility/facMaster/woFacMasterInfoAjax.do", method=RequestMethod.POST)
+	public ModelAndView woFacMasterInfoAjax(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
-		Map<String, Object> mtStd = facMasterService.selectMaterialStd(map);
+		Map<String, Object> mtStd = facMasterService.selectFacMasterStd(map);
 		mav.setViewName("jsonView");
 		mav.addObject("mt_info", mtStd);
 		return mav;
@@ -66,115 +60,23 @@ public class FacMasterController {
 	
 	@RequestMapping("/sl/facility/facMaster/registFacMasterOk.do")
 	public String registFacMasterOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//재고확인
-		for(int i=1;i<=15;i++) {
-			if(map.get("itemCd"+i) == null) break;
-			
-			Map<String, Object> temp = new HashMap<>();
-			temp.put("itemCd", map.get("itemCd"+i));
-			temp.put("cnt", map.get("cnt"+i));
-			int pass = facMasterService.checkItemStock(temp);
-			
-			if(pass == 0) {
-				redirectAttributes.addFlashAttribute("msg", map.get("itemName"+i)+"의 재고가 부족합니다.");
-				redirectAttributes.addFlashAttribute("facMasterVO", map);
-				return "redirect:/sl/facility/facMaster/registFacMaster.do";
-			}
-		}
-		
-		//재고 갱신
-		for(int i=1;i<=10;i++) {
-			if(map.get("itemCd"+i) == null) break;
-			
-			Map<String, Object> temp = new HashMap<>();
-			temp.put("itemCd", map.get("itemCd"+i));
-			temp.put("cnt", "-"+map.get("cnt"+i));
-			facMasterService.updateMaterialStock(temp);
-		}
-		
 		map.put("userId", session.getAttribute("user_id"));
 		facMasterService.registFacMaster(map);
-		facMasterService.registInMaterial(map);
-		facMasterService.registInsertInfo(map); 
-		//해당 작지에 대한 공정목록 생성
-		createProcess(map, session);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/facility/facMaster/facMasterList.do";
 	}
 	
 	@RequestMapping("/sl/facility/facMaster/modifyFacMaster.do")
 	public String modifyFacMaster(@RequestParam Map<String, Object> map, ModelMap model) {
-		List<?> itemList = facMasterService.selectMaterialList();
-		model.put("itemList", itemList);
-		List<?> prodList = facMasterService.selectProductList();
-		model.put("prodList", prodList);
-		
-		if(!map.isEmpty()) {
-			Map<String, Object> detail = facMasterService.selectFacMasterInfo(map);
-			model.put("facMasterVO", detail);
-		}
-		
-		Map<String, Object> materialList = facMasterService.selectInMaterialList(map);
-		List<Map<String, Object>> mtList = new ArrayList<>();
-		for(int i=1;i<=15;i++) {
-			Map<String, Object> temp = new HashMap<>();
-			String itemCd = "itemCd"+i;
-			String itemName = "itemName"+i;
-			String cnt = "cnt"+i;
-			if(materialList.get(itemCd) == null) {
-				break;
-			}
-			String std = facMasterService.selectItemStd(materialList.get(itemCd)+"");
-			
-			temp.put("itemCd", materialList.get(itemCd));
-			temp.put("itemName", materialList.get(itemName));
-			temp.put("cnt", materialList.get(cnt));
-			temp.put("std", std);
-			mtList.add(temp);
-		}
-		model.put("mtList", mtList);
+		Map<String, Object> detail = facMasterService.selectFacMasterInfo(map);
+		model.put("facMasterVO", detail);
 		return "sl/facility/facMaster/facMasterModify";
 	}
 	
 	@RequestMapping("/sl/facility/facMaster/modifyFacMasterOk.do")
 	public String modifyFacMasterOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//재고확인
-		for(int i=1;i<=10;i++) {
-			if(map.get("itemCd"+i) == null) break;
-			
-			Map<String, Object> temp = new HashMap<>();
-			temp.put("itemCd", map.get("itemCd"+i));
-			temp.put("cnt", map.get("cnt"+i));
-			int pass = facMasterService.checkItemStock(temp);
-			
-			if(pass == 0) {
-				redirectAttributes.addFlashAttribute("msg", map.get("itemName"+i)+"의 재고가 부족합니다.");
-				redirectAttributes.addFlashAttribute("facMasterVO", map);
-				return "redirect:/sl/facility/facMaster/registFacMaster.do";
-			}
-		}
-		
-		//이전 등록 자재들 수량 복구
-		for(int i=1;i<=15;i++) {
-			if(map.get("curItemCd"+i) == null) break;
-			Map<String, Object> temp = new HashMap<>();
-			temp.put("itemCd", map.get("curItemCd"+i));
-			temp.put("cnt", map.get("curCnt"+i));
-			facMasterService.updateMaterialStock(temp);
-		}
-		
-		//새로 수정된 자재들 수량으로 갱신
-		for(int i=1;i<=15;i++) {
-			if(map.get("itemCd"+i) == null) break;
-			Map<String, Object> temp = new HashMap<>();
-			temp.put("itemCd", map.get("itemCd"+i));
-			temp.put("cnt", "-"+map.get("cnt"+i));
-			facMasterService.updateMaterialStock(temp);
-		}
-		
+		map.put("userId", session.getAttribute("user_id"));
 		facMasterService.modifyFacMaster(map);
-		facMasterService.modifyInMaterial(map);
-		
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/facility/facMaster/facMasterList.do";
 	}
@@ -182,6 +84,11 @@ public class FacMasterController {
 	@RequestMapping("/sl/facility/facMaster/detailFacMaster.do")
 	public String deatail(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = facMasterService.selectFacMasterInfo(map);
+		if (detail.get("eqIsuse").equals(0)) {
+			detail.put("eqIsuse", "사용");
+		} else if (detail.get("eqIsuse").equals(1)) {
+			detail.put("eqIsuse", "미사용");
+		}
 		model.put("facMasterVO", detail);
 		return "sl/facility/facMaster/facMasterDetail";
 	}
@@ -189,26 +96,8 @@ public class FacMasterController {
 	@RequestMapping("/sl/facility/facMaster/deleteFacMaster.do")
 	public String deleteFacMaster(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		facMasterService.deleteFacMaster(map);
-		facMasterService.deleteInsertInfo(map);
-		facMasterService.deleteInMaterial(map);
-		facMasterService.deleteProcess(map);
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");
 		return "redirect:/sl/facility/facMaster/facMasterList.do";
 	}
 	
-	private void createProcess(Map<String, Object> map, HttpSession session) {
-		List<?> processList = facMasterService.selectProcessList(map);
-		Map<String, Object> process = new HashMap<>();
-		for(int i=0;i<processList.size();i++) {
-			String[] str1 = processList.get(i).toString().split(", ");
-			String[] idx = str1[0].split("=");
-			String[] nm = str1[2].split("=");
-			process.put("idx"+(i+1), idx[1]);
-			process.put("nm"+(i+1), nm[1].substring(0, nm[1].length()-1));
-		}
-		process.put("woItnDte", map.get("woItnDte"));
-		process.put("totCnt", processList.size());
-		process.put("userId", session.getAttribute("user_id"));
-		facMasterService.registProcess(process);
-	}
 }

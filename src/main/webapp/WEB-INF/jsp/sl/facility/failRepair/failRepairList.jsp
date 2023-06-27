@@ -54,7 +54,8 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do" method="post">
-									<input type="hidden" name=faCd>
+									<input type="hidden" name=tsId>
+									<input type="hidden" name=trId>
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
@@ -84,12 +85,10 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>번호</th>
-                                            <th>설비구분</th>
-											<th>설비명</th>
-											<th>고장구분</th>
-											<th>고장신고일자</th>
+                                            <th>조치ID</th>
+                                            <th>신고ID</th>
 											<th>조치구분</th>
+											<th>조치내용</th>
 											<th>조치일자</th>
 											<th>수정/삭제</th>
                                         </tr>
@@ -97,18 +96,18 @@
                                     <tbody>
                                     	<c:forEach var="result" items="${failRepairList}" varStatus="status">
 	                                   		<tr>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
+	                                            <td>${result.tsId}</td>
+	                                            <td>${result.trId}</td>
+	                                            <td>${result.tsType}</td>
+	                                            <td>${result.tsComment}</td>
+	                                            <td>
+	                                            	<fmt:formatDate value="${result.tsDate}" pattern="yyyy-MM-dd"/>
+	                                            </td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_failRepair_go('${result.faCd}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_failRepair_go('${result.tsId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_failRepair('${result.faCd}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_failRepair('${result.tsId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -174,15 +173,15 @@
 		listForm.submit();
 	}
 	
-	function fn_modify_failRepair_go(faCd){
-		listForm.faCd.value = faCd;
+	function fn_modify_failRepair_go(tsId){
+		listForm.tsId.value = tsId;
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/failRepair/modifyFailRepair.do";
 		listForm.submit();
 	}
 	
-	function fn_delete_failRepair(faCd){
+	function fn_delete_failRepair(tsId){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.faCd.value = faCd;
+			listForm.tsId.value = tsId;
 			listForm.action = "${pageContext.request.contextPath}/sl/facility/failRepair/deleteFailRepair.do";
 			listForm.submit();
 		}
