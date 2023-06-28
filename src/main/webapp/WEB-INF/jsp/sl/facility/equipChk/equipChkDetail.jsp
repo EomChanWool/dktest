@@ -47,45 +47,63 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장신고 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비체크시트 상세</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/facility/failReport/modifyFailReportOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="trId" value="${failReportVO.trId}">
-	                                <table class="table table-bordered" id="dataTable">
-	                                    <tbody>
-											<tr>
-												<th>신고ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.trId}" disabled="disabled"></td>
-												<th>설비ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.eqId}" disabled="disabled"></td>
-											</tr>
-											<tr>
-												<th>고장구분</th>
-												<td><input type="text" class="form-control" name="trType" value="${failReportVO.trType}"></td>
-												<th>고장내용</th>
-												<td><input type="text" class="form-control" name="trComment" id="trComment" value="${failReportVO.trComment}"></td>
-											</tr>
-											<tr>
-												<th>신고일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="trDate" id="trDate" value="<fmt:formatDate value='${failReportVO.trDate}' pattern='yyyy-MM-dd' />"></td>
-												<th>처리여부</th>
-												<td>
-													<select class="form-control" name="trIscomp">
-														<option>선택</option>
-														<option value="0" <c:if test="${failReportVO.trIscomp eq '0'}">selected="selected"</c:if>>O</option>
-														<option value="1" <c:if test="${failReportVO.trIscomp eq '1'}">selected="selected"</c:if>>X</option>
-													</select>
-												</td>
-											</tr>
-										</tbody>
-	                                </table>
-                                </form>
+                                <table class="table table-bordered" id="dataTable">
+                                    <tbody>
+										<tr>
+											<th>정보ID</th>
+											<td><span class="form-control val-area">${equipChkVO.eciId}</span></td>
+											<th>설비ID</th>
+											<td><span class="form-control val-area">${equipChkVO.eqId}</span></td>
+										</tr>
+										<tr>
+											<th>설비체크명</th>
+											<td><span class="form-control val-area">${equipChkVO.eciName}</span></td>
+											<th>점검내용</th>
+											<td><span class="form-control val-area">${equipChkVO.eciComment}</span></td>
+										</tr>
+										<tr>
+											<th>점검자</th>
+											<td><span class="form-control val-area">${equipChkVO.eciManager}</span></td>
+											<th>점검일</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${equipChkVO.eciDate}" pattern="yyyy-MM-dd"/> 
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<th>등록ID</th>
+											<td><span class="form-control val-area">${equipChkVO.eciRegId}</span></td>
+											<th>등록일</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${equipChkVO.eciRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<th>수정ID</th>
+											<td><span class="form-control val-area">${equipChkVO.eciEdtId}</span></td>
+											<th>수정일</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${equipChkVO.eciEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<th>비고</th>
+											<td colspan="3"><span class="form-control val-area">${equipChkVO.eciNote}</span></td>
+										</tr>
+									</tbody>
+                                </table>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_failReport()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/equipChk/equipChkList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -121,45 +139,10 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_failReport(){
-		var num = /^\d+$/;
-// 		if(!num.test($('#prReCnt').val())){
-// 			alert("생산수량을 확인 바랍니다.");
-// 			return;
-// 		}
-		
-// 		if($('#prReFaultyCnt').val() != '' && !num.test($('#prReFaultyCnt').val())){
-// 			alert("불량수량을 확인 바랍니다.");
-// 			return;
-// 		}
-		
-// 		if($('#prReState').val() == ''){
-// 			alert("작업상태를 확인 바랍니다.");
-// 			return;
-// 		}
-// 		if($('#prReState').val() == '1' && $('#prReEdTime').val() == ''){
-// 			alert("작업종료일을 확인 바랍니다.");
-// 			return;
-// 		}
-		
-		modifyForm.submit();
-	}
-	
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failReportList').addClass("active");
-		
-		let msg = '${msg}';
-		if(msg) {
-			alert(msg);
-		}
-		
-// 		$('#prReState').change(function(){
-// 			if($('#prReState').val() == "0"){
-// 				$('#prReEdTime').val("");
-// 			}
-// 		});
+		$('#equipChkList').addClass("active");
 	});
 	</script>
 </body>

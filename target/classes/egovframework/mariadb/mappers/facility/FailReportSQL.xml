@@ -110,7 +110,17 @@
 			a.tr_type,
 			a.tr_date,
 			a.tr_comment,
-			a.tr_iscomp
+			a.tr_iscomp,
+			b.eq_type,
+			b.eq_name,
+			b.eq_sensorid,
+			b.eq_place,
+			b.eq_op_state,
+			b.eq_isuse,
+			a.tr_reg_id,
+			a.tr_reg_date,
+			a.tr_edt_id,
+			a.tr_edt_date
 		FROM sm_trouble_report a
 		JOIN sm_equipment b
 		ON a.eq_id = b.eq_id
@@ -122,7 +132,9 @@
 			tr_type = #{trType},
 			tr_comment = #{trComment},
 			tr_date = #{trDate},
-			tr_iscomp = #{trIscomp}
+			tr_iscomp = #{trIscomp},
+			tr_edt_id = #{userId},
+			tr_edt_date = GETDATE()
 		WHERE tr_id = #{trId}
 	</update>
 	

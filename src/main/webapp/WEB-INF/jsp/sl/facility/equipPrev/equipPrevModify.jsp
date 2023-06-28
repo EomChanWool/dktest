@@ -47,45 +47,33 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장신고 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/facility/failReport/modifyFailReportOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="trId" value="${failReportVO.trId}">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/failRepair/modifyFailRepairOk.do" name="modifyForm" method="post">
+                            		<input type="hidden" name="tsId" value="${failRepairVO.tsId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
 												<th>신고ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.trId}" disabled="disabled"></td>
-												<th>설비ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.eqId}" disabled="disabled"></td>
+												<td><input type="text" class="form-control" name="trId" value="${failRepairVO.trId}" disabled="disabled"></td>
+												<th>조치구분</th>
+												<td><input type="text" class="form-control" name="tsType" value="${failRepairVO.tsType}"></td>
 											</tr>
 											<tr>
-												<th>고장구분</th>
-												<td><input type="text" class="form-control" name="trType" value="${failReportVO.trType}"></td>
-												<th>고장내용</th>
-												<td><input type="text" class="form-control" name="trComment" id="trComment" value="${failReportVO.trComment}"></td>
-											</tr>
-											<tr>
-												<th>신고일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="trDate" id="trDate" value="<fmt:formatDate value='${failReportVO.trDate}' pattern='yyyy-MM-dd' />"></td>
-												<th>처리여부</th>
-												<td>
-													<select class="form-control" name="trIscomp">
-														<option>선택</option>
-														<option value="0" <c:if test="${failReportVO.trIscomp eq '0'}">selected="selected"</c:if>>O</option>
-														<option value="1" <c:if test="${failReportVO.trIscomp eq '1'}">selected="selected"</c:if>>X</option>
-													</select>
-												</td>
+												<th>조치내용</th>
+												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failRepairVO.tsComment}"></td>
+												<th>조치일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="<fmt:formatDate value='${failRepairVO.tsDate}' pattern='yyyy-MM-dd' />"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_failReport()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_failRepair()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -121,24 +109,19 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_failReport(){
-		var num = /^\d+$/;
-// 		if(!num.test($('#prReCnt').val())){
-// 			alert("생산수량을 확인 바랍니다.");
+	function fn_modify_failRepair(){
+// 		if($('#faName').val() == ''){
+// 			alert("설비명을 확인 바랍니다.");
 // 			return;
 // 		}
 		
-// 		if($('#prReFaultyCnt').val() != '' && !num.test($('#prReFaultyCnt').val())){
-// 			alert("불량수량을 확인 바랍니다.");
+// 		if($('#faCtlVal').val() == ''){
+// 			alert("설정값을 확인 바랍니다.");
 // 			return;
 // 		}
 		
-// 		if($('#prReState').val() == ''){
-// 			alert("작업상태를 확인 바랍니다.");
-// 			return;
-// 		}
-// 		if($('#prReState').val() == '1' && $('#prReEdTime').val() == ''){
-// 			alert("작업종료일을 확인 바랍니다.");
+// 		if($('#faStatus').val() == ''){
+// 			alert("상태를 확인 바랍니다.");
 // 			return;
 // 		}
 		
@@ -148,18 +131,12 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failReportList').addClass("active");
+		$('#failRepairList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
-		
-// 		$('#prReState').change(function(){
-// 			if($('#prReState').val() == "0"){
-// 				$('#prReEdTime').val("");
-// 			}
-// 		});
 	});
 	</script>
 </body>

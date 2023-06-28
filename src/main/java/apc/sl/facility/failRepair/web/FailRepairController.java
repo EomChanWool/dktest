@@ -62,9 +62,7 @@ public class FailRepairController {
 	
 	@RequestMapping("/sl/facility/failRepair/modifyFailRepair.do")
 	public String modifyFailRepair(@RequestParam Map<String, Object> map, ModelMap model) {
-		
 		Map<String, Object> detail = failRepairService.selectFailRepairInfo(map);
-		System.out.println(failRepairService.selectFailRepairInfo(map));
 		model.put("failRepairVO", detail);
 		return "sl/facility/failRepair/failRepairModify";
 	}
@@ -75,6 +73,13 @@ public class FailRepairController {
 		failRepairService.modifyFailRepair(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/facility/failRepair/failRepairList.do";
+	}
+	
+	@RequestMapping("/sl/facility/failRepair/detailFailRepair.do")
+	public String deatail(@RequestParam Map<String, Object> map, ModelMap model) {
+		Map<String, Object> detail = failRepairService.selectFailRepairInfo(map);
+		model.put("failRepairVO", detail);
+		return "sl/facility/failRepair/failRepairDetail";
 	}
 	
 	@RequestMapping("/sl/facility/failRepair/deleteFailRepair.do")

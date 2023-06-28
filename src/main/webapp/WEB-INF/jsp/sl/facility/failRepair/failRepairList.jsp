@@ -86,7 +86,6 @@
                                     <thead>
                                         <tr>
                                             <th>조치ID</th>
-                                            <th>신고ID</th>
 											<th>조치구분</th>
 											<th>조치내용</th>
 											<th>조치일자</th>
@@ -95,15 +94,14 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${failRepairList}" varStatus="status">
-	                                   		<tr>
+	                                   		<tr onclick="fn_detail_FailRepair('${result.tsId}')" style="cursor: pointer;">
 	                                            <td>${result.tsId}</td>
-	                                            <td>${result.trId}</td>
 	                                            <td>${result.tsType}</td>
 	                                            <td>${result.tsComment}</td>
 	                                            <td>
 	                                            	<fmt:formatDate value="${result.tsDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>
-	                                            <td style="padding: 5px 0px;">
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_failRepair_go('${result.tsId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
@@ -176,6 +174,12 @@
 	function fn_modify_failRepair_go(tsId){
 		listForm.tsId.value = tsId;
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/failRepair/modifyFailRepair.do";
+		listForm.submit();
+	}
+	
+	function fn_detail_FailRepair(tsId){
+		listForm.tsId.value = tsId;
+		listForm.action = "${pageContext.request.contextPath}/sl/facility/failRepair/detailFailRepair.do";
 		listForm.submit();
 	}
 	
