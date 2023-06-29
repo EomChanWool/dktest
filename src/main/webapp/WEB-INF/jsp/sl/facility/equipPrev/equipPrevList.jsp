@@ -35,7 +35,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav FailReport - User Information -->
+                        <!-- Nav equipPrev - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
 
                     </ul>
@@ -47,70 +47,71 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장신고관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do" method="post">
-									<input type="hidden" name="trId">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevList.do" method="post">
+									<input type="hidden" name=epmId>
+									<input type="hidden" name=trId>
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+									
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
 							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>설비구분</option>
 							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>고장구분</option>
-							    		
+							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>조치구분</option>
 						    		</select>
+									
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
-						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_FailReport()" style="margin-left: 0.3rem;">
+						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_equipPrev()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
 	                            </a>
-						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_FailReport()">
+						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_equipPrev()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_FailReport()" style="float: right;">
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_equipPrev()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
 							</div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable"  >
+                                <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>신고ID</th>
-											<th>고장구분</th>
-											<th>고장내용</th>
-											<th>처리여부</th>
-											<th>신고일자</th>
+                                            <th>조치ID</th>
+											<th>조치구분</th>
+											<th>조치내용</th>
+											<th>조치일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${failReportList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_FailReport('${result.trId}')" style="cursor: pointer;">
-	                                            <td>${result.trId}</td>
-	                                            <td>${result.trType}</td>
-	                                            <td>${result.trComment}</td>
-	                                            <td>${result.trIscomp}</td>
+                                    	<c:forEach var="result" items="${equipPrevList}" varStatus="status">
+	                                   		<tr onclick="fn_detail_EquipPrev('${result.epmId}')" style="cursor: pointer;">
+	                                            <td>${result.epmId}</td>
+	                                            <td>${result.tsType}</td>
+	                                            <td>${result.tsComment}</td>
 	                                            <td>
-	                                            	<fmt:formatDate value="${result.trDate}" pattern="yyyy-MM-dd"/>
+	                                            	<fmt:formatDate value="${result.tsDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>
-	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_FailReport_go('${result.trId}')">
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_equipPrev_go('${result.epmId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_FailReport('${result.trId}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_equipPrev('${result.epmId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty failReportList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty equipPrevList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -155,37 +156,37 @@
 	   	listForm.submit();
 	}
 	
-	function fn_search_FailReport(){
+	function fn_search_equipPrev(){
 		listForm.submit();
 	}
 	
-	function fn_searchAll_FailReport(){
+	function fn_searchAll_equipPrev(){
 		listForm.searchKeyword.value = "";
 		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	
-	function fn_regist_FailReport(){
-		listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/registFailReport.do";
+	function fn_regist_equipPrev(){
+		listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/registEquipPrev.do";
 		listForm.submit();
 	}
 	
-	function fn_modify_FailReport_go(trId){
-		listForm.trId.value = trId;
-		listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/modifyFailReport.do";
+	function fn_modify_equipPrev_go(epmId){
+		listForm.epmId.value = epmId;
+		listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/modifyEquipPrev.do";
 		listForm.submit();
 	}
 	
-	function fn_detail_FailReport(trId){
-		listForm.trId.value = trId;
-		listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/detailFailReport.do";
+	function fn_detail_EquipPrev(epmId){
+		listForm.epmId.value = epmId;
+		listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/detailEquipPrev.do";
 		listForm.submit();
 	}
 	
-	function fn_delete_FailReport(trId){
+	function fn_delete_equipPrev(epmId){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.trId.value = trId;
-			listForm.action = "${pageContext.request.contextPath}/sl/facility/failReport/deleteFailReport.do";
+			listForm.epmId.value = epmId;
+			listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/deleteEquipPrev.do";
 			listForm.submit();
 		}
 	}
@@ -193,7 +194,7 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failReportList').addClass("active");
+		$('#equipPrevList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {

@@ -38,7 +38,7 @@
                     </form>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav FailReport - User Information -->
+                        <!-- Nav FailRepair - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
                     </ul>
                 </nav>
@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장신고 상세</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치 상세</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -55,72 +55,61 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>신고ID</th>
-											<td><span class="form-control val-area">${failReportVO.trId}</span></td>
+											<th>고장ID</th>
+											<td><span class="form-control val-area">${failRepairVO.trId}</span></td>
+											<th>조치ID</th>
+											<td><span class="form-control val-area">${failRepairVO.tsId}</span></td>
 										</tr>
 										<tr>
 											<th>고장구분</th>
-											<td><span class="form-control val-area">${failReportVO.trType}</span></td>
+											<td><span class="form-control val-area">${failRepairVO.trType}</span></td>
+											<th>조치구분</th>
+											<td><span class="form-control val-area">${failRepairVO.tsType}</span></td>
+										</tr>
+										<tr>
 											<th>고장내용</th>
-											<td><span class="form-control val-area">${failReportVO.trComment}</span></td>
+											<td><span class="form-control val-area">${failRepairVO.trComment}</span></td>
+											<th>조치내용</th>
+											<td><span class="form-control val-area">${failRepairVO.tsComment}</span></td>
 										</tr>
 										<tr>
 											<th>신고일자</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failReportVO.trDate}" pattern="yyyy-MM-dd"/> 
+													<fmt:formatDate value="${failRepairVO.trDate}" pattern="yyyy-MM-dd"/> 
 												</span>
 											</td>
-											<th>처리여부</th>
-											<td><span class="form-control val-area">${failReportVO.trIscomp}</span></td>
+											<th>조치일자</th>
+											<td>
+												<span class="form-control val-area">
+													<fmt:formatDate value="${failRepairVO.tsDate}" pattern="yyyy-MM-dd"/> 
+												</span>
+											</td>
 										</tr>
 										<tr>
 											<th>등록ID</th>
-											<td><span class="form-control val-area">${failReportVO.trRegId}</span></td>
+											<td><span class="form-control val-area">${failRepairVO.tsRegId}</span></td>
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failReportVO.trRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${failRepairVO.tsRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
 										<tr>
 											<th>수정ID</th>
-											<td><span class="form-control val-area">${failReportVO.trEdtId}</span></td>
+											<td><span class="form-control val-area">${failRepairVO.tsEdtId}</span></td>
 											<th>수정일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failReportVO.trEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${failRepairVO.tsEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
-										<tr>
-											<th>설비ID</th>
-											<td><span class="form-control val-area">${failReportVO.eqId}</span></td>
-										</tr>
-										<tr>
-											<th>설비구분</th>
-											<td><span class="form-control val-area">${failReportVO.eqType}</span></td>
-											<th>설비명</th>
-											<td><span class="form-control val-area">${failReportVO.eqName}</span></td>
-										</tr>
-										<tr>
-											<th>센서ID</th>
-											<td><span class="form-control val-area">${failReportVO.eqSensorid}</span></td>
-											<th>설치장소</th>
-											<td><span class="form-control val-area">${failReportVO.eqPlace}</span></td>
-										</tr>
-										<tr>
-											<th>설비상태</th>
-											<td><span class="form-control val-area">${failReportVO.eqOpState}</span></td>
-											<th>사용여부</th>
-											<td><span class="form-control val-area">${failReportVO.eqIsuse}</span></td>
-										</tr>
-										
 									</tbody>
                                 </table>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do'">목록</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -159,7 +148,7 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failReportList').addClass("active");
+		$('#failRepairList').addClass("active");
 	});
 	</script>
 </body>

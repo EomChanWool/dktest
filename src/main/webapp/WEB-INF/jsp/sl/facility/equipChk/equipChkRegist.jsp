@@ -47,45 +47,47 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장신고 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">공정설비관리 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/facility/failReport/modifyFailReportOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="trId" value="${failReportVO.trId}">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/equipChk/registEquipChkOk.do" name="registForm" method="post">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>신고ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.trId}" disabled="disabled"></td>
 												<th>설비ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" value="${failReportVO.eqId}" disabled="disabled"></td>
-											</tr>
-											<tr>
-												<th>고장구분</th>
-												<td><input type="text" class="form-control" name="trType" value="${failReportVO.trType}"></td>
-												<th>고장내용</th>
-												<td><input type="text" class="form-control" name="trComment" id="trComment" value="${failReportVO.trComment}"></td>
-											</tr>
-											<tr>
-												<th>신고일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="trDate" id="trDate" value="<fmt:formatDate value='${failReportVO.trDate}' pattern='yyyy-MM-dd' />"></td>
-												<th>처리여부</th>
 												<td>
-													<select class="form-control" name="trIscomp">
-														<option>선택</option>
-														<option value="0" <c:if test="${failReportVO.trIscomp eq '0'}">selected="selected"</c:if>>O</option>
-														<option value="1" <c:if test="${failReportVO.trIscomp eq '1'}">selected="selected"</c:if>>X</option>
+													<select class="form-control" name="eqId" id="eqId">
+														<option value="">선택</option>
+														<c:forEach var="list" items="${equipmentList}" varStatus="status">
+															<option value="${list.eqId}">${list.eqId}</option>
+														</c:forEach>
 													</select>
 												</td>
+												<th>설비체크명</th>
+												<td><input type="text" class="form-control" name="eciName" value="${equipChkVO.eciName}"></td>
+											</tr>
+											<tr>
+												<th>점검내용</th>
+												<td><input type="text" class="form-control" name="eciComment" id="eciComment" value="${equipChkVO.eciComment}"></td>
+												<th>점검자<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="eciManager" id="eciManager" value="${equipChkVO.eciManager}"></td>
+											</tr>
+											<tr>
+												<th>점검일<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="eciDate" id="eciDate" value="${equipChkVO.eciDate}"></td>
+											</tr>
+											<tr>
+												<th>비고</th>
+												<td colspan="3"><input type="text" class="form-control" name="eciNote" id="eciNote" value="${equipChkVO.eciNote}"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_failReport()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failReport/failReportList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_equipChk()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/equipChk/equipChkList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -121,46 +123,80 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_failReport(){
-		var num = /^\d+$/;
-// 		if(!num.test($('#prReCnt').val())){
-// 			alert("생산수량을 확인 바랍니다.");
+	function fn_regist_equipChk(){
+// 		if($('#prListIdx').val() == ''){
+// 			alert("공정번호를 확인 바랍니다.");
 // 			return;
 // 		}
 		
-// 		if($('#prReFaultyCnt').val() != '' && !num.test($('#prReFaultyCnt').val())){
-// 			alert("불량수량을 확인 바랍니다.");
+// 		if($('#faCd').val() == ''){
+// 			alert("설비코드를 확인 바랍니다.");
 // 			return;
 // 		}
 		
-// 		if($('#prReState').val() == ''){
-// 			alert("작업상태를 확인 바랍니다.");
-// 			return;
-// 		}
-// 		if($('#prReState').val() == '1' && $('#prReEdTime').val() == ''){
-// 			alert("작업종료일을 확인 바랍니다.");
+// 		if($('#prChkList').val() == ''){
+// 			alert("점검항목을 확인 바랍니다.");
 // 			return;
 // 		}
 		
-		modifyForm.submit();
+// 		if($('#prChkDte').val() == ''){
+// 			alert("점검일을 확인 바랍니다.");
+// 			return;
+// 		}
+		
+// 		if($('#prChkManager').val() == ''){
+// 			alert("담당자를 확인 바랍니다.");
+// 			return;
+// 		}
+		
+// 		if($('#prChkInsp').val() == ''){
+// 			alert("점검내역을 확인 바랍니다.");
+// 			return;
+// 		}
+		
+		registForm.submit();
 	}
 	
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failReportList').addClass("active");
+		$('#equipChkList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-// 		$('#prReState').change(function(){
-// 			if($('#prReState').val() == "0"){
-// 				$('#prReEdTime').val("");
-// 			}
+// 		equipChkEquipInfoAjax();
+		
+// 		$('#prListIdx').change(function(){
+// 			$('#prChkList').val("");
+// 			$('#faCd').empty();
+// 			equipChkEquipInfoAjax();
 // 		});
 	});
+	
+// 	function equipChkEquipInfoAjax(){
+// 		$.ajax({
+// 			  type:"POST",
+// 			  url:"<c:url value='${pageContext.request.contextPath}/sl/facility/equipChk/equipChkEquipInfoAjax.do'/>",	  		  			  
+// 			  dataType:"JSON",
+// 			  data:{
+// 				  'prListIdx':$('#prListIdx').val()
+// 			  },
+// 			  success:function(result){
+// 				  var de_option = $('<option value="">선택</option>');
+// 				  $('#faCd').append(de_option);
+// 				  for(var i=0;i<result.fa_info.length;i++){
+// 					  var option = $('<option value="'+result.fa_info[i].faCd+'">'+result.fa_info[i].faName+'</option>');
+// 					  $('#faCd').append(option);
+// 				  }
+// 			  },
+// 			  error:function(request,status,error){ 
+// 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
+// 			  }
+// 		  });
+// 	}
 	</script>
 </body>
 

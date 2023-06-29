@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.facility.equipPrev.service.impl.EquipPrevMapper">
+	<select id="selectEquipPrevListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_equip_prev_maintenance
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectEquipPrevList" resultType="egovMap">
+		SELECT
+			a.epm_id,
+			b.eq_id,
+			a.epm_type,
+			a.epm_date,
+			a.epm_comment,
+			a.epm_manager
+		FROM sm_equip_prev_maintenance a
+		JOIN sm_equipment b
+		ON a.eq_id = b.eq_id
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY emp_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+	</select>
+	
+<!-- 	<select id="selectFailList" resultType="egovMap"> -->
+<!-- 		SELECT -->
+<!-- 			tr_id -->
+<!-- 		FROM sm_trouble_report -->
+<!-- 		WHERE tr_iscomp = 1 -->
+<!-- 	</select> -->
+	
+<!-- 	<insert id="registEquipPrev"> -->
+	
+<!-- 		DECLARE @str NVARCHAR(50) -->
+<!-- 		DECLARE @seq INT -->
+		
+<!-- 		SET @str = 'TS000' -->
+	
+<!-- 		INSERT INTO sm_equip_prev_maintenance -->
+<!-- 			( -->
+<!-- 			ts_id, -->
+<!-- 			tr_id, -->
+<!-- 			ts_type, -->
+<!-- 			ts_comment, -->
+<!-- 			ts_date, -->
+<!-- 			ts_reg_id, -->
+<!-- 			ts_reg_date -->
+<!-- 			) -->
+<!-- 		VALUES -->
+<!-- 			( -->
+<!-- 			@str + CAST(NEXT VALUE FOR ts_seq AS NVARCHAR(50)), -->
+<!-- 			#{trId}, -->
+<!-- 			#{tsType}, -->
+<!-- 			#{tsComment}, -->
+<!-- 			#{tsDate}, -->
+<!-- 			#{userId}, -->
+<!-- 			GETDATE() -->
+<!-- 			) -->
+<!-- 	</insert> -->
+	
+<!-- 	<select id="selectEquipPrevInfo" resultType="egovMap"> -->
+<!-- 		SELECT -->
+<!-- 			a.ts_id, -->
+<!-- 			b.tr_id, -->
+<!-- 			a.ts_type, -->
+<!-- 			a.ts_comment, -->
+<!-- 			a.ts_date, -->
+<!-- 			a.ts_reg_id, -->
+<!-- 			a.ts_reg_date, -->
+<!-- 			a.ts_edt_id, -->
+<!-- 			a.ts_edt_date, -->
+<!-- 			b.tr_type, -->
+<!-- 			b.tr_date, -->
+<!-- 			b.tr_comment -->
+<!-- 		FROM sm_trouble_report b -->
+<!-- 		JOIN sm_equip_prev_maintenance a -->
+<!-- 		ON a.tr_id = b.tr_id -->
+<!-- 		WHERE a.ts_id = #{tsId} -->
+<!-- 	</select> -->
+	
+<!-- 	<update id="failReportIscomp"> -->
+<!-- 		UPDATE sm_trouble_report SET -->
+<!-- 			tr_iscomp = 0 -->
+<!-- 		WHERE tr_id = #{trId} -->
+<!-- 	</update> -->
+	
+<!-- 	<update id="modifyEquipPrev"> -->
+<!-- 		UPDATE sm_equip_prev_maintenance SET -->
+<!-- 			ts_type = #{tsType}, -->
+<!-- 			ts_comment = #{tsComment}, -->
+<!-- 			ts_date = #{tsDate}, -->
+<!-- 			ts_edt_id = #{userId}, -->
+<!-- 			ts_edt_date = GETDATE() -->
+<!-- 		WHERE ts_id = #{tsId} -->
+<!-- 	</update> -->
+	
+<!-- 	<delete id="deleteEquipPrev"> -->
+<!-- 		DELETE FROM sm_equip_prev_maintenance WHERE ts_id = #{tsId} -->
+<!-- 	</delete> -->
+</mapper>

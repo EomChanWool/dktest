@@ -109,6 +109,18 @@ public class FailReportController {
 		return "redirect:/sl/facility/failReport/failReportList.do";
 	}
 	
+	@RequestMapping("/sl/facility/failReport/detailFailReport.do")
+	public String deatail(@RequestParam Map<String, Object> map, ModelMap model) {
+		Map<String, Object> detail = failReportService.selectFailReportInfo(map);
+		if (detail.get("eqIsuse").equals(0)) {
+			detail.put("eqIsuse", "사용");
+		} else if (detail.get("eqIsuse").equals(1)) {
+			detail.put("eqIsuse", "미사용");
+		}
+		model.put("failReportVO", detail);
+		return "sl/facility/failReport/failReportDetail";
+	}
+	
 	@RequestMapping("/sl/facility/failReport/deleteFailReport.do")
 	public String deleteFailReportOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		failReportService.deleteFailReport(map);

@@ -70,7 +70,14 @@
 			b.tr_id,
 			a.ts_type,
 			a.ts_comment,
-			a.ts_date
+			a.ts_date,
+			a.ts_reg_id,
+			a.ts_reg_date,
+			a.ts_edt_id,
+			a.ts_edt_date,
+			b.tr_type,
+			b.tr_date,
+			b.tr_comment
 		FROM sm_trouble_report b
 		JOIN sm_troubleshooting a
 		ON a.tr_id = b.tr_id
@@ -87,7 +94,9 @@
 		UPDATE sm_troubleshooting SET
 			ts_type = #{tsType},
 			ts_comment = #{tsComment},
-			ts_date = #{tsDate}
+			ts_date = #{tsDate},
+			ts_edt_id = #{userId},
+			ts_edt_date = GETDATE()
 		WHERE ts_id = #{tsId}
 	</update>
 	
