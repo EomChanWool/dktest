@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.facility.kpi.service.impl.KpiMapper">
 	<select id="selectKpiListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_exp_kpi
+		SELECT COUNT(*) FROM sm_kpi_info
 		WHERE 1=1
 		<if test="searchCondition2 != ''">
 			AND ex_year = #{searchCondition2}
@@ -14,13 +14,11 @@
 	
 	<select id="selectKpiList" resultType="egovMap">
 		SELECT
-			ex_idx,
-			ex_year,
-			ex_month,
-			ex_trg_error,
-			ex_trg_sales,
-			(ex_760n + ex_760o + ex_760w + ex_560) AS totalCnt
-		FROM sm_exp_kpi
+			ki_year,
+			ki_month,
+			cp_cut_qty,
+			cp_bad_qty
+		FROM sm_kpi_info
 		WHERE 1=1
 		<if test="searchCondition2 != ''">
 			AND ex_year = #{searchCondition2}
@@ -28,8 +26,9 @@
 		<if test="searchCondition3 != ''">
 			AND ex_month = #{searchCondition3}
 		</if>
-		ORDER BY ex_year DESC, ex_month DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY ki_month DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
 	<select id="selectKpiGraphList" resultType="egovMap">
@@ -40,7 +39,7 @@
 			ex_trg_error,
 			ex_trg_sales,
 			(ex_760n + ex_760o + ex_760w + ex_560) AS totalCnt
-		FROM sm_exp_kpi
+		FROM sm_kpi_info
 		WHERE 1=1
 		<if test="searchCondition2 != ''">
 			AND ex_year = #{searchCondition2}
@@ -93,7 +92,7 @@
 	</select>
 	
 	<select id="selectExistsKpi" resultType="int">
-		SELECT COUNT(*) FROM sm_exp_kpi WHERE ex_year = #{exYear} AND ex_month = #{exMonth}
+		SELECT COUNT(*) FROM sm_kpi_info WHERE ex_year = #{exYear} AND ex_month = #{exMonth}
 	</select>
 	
 	<select id="selectProdPerPriceInfo" resultType="egovMap">
@@ -101,7 +100,7 @@
 	</select>
 	
 	<insert id="registKpi">
-		INSERT INTO sm_exp_kpi
+		INSERT INTO sm_kpi_info
 			(
 			ex_idx,
 			ex_year,
@@ -117,7 +116,7 @@
 			)
 		VALUES
 			(
-			(SELECT CONCAT('EX', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.ex_idx),0) FROM sm_exp_kpi a),'[a-z]','')))+1,4,0))),
+			(SELECT CONCAT('EX', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.ex_idx),0) FROM sm_kpi_info a),'[a-z]','')))+1,4,0))),
 			#{exYear},
 			#{exMonth},
 			#{ex760n},
@@ -142,12 +141,12 @@
 			ex_560,
 			ex_trg_error,
 			ex_trg_sales
-		FROM sm_exp_kpi
+		FROM sm_kpi_info
 		WHERE ex_idx = #{exIdx}
 	</select>
 	
 	<update id="modifyKpi">
-		UPDATE sm_exp_kpi SET
+		UPDATE sm_kpi_info SET
 			ex_year = #{exYear},
 			ex_month = #{exMonth},
 			ex_trg_error = #{exTrgError},
@@ -158,6 +157,6 @@
 	</update>
 	
 	<delete id="deleteKpi">
-		DELETE FROM sm_exp_kpi WHERE ex_idx = #{exIdx}
+		DELETE FROM sm_kpi_info WHERE ex_idx = #{exIdx}
 	</delete>
 </mapper>

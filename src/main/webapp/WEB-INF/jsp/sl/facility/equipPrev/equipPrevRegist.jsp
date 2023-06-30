@@ -47,39 +47,43 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장조치 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비예방보수 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/facility/failRepair/registFailRepairOk.do" name="registForm" method="post">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/equipPrev/registEquipPrevOk.do" name="registForm" method="post">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>신고ID <span class="req">*</span></th>
+												<th>설비ID <span class="req">*</span></th>
 												<td>
-													<select class="form-control" name="trId" id="trId">
+													<select class="form-control" name="eqId" id="eqId">
 														<option value="">선택</option>
-														<c:forEach var="list" items="${failList}" varStatus="status">
-															<option value="${list.trId}">${list.trId}</option>
+														<c:forEach var="list" items="${equipmentList}" varStatus="status">
+															<option value="${list.eqId}">${list.eqId}</option>
 														</c:forEach>
 													</select>
 												</td>
-												<th>조치구분</th>
-												<td><input type="text" class="form-control" name="tsType" value="${failReportVO.tsType}"></td>
+												<th>예방보수구분</th>
+												<td><input type="text" class="form-control" name="epmType" value="${equipPrevVO.epmType}"></td>
 											</tr>
 											<tr>
-												<th>조치내용</th>
-												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failReportVO.tsComment}"></td>
-												<th>조치일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="${failReportVO.tsDate}"></td>
+												<th>작업자</th>
+												<td><input type="text" class="form-control" name="epmManager" id="epmManager" value="${equipPrevVO.epmManager}"></td>
+												<th>예방보수내용</th>
+												<td><input type="text" class="form-control" name="epmComment" id="epmComment" value="${equipPrevVO.epmComment}"></td>
+											</tr>
+											<tr>
+												<th>예방보수일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="epmDate" id="epmDate" value="${equipPrevVO.epmDate}"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_regist_failRepair()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_equipPrev()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -115,7 +119,7 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_regist_failRepair(){
+	function fn_regist_equipPrev(){
 // 		if($('#faName').val() == ''){
 // 			alert("설비명을 확인 바랍니다.");
 // 			return;
@@ -137,7 +141,7 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failRepairList').addClass("active");
+		$('#equipPrevList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {

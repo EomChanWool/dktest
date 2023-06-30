@@ -58,21 +58,14 @@
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>설비구분1</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>설비구분2</option>
-							    		
-						    		</select>
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>설비코드</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>설비명</option>
-							    		
+							    		<option value="설비ID" <c:if test="${searchVO.searchCondition eq '설비ID'}">selected="selected"</c:if>>설비ID</option>
+							    		<option value="설비구분" <c:if test="${searchVO.searchCondition eq '설비구분'}">selected="selected"</c:if>>설비구분</option>
+							    		<option value="설비명" <c:if test="${searchVO.searchCondition eq '설비명'}">selected="selected"</c:if>>설비명</option>
+							    		<option value="설비상태" <c:if test="${searchVO.searchCondition eq '설비상태'}">selected="selected"</c:if>>설비상태</option>
 						    		</select>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin-right: 5px;">
-						    		
-						    		
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_facMaster()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -166,9 +159,8 @@
 	}
 	
 	function fn_searchAll_facMaster(){
+		listForm.searchCondition.value = "";
 		listForm.searchKeyword.value = "";
-		listForm.searchStDate.value = "";
-		listForm.searchEdDate.value = "";
 		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}

@@ -82,20 +82,20 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>년도</th>
-											<th>KPI구분</th>
-											<th>KPI성과지표</th>
-											<th>기준정보</th>
+                                            <th>연도</th>
+                                            <th>월</th>
+											<th>목표생산량</th>
+											<th>목표불량률</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${kpiList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.exYear}년</td>
-												<td>${result.exMonth}월</td>
-												<td>${result.exTrgOutput}</td>
-												<td>${result.exTrgSales}</td>
+	                                            <td>${result.kiYear}년</td>
+												<td>${result.kiMonth}월</td>
+												<td>${result.cpCutQty}</td>
+												<td>${result.cpBadQty}</td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.exIdx}')">
 				                                        <span class="text">수정</span>

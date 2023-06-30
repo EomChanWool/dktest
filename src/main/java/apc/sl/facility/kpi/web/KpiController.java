@@ -27,14 +27,13 @@ public class KpiController {
 	@Autowired
 	private KpiService kpiService;
 	
-	@RequestMapping("/sl/kpi/kpi/kpiList.do")
+	@RequestMapping("/sl/kpi/kpimanagement/kpiList.do")
 	public String kpiList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
-		searchVO.setTemp("케이블드럼");
-		if(searchVO.getSearchCondition().equals("")) {
-			searchVO.setSearchCondition("불량률");
-			searchVO.setSearchCondition2(getYears().get("exYear")+"");
-		}
-		
+//		searchVO.setTemp("케이블드럼");
+//		if(searchVO.getSearchCondition().equals("")) {
+//			searchVO.setSearchCondition("불량률");
+//			searchVO.setSearchCondition2(getYears().get("exYear")+"");
+//		}
 		int totCnt = kpiService.selectKpiListToCnt(searchVO);
 		/** pageing setting */
 		searchVO.setPageSize(10);
@@ -52,17 +51,17 @@ public class KpiController {
 		model.put("paginationInfo", paginationInfo);
 		model.put("date", getYears());
 		
-		List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
-		model.put("kpiGraphList", kpiGraphList);
-		if(searchVO.getSearchCondition().equals("불량률") || searchVO.getSearchCondition().equals("생산량")) {
-			//총생산량,불량율
-			List<?> dataList = kpiService.selectErrorOutput(searchVO);
-			model.put("dataList", dataList);
-		}else if(searchVO.getSearchCondition().equals("매출액")) {
-			//매출액
-			List<?> dataList = kpiService.selectSales(searchVO);
-			model.put("dataList", dataList);
-		}
+//		List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
+//		model.put("kpiGraphList", kpiGraphList);
+//		if(searchVO.getSearchCondition().equals("불량률") || searchVO.getSearchCondition().equals("생산량")) {
+//			//총생산량,불량율
+//			List<?> dataList = kpiService.selectErrorOutput(searchVO);
+//			model.put("dataList", dataList);
+//		}else if(searchVO.getSearchCondition().equals("매출액")) {
+//			//매출액
+//			List<?> dataList = kpiService.selectSales(searchVO);
+//			model.put("dataList", dataList);
+//		}
 		return "sl/facility/kpi/kpiList";
 	}
 	
@@ -82,7 +81,6 @@ public class KpiController {
 		 * if(searchVO.getSearchCondition().equals("매출액")) { //매출액 List<?> dataList =
 		 * kpiService.selectSales(searchVO); model.put("dataList", dataList); }
 		 */
-		
 		return "sl/facility/kpi/kpiGraph";
 	}
 	

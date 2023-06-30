@@ -24,66 +24,64 @@
 		<if test="searchKeyword != ''">
 			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY emp_id DESC
+		ORDER BY epm_id DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 	
-<!-- 	<select id="selectFailList" resultType="egovMap"> -->
-<!-- 		SELECT -->
-<!-- 			tr_id -->
-<!-- 		FROM sm_trouble_report -->
-<!-- 		WHERE tr_iscomp = 1 -->
-<!-- 	</select> -->
+	<select id="selectEquipmentList" resultType="egovMap">
+		SELECT
+			eq_id
+		FROM sm_equipment
+	</select>
 	
-<!-- 	<insert id="registEquipPrev"> -->
+	<insert id="registEquipPrev">
 	
-<!-- 		DECLARE @str NVARCHAR(50) -->
-<!-- 		DECLARE @seq INT -->
+		DECLARE @str NVARCHAR(50) = 'EPM'
+		DECLARE @seq INT
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR epm_seq
 		
-<!-- 		SET @str = 'TS000' -->
+		INSERT INTO sm_equip_prev_maintenance
+			(
+			epm_id,
+			eq_id,
+			epm_type,
+			epm_manager,
+			epm_comment,
+			epm_date,
+			epm_reg_id,
+			epm_reg_date
+			)
+		VALUES
+			(
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
+			#{eqId},
+			#{epmType},
+			#{epmManager},
+			#{epmComment},
+			#{epmDate},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
 	
-<!-- 		INSERT INTO sm_equip_prev_maintenance -->
-<!-- 			( -->
-<!-- 			ts_id, -->
-<!-- 			tr_id, -->
-<!-- 			ts_type, -->
-<!-- 			ts_comment, -->
-<!-- 			ts_date, -->
-<!-- 			ts_reg_id, -->
-<!-- 			ts_reg_date -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			@str + CAST(NEXT VALUE FOR ts_seq AS NVARCHAR(50)), -->
-<!-- 			#{trId}, -->
-<!-- 			#{tsType}, -->
-<!-- 			#{tsComment}, -->
-<!-- 			#{tsDate}, -->
-<!-- 			#{userId}, -->
-<!-- 			GETDATE() -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
-<!-- 	<select id="selectEquipPrevInfo" resultType="egovMap"> -->
-<!-- 		SELECT -->
-<!-- 			a.ts_id, -->
-<!-- 			b.tr_id, -->
-<!-- 			a.ts_type, -->
-<!-- 			a.ts_comment, -->
-<!-- 			a.ts_date, -->
-<!-- 			a.ts_reg_id, -->
-<!-- 			a.ts_reg_date, -->
-<!-- 			a.ts_edt_id, -->
-<!-- 			a.ts_edt_date, -->
-<!-- 			b.tr_type, -->
-<!-- 			b.tr_date, -->
-<!-- 			b.tr_comment -->
-<!-- 		FROM sm_trouble_report b -->
-<!-- 		JOIN sm_equip_prev_maintenance a -->
-<!-- 		ON a.tr_id = b.tr_id -->
-<!-- 		WHERE a.ts_id = #{tsId} -->
-<!-- 	</select> -->
+	<select id="selectEquipPrevInfo" resultType="egovMap">
+		SELECT
+			epm_id,
+			eq_id,
+			epm_type,
+			epm_manager,
+			epm_comment,
+			epm_date,
+			epm_reg_id,
+			epm_reg_date,
+			epm_edt_id,
+			epm_edt_date
+		FROM sm_equip_prev_maintenance
+		WHERE epm_id = #{epmId}
+	</select>
 	
 <!-- 	<update id="failReportIscomp"> -->
 <!-- 		UPDATE sm_trouble_report SET -->
@@ -91,17 +89,18 @@
 <!-- 		WHERE tr_id = #{trId} -->
 <!-- 	</update> -->
 	
-<!-- 	<update id="modifyEquipPrev"> -->
-<!-- 		UPDATE sm_equip_prev_maintenance SET -->
-<!-- 			ts_type = #{tsType}, -->
-<!-- 			ts_comment = #{tsComment}, -->
-<!-- 			ts_date = #{tsDate}, -->
-<!-- 			ts_edt_id = #{userId}, -->
-<!-- 			ts_edt_date = GETDATE() -->
-<!-- 		WHERE ts_id = #{tsId} -->
-<!-- 	</update> -->
+	<update id="modifyEquipPrev">
+		UPDATE sm_equip_prev_maintenance SET
+			epm_type = #{epmType},
+			epm_manager = #{epmManager},
+			epm_comment = #{epmComment},
+			epm_date = #{epmDate},
+			epm_edt_id = #{userId},
+			epm_edt_date = GETDATE()
+		WHERE epm_id = #{epmId}
+	</update>
 	
-<!-- 	<delete id="deleteEquipPrev"> -->
-<!-- 		DELETE FROM sm_equip_prev_maintenance WHERE ts_id = #{tsId} -->
-<!-- 	</delete> -->
+	<delete id="deleteEquipPrev">
+		DELETE FROM sm_equip_prev_maintenance WHERE epm_id = #{epmId}
+	</delete>
 </mapper>

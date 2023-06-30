@@ -37,10 +37,11 @@
 	
 	<insert id="registFailRepair">
 	
-		DECLARE @str NVARCHAR(50)
+		DECLARE @str NVARCHAR(50) = 'TS'
 		DECLARE @seq INT
-		
-		SET @str = 'TS000'
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR ts_seq
 	
 		INSERT INTO sm_troubleshooting
 			(
@@ -54,7 +55,7 @@
 			)
 		VALUES
 			(
-			@str + CAST(NEXT VALUE FOR ts_seq AS NVARCHAR(50)),
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
 			#{trId},
 			#{tsType},
 			#{tsComment},

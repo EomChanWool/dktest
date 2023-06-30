@@ -119,7 +119,7 @@
     </a>
     <div id="kpi" class="collapse" aria-labelledby="headingKpi" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
-		    <c:if test="${mLevel.P0025 <= memberVO.mLev}"><a class="collapse-item" id="kpiList" href="${pageContext.request.contextPath}/sl/kpi/kpi/kpiList.do">KPI목표관리</a></c:if>
+		    <c:if test="${mLevel.P0025 <= memberVO.mLev}"><a class="collapse-item" id="kpiList" href="${pageContext.request.contextPath}/sl/kpi/kpimanagement/kpiList.do">KPI목표관리</a></c:if>
 		    <c:if test="${mLevel.P0026 <= memberVO.mLev}"><a class="collapse-item" id="kpiStateList" href="${pageContext.request.contextPath}/sl/kpi/kpiState/kpiStateList.do">KPI현황</a></c:if>
 		</div>
     </div>

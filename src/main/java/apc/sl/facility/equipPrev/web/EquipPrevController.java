@@ -26,7 +26,6 @@ public class EquipPrevController {
 	public String equipPrevList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		int totCnt = equipPrevService.selectEquipPrevListToCnt(searchVO);
 		/** pageing setting */
-		System.out.println("들어옴1");
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex()); // 현재 페이지 번호
@@ -36,9 +35,7 @@ public class EquipPrevController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		System.out.println("들어옴1.5");
 		List<?> equipPrevList = equipPrevService.selectEquipPrevList(searchVO);
-		System.out.println("들어옴2");
 		model.put("equipPrevList", equipPrevList);
 		model.put("paginationInfo", paginationInfo);
 		
@@ -47,8 +44,8 @@ public class EquipPrevController {
 	
 	@RequestMapping("/sl/facility/equipPrev/registEquipPrev.do")
 	public String registEquipPrev(ModelMap model) {
-		List<?> failList = equipPrevService.selectFailList();
-		model.put("failList", failList);
+		List<?> equipmentList = equipPrevService.selectEquipmentList();
+		model.put("equipmentList", equipmentList);
 		return "sl/facility/equipPrev/equipPrevRegist";
 	}
 	
@@ -57,8 +54,6 @@ public class EquipPrevController {
 		map.put("userId", session.getAttribute("user_id"));
 		System.out.println("map : "+ map);
 		equipPrevService.registEquipPrev(map);
-		
-		equipPrevService.failReportIscomp(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/facility/equipPrev/equipPrevList.do";
 	}

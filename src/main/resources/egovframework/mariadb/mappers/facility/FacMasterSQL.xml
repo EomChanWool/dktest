@@ -6,14 +6,17 @@
 			COUNT(*) 
 		FROM sm_equipment
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND wo_name = #{searchKeyword}
+		<if test="searchCondition == '설비ID'">
+			AND eq_id LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchStDate != ''">
-			AND wo_itn_dte >= #{searchStDate}
+		<if test="searchCondition == '설비구분'">
+			AND eq_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchEdDate !=''">
-			AND wo_itn_dte <![CDATA[<=]]> #{searchEdDate}
+		<if test="searchCondition == '설비명'">
+			AND eq_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비상태'">
+			AND eq_op_state LIKE '%' + #{searchKeyword} + '%'
 		</if>
 	</select>
 	
@@ -32,14 +35,17 @@
 			eq_edt_date
 		FROM sm_equipment
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND wo_name LIKE CONCAT('%',#{searchKeyword},'%')
+		<if test="searchCondition == '설비ID'">
+			AND eq_id LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchStDate != ''">
-			AND wo_itn_dte >= #{searchStDate}
+		<if test="searchCondition == '설비구분'">
+			AND eq_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchEdDate !=''">
-			AND wo_itn_dte <![CDATA[<=]]> #{searchEdDate}
+		<if test="searchCondition == '설비명'">
+			AND eq_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비상태'">
+			AND eq_op_state LIKE '%' + #{searchKeyword} + '%'
 		</if>
 		ORDER BY eq_id DESC
 		OFFSET #{firstIndex} ROWS
@@ -47,10 +53,11 @@
 	</select>
 	
 	<insert id="registFacMaster">
-		DECLARE @str NVARCHAR(50)
+		DECLARE @str NVARCHAR(50) = 'EM'
 		DECLARE @seq INT
-		
-		SET @str = 'EM000'
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR eq_seq
 	
 		INSERT INTO sm_equipment
 			(
@@ -66,7 +73,7 @@
 			)
 		VALUES
 			(
-			@str + CAST(NEXT VALUE FOR eq_seq AS NVARCHAR(50)),
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
 			#{eqType},
 			#{eqName},
 			#{eqSensorid},

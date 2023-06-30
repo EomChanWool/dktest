@@ -53,10 +53,11 @@
 	</select>
 	
 	<insert id="registFailReport">
-		DECLARE @str NVARCHAR(50)
+		DECLARE @str NVARCHAR(50) = 'TR'
 		DECLARE @seq INT
-		
-		SET @str = 'TR000'
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR tr_seq
 	
 		INSERT INTO sm_trouble_report
 			(
@@ -71,7 +72,7 @@
 			)
 		VALUES
 			(
-			@str + CAST(NEXT VALUE FOR tr_seq AS NVARCHAR(50)),
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
 			#{eqId},
 			#{trType},
 			#{trComment},

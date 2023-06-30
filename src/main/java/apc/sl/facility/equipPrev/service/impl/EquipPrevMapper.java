@@ -13,7 +13,7 @@ public interface EquipPrevMapper {
 
 	List<?> selectEquipPrevList(SearchVO searchVO);
 
-	List<?> selectFailList();
+	List<?> selectEquipmentList();
 
 	void failReportIscomp(Map<String, Object> map);
 

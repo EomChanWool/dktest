@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장조치관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비예방보수관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

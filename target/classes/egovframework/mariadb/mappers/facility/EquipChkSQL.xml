@@ -70,10 +70,11 @@
 	
 	<insert id="registEquipChk">
 		
-		DECLARE @str NVARCHAR(50)
+		DECLARE @str NVARCHAR(50) = 'ECI'
 		DECLARE @seq INT
-		
-		SET @str = 'ECI000'
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR eci_seq
 	
 		INSERT INTO sm_equip_checksheet_info
 			(
@@ -89,7 +90,7 @@
 			)
 		VALUES
 			(
-			@str + CAST(NEXT VALUE FOR eci_seq AS NVARCHAR(50)),
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
 			#{eqId},
 			#{eciName},
 			#{eciComment},

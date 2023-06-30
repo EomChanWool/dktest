@@ -52,28 +52,34 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/facility/failRepair/modifyFailRepairOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="tsId" value="${failRepairVO.tsId}">
+                            	<form action="${pageContext.request.contextPath}/sl/facility/equipPrev/modifyEquipPrevOk.do" name="modifyForm" method="post">
+                            		<input type="hidden" name="epmId" value="${equipPrevVO.epmId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>신고ID <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="trId" value="${failRepairVO.trId}" disabled="disabled"></td>
-												<th>조치구분</th>
-												<td><input type="text" class="form-control" name="tsType" value="${failRepairVO.tsType}"></td>
+												<th>예방ID <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="epmId" value="${equipPrevVO.epmId}" disabled="disabled"></td>
+												<th>설비ID <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="eqId" value="${equipPrevVO.eqId}" disabled="disabled"></td>
 											</tr>
 											<tr>
-												<th>조치내용</th>
-												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failRepairVO.tsComment}"></td>
-												<th>조치일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="<fmt:formatDate value='${failRepairVO.tsDate}' pattern='yyyy-MM-dd' />"></td>
+												<th>예방보수구분</th>
+												<td><input type="text" class="form-control" name="epmType" value="${equipPrevVO.epmType}"></td>
+												<th>작업자</th>
+												<td><input type="text" class="form-control" name="epmManager" id="epmManager" value="${equipPrevVO.epmManager}"></td>
+											</tr>
+											<tr>
+												<th>예방보수내용</th>
+												<td><input type="text" class="form-control" name="epmComment" value="${equipPrevVO.epmComment}"></td>
+												<th>예방보수일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="epmDate" id="epmDate" value="<fmt:formatDate value='${equipPrevVO.epmDate}' pattern='yyyy-MM-dd' />"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_failRepair()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_equipPrev()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -109,7 +115,7 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_failRepair(){
+	function fn_modify_equipPrev(){
 // 		if($('#faName').val() == ''){
 // 			alert("설비명을 확인 바랍니다.");
 // 			return;
@@ -124,14 +130,13 @@
 // 			alert("상태를 확인 바랍니다.");
 // 			return;
 // 		}
-		
 		modifyForm.submit();
 	}
 	
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failRepairList').addClass("active");
+		$('#equipPrevList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {

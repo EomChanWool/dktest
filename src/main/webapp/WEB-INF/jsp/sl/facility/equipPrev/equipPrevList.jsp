@@ -55,7 +55,7 @@
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevList.do" method="post">
 									<input type="hidden" name=epmId>
-									<input type="hidden" name=trId>
+									<input type="hidden" name=eqId>
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
@@ -85,10 +85,11 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>조치ID</th>
-											<th>조치구분</th>
-											<th>조치내용</th>
-											<th>조치일자</th>
+                                            <th>예방ID</th>
+											<th>예방보수구분</th>
+											<th>작업자</th>
+											<th>예방보수내용</th>
+											<th>예방보수일자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -96,10 +97,11 @@
                                     	<c:forEach var="result" items="${equipPrevList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_EquipPrev('${result.epmId}')" style="cursor: pointer;">
 	                                            <td>${result.epmId}</td>
-	                                            <td>${result.tsType}</td>
-	                                            <td>${result.tsComment}</td>
+	                                            <td>${result.epmType}</td>
+	                                            <td>${result.epmManager}</td>
+	                                            <td>${result.epmComment}</td>
 	                                            <td>
-	                                            	<fmt:formatDate value="${result.tsDate}" pattern="yyyy-MM-dd"/>
+	                                            	<fmt:formatDate value="${result.epmDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_equipPrev_go('${result.epmId}')">

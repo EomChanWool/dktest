@@ -25,8 +25,8 @@ public class EquipPrevServieImpl implements EquipPrevService {
 	}
 
 	@Override
-	public List<?> selectFailList() {
-		return equipPrevMapper.selectFailList();
+	public List<?> selectEquipmentList() {
+		return equipPrevMapper.selectEquipmentList();
 	}
 
 	@Override

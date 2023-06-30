@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장조치 상세</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비예방보수 상세</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -55,61 +55,51 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>고장ID</th>
-											<td><span class="form-control val-area">${failRepairVO.trId}</span></td>
-											<th>조치ID</th>
-											<td><span class="form-control val-area">${failRepairVO.tsId}</span></td>
+											<th>예방ID</th>
+											<td><span class="form-control val-area">${equipPrevVO.epmId}</span></td>
+											<th>설비ID</th>
+											<td><span class="form-control val-area">${equipPrevVO.eqId}</span></td>
 										</tr>
 										<tr>
-											<th>고장구분</th>
-											<td><span class="form-control val-area">${failRepairVO.trType}</span></td>
-											<th>조치구분</th>
-											<td><span class="form-control val-area">${failRepairVO.tsType}</span></td>
+											<th>예방보수구분</th>
+											<td><span class="form-control val-area">${equipPrevVO.epmType}</span></td>
+											<th>작업자</th>
+											<td><span class="form-control val-area">${equipPrevVO.epmManager}</span></td>
 										</tr>
 										<tr>
-											<th>고장내용</th>
-											<td><span class="form-control val-area">${failRepairVO.trComment}</span></td>
-											<th>조치내용</th>
-											<td><span class="form-control val-area">${failRepairVO.tsComment}</span></td>
-										</tr>
-										<tr>
+											<th>예방보수내용</th>
+											<td><span class="form-control val-area">${equipPrevVO.epmComment}</span></td>
 											<th>신고일자</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failRepairVO.trDate}" pattern="yyyy-MM-dd"/> 
-												</span>
-											</td>
-											<th>조치일자</th>
-											<td>
-												<span class="form-control val-area">
-													<fmt:formatDate value="${failRepairVO.tsDate}" pattern="yyyy-MM-dd"/> 
+													<fmt:formatDate value="${equipPrevVO.epmDate}" pattern="yyyy-MM-dd"/> 
 												</span>
 											</td>
 										</tr>
 										<tr>
 											<th>등록ID</th>
-											<td><span class="form-control val-area">${failRepairVO.tsRegId}</span></td>
+											<td><span class="form-control val-area">${equipPrevVO.epmRegId}</span></td>
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failRepairVO.tsRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${equipPrevVO.epmRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
 										<tr>
 											<th>수정ID</th>
-											<td><span class="form-control val-area">${failRepairVO.tsEdtId}</span></td>
+											<td><span class="form-control val-area">${equipPrevVO.epmEdtId}</span></td>
 											<th>수정일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${failRepairVO.tsEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${equipPrevVO.epmEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
 									</tbody>
                                 </table>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/failRepair/failRepairList.do'">목록</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -148,7 +138,7 @@
 	$(function() {
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
-		$('#failRepairList').addClass("active");
+		$('#equipPrevList').addClass("active");
 	});
 	</script>
 </body>
