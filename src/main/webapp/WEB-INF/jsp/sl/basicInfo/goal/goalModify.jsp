@@ -51,6 +51,7 @@
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/goal/modifyGoalOk.do" name="registForm" method="post">
                             	<input type="hidden" name="gmYear" value="${goalInfo.gmYear}"/>
                             	<input type="hidden" name="gmMonth" value="${goalInfo.gmMonth}"/>
+                            	
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>

@@ -95,6 +95,7 @@
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
+                                    
                                     <tbody>
                                     	<c:forEach var="result" items="${goalList}" varStatus="status">
 	                                   		<tr>
