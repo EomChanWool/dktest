@@ -1,5 +1,6 @@
 package apc.sl.basicInfo.actualResult.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -35,7 +36,7 @@ public class ActualResultController {
 	
 	@RequestMapping("/sl/login.do")
 	public String login(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response,HttpSession session) throws Exception {
-		System.out.println("로그인맵 : " + map);
+		System.out.println("로그인맵 : " + sha256.encrypt(map.get("password")+""));
 		Map<String, Object> member = actualResultService.selectActualResult(map);
 		if(member == null) {
 			redirectAttributes.addFlashAttribute("msg", "아이디가없습니다");
@@ -68,13 +69,14 @@ public class ActualResultController {
 //			miLev.put(str1[1], str2[1]);
 //		}
 //		session.setAttribute("miLevel", miLev);
-//		if(Integer.parseInt(member.get("miLevel")+"") == 2) {
-//			return "redirect:/sl/basicInfo/user/userList.do";
-//		}else {
-//			return "redirect:/sl/material/income/incomeList.do";
-//		}
+		if(Integer.parseInt(member.get("miLevel")+"") == 4) {
+			return "redirect:/sl/basicInfo/user/userList.do";
+		}if(Integer.parseInt(member.get("miLevel")+"") < 4 && Integer.parseInt(member.get("miLevel")+"") > 1) {
+			return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";
+		}else {
+			return "redirect:/sl/basicInfo/materialMove/materialMoveList.do";
+		}
 		
-		return "redirect:/sl/basicInfo/user/userList.do";
 	}
 	
 	@RequestMapping("/sl/logout.do")

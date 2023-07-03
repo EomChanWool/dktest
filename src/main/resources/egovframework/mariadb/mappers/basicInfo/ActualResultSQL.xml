@@ -36,7 +36,7 @@
 	</select>
 	
 	<select id="selectMenuLevel" resultType="egovMap">
-		SELECT p_idx, a_lev FROM sm_authority
+		SELECT ma_idx, mi_level FROM sm_member_auth
 	</select>
 	
 <!-- 	<insert id="insertSystemLog"> -->

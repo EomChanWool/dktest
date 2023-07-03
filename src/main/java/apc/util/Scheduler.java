@@ -26,13 +26,13 @@ public class Scheduler {
 	@Autowired
 	private ExcelReaderService excelReaderService;
 	
-	@Scheduled(cron = "10 5 5 * * *")
+	@Scheduled(cron = "10 5 8 * * *")
 	public void delete1() throws Exception{
 		excelReaderService.deletedb();
 		excelReaderService.deleteMm();
 	}
 	
-	@Scheduled(cron = "20 5 5 * * *")
+	@Scheduled(cron = "20 5 8 * * *")
 	public void autoUpdate1() throws Exception {
 		String fileName = "C:\\test\\datatest.xls";
 		FileInputStream fis = new FileInputStream(fileName);
