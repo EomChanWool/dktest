@@ -47,61 +47,56 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">KPI 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">KPI목표관리 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/production/kpi/registKpiOk.do" name="registForm" method="post">
+                            	<form action="${pageContext.request.contextPath}/sl/kpi/kpimanagement/registKpiOk.do" name="registForm" method="post">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>년도  <span class="req">*</span></th>
+												<th>기준년도   <span class="req">*</span></th>
 												<td>
-													<select class="form-control" name="exYear" id="exYear">
+													<select class="form-control" name="kiYear" id="kiYear">
 														<option value="">선택</option>
 														<c:forEach begin="${date.begin}" end="${date.end}" varStatus="status">
-											    			<option value="${status.begin+status.count-1}" <c:if test="${status.begin+status.count-1 eq kpiVO.exYear}">selected="selected"</c:if>>${status.begin+status.count-1}</option>
+											    			<option value="${status.begin+status.count-1}" <c:if test="${status.begin+status.count-1 eq kpiVO.kiYear}">selected="selected"</c:if>>${status.begin+status.count-1}</option>
 											    		</c:forEach>
 													</select>
 												</td>
 												<th>월  <span class="req">*</span></th>
 												<td>
-													<select class="form-control" name="exMonth" id="exMonth">
+													<select class="form-control" name="kiMonth" id="kiMonth">
 														<option value="">선택</option>
 														<c:forEach begin="1" end="12" varStatus="status">
-											    			<option value="${status.count}" <c:if test="${status.count eq kpiVO.exMonth}">selected="selected"</c:if>>${status.count}</option>
+											    			<option value="${status.count}" <c:if test="${status.count eq kpiVO.kiMonth}">selected="selected"</c:if>>${status.count}</option>
 											    		</c:forEach>
 													</select>
 												</td>
 											</tr>
 											<tr>
-												<th>760N 목표생산량(EA)  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ex760n" id="ex760n" value="${kpiVO.ex760n}"></td>
-												<th>760O 목표생산량(EA)  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ex760o" id="ex760o" value="${kpiVO.ex760o}"></td>
-											</tr>
-											<tr>
-												<th>760W 목표생산량(EA)  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ex760w" id="ex760w" value="${kpiVO.ex760w}"></td>
-												<th>560 목표생산량(EA)  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ex560" id="ex560" value="${kpiVO.ex560}"></td>
-											</tr>
-											<tr>
-												<th>목표불량율(%)  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="exTrgError" id="exTrgError" value="${kpiVO.exTrgError}"></td>
-												<th>목표매출액(만원)  <span class="req">*</span></th>
+												<th>KPI 구분</th>
 												<td>
-													<span class="form-control val-area" id="exTrgSales">${kpiVO.exTrgSales}</span>
-													<input type="hidden" name="exTrgSales" value="${kpiVO.exTrgSales}">
+													<select class="form-control" name="kiType" id="kiType">
+														<option value="">선택</option>
+														<option value="kiType">절단공정</option>
+														<option value="kiType">가공공정</option>
+													</select>
 												</td>
+											</tr>
+											<tr>
+												<th>목표생산량  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="cpCutQty" id="cpCutQty" value="${kpiVO.cpCutQty}"></td>
+												<th>목표불량률  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="cpBadQty" id="cpBadQty" value="${kpiVO.cpBadQty}"></td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_kpi()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/production/kpi/kpiList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/kpi/kpimanagement/kpiList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -139,32 +134,32 @@
 	<script>
 	function fn_regist_kpi(){
 		var num =  /^[0-9.]+$/;
-		if($('#exYear').val() == ''){
-			alert("년도를 확인 바랍니다.");
-			return;
-		}
+// 		if($('#exYear').val() == ''){
+// 			alert("년도를 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#exMonth').val() == ''){
-			alert("월을 확인 바랍니다.");
-			return;
-		}
+// 		if($('#exMonth').val() == ''){
+// 			alert("월을 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if(!num.test($('#exTrgError').val())){
-			alert("목표 불량율을 확인 바랍니다.");
-			return;
-		}
+// 		if(!num.test($('#exTrgError').val())){
+// 			alert("목표 불량율을 확인 바랍니다.");
+// 			return;
+// 		}
 		
-		if($('#exTrgSales').text() == ''){
-			alert("목표 생산량을 확인 바랍니다.");
-			return;
-		}
+// 		if($('#exTrgSales').text() == ''){
+// 			alert("목표 생산량을 확인 바랍니다.");
+// 			return;
+// 		}
 		
 		registForm.submit();
 	}
 	
 	$(function() {
-		$('#productionMenu').addClass("active");
-		$('#production').addClass("show");
+		$('#kpiMenu').addClass("active");
+		$('#kpi').addClass("show");
 		$('#kpiList').addClass("active");
 		
 		let msg = '${msg}';
@@ -189,7 +184,7 @@
 	function prodPerPriceInfoAjax(){
 		$.ajax({
 			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/production/kpi/prodPerPriceInfoAjax.do'/>",	  		  			  
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/kpi/kpi/prodPerPriceInfoAjax.do'/>",	  		  			  
 			  dataType:"JSON",
 			  data:{
 			  },
@@ -214,6 +209,7 @@
 			  }
 		  });
 	}
+	
 	</script>
 </body>
 

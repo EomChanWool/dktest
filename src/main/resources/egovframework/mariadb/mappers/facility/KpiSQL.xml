@@ -14,6 +14,7 @@
 	
 	<select id="selectKpiList" resultType="egovMap">
 		SELECT
+			ki_id,
 			ki_year,
 			ki_month,
 			cp_cut_qty,
@@ -100,33 +101,31 @@
 	</select>
 	
 	<insert id="registKpi">
+	
+		DECLARE @MaxKiId INT;
+		SET @MaxKiId = (SELECT ISNULL(MAX(a.ki_id), 0) FROM sm_kpi_info a);
+	
 		INSERT INTO sm_kpi_info
 			(
-			ex_idx,
-			ex_year,
-			ex_month,
-			ex_760n,
-			ex_760o,
-			ex_760w,
-			ex_560,
-			ex_trg_error,
-			ex_trg_sales,
-			ex_reg_dte,
-			ex_reg_mem
+			ki_id,
+			ki_year,
+			ki_month,
+			ki_type,
+			cp_cut_qty,			
+			cp_bad_qty,
+			ki_reg_id,
+			ki_reg_date
 			)
 		VALUES
 			(
-			(SELECT CONCAT('EX', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.ex_idx),0) FROM sm_kpi_info a),'[a-z]','')))+1,4,0))),
-			#{exYear},
-			#{exMonth},
-			#{ex760n},
-			#{ex760o},
-			#{ex760w},
-			#{ex560},
-			#{exTrgError},
-			#{exTrgSales},
-			NOW(),
-			#{userId}
+			(SELECT CONCAT('KI', RIGHT('0000' + CAST(@MaxKiId + 1 AS VARCHAR(4)), 4))),
+			#{kiYear},
+			#{kiMonth},
+			#{kiType},
+			#{cpCutQty},
+			#{cpBadQty},
+			#{userId},
+			GETDATE()
 			)
 	</insert>
 	
@@ -157,6 +156,6 @@
 	</update>
 	
 	<delete id="deleteKpi">
-		DELETE FROM sm_kpi_info WHERE ex_idx = #{exIdx}
+		DELETE FROM sm_kpi_info WHERE ki_id = #{kiId}
 	</delete>
 </mapper>

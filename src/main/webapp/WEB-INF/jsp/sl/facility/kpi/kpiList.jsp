@@ -53,8 +53,8 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/kpi/kpiGoal/kpiGoalList.do" method="post">
-									<input type="hidden" name="exIdx">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/kpi/kpimanagement/kpiGoalList.do" method="post">
+									<input type="hidden" name="kiId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									
 						    		
@@ -82,7 +82,7 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>연도</th>
+                                            <th>년도</th>
                                             <th>월</th>
 											<th>목표생산량</th>
 											<th>목표불량률</th>
@@ -97,10 +97,10 @@
 												<td>${result.cpCutQty}</td>
 												<td>${result.cpBadQty}</td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.exIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.kiId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_kpi('${result.exIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_kpi('${result.kiId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -164,20 +164,20 @@
 		}
 		
 		function fn_regist_kpi(){
-			listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpiGoal/registKpi.do";
+			listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpimanagement/registKpi.do";
 			listForm.submit();
 		}
 		
-		function fn_modify_kpi_go(exIdx){
-			listForm.exIdx.value = exIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpiGoal/modifyKpi.do";
+		function fn_modify_kpi_go(kiId){
+			listForm.kiId.value = kiId;
+			listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpimanagement/modifyKpi.do";
 			listForm.submit();
 		}
 		
-		function fn_delete_kpi(exIdx){
+		function fn_delete_kpi(kiId){
 			if(confirm('해당 내역을 삭제하시겠습니까?')) {
-				listForm.exIdx.value = exIdx;
-				listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpiGoal/deleteKpi.do";
+				listForm.kiId.value = kiId;
+				listForm.action = "${pageContext.request.contextPath}/sl/kpi/kpimanagement/deleteKpi.do";
 				listForm.submit();
 			}
 		}

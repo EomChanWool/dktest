@@ -84,15 +84,15 @@ public class KpiController {
 		return "sl/facility/kpi/kpiGraph";
 	}
 	
-	@RequestMapping("/sl/production/kpi/registKpi.do")
+	@RequestMapping("/sl/kpi/kpimanagement/registKpi.do")
 	public String registKpi(ModelMap model) {
 		model.put("date", getYears());
 		model.put("kpiVO", getYears());
-		return "sl/production/kpi/kpiRegist";
+		return "sl/facility/kpi/kpiRegist";
 	}
 	
 	
-	@RequestMapping(value="/sl/production/kpi/prodPerPriceInfoAjax.do", method=RequestMethod.POST)
+	@RequestMapping(value="/sl/kpi/kpimanagement/prodPerPriceInfoAjax.do", method=RequestMethod.POST)
 	public ModelAndView prodPerPriceInfoAjax(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
 		List<?> list = kpiService.selectProdPerPriceInfo(map);
@@ -101,48 +101,51 @@ public class KpiController {
 		return mav;
 	}
 	
-	@RequestMapping("/sl/production/kpi/registKpiOk.do")
+	@RequestMapping("/sl/kpi/kpimanagement/registKpiOk.do")
 	public String registKpiOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		int exists = kpiService.selectExistsKpi(map);
-		if(exists != 0) {
-			redirectAttributes.addFlashAttribute("msg", "이미 등록된 내역입니다.");
-			redirectAttributes.addFlashAttribute("kpiVO", map);
-			return "redirect:/sl/production/kpi/registKpi.do";
-		}
+		map.put("userId", session.getAttribute("user_id"));
+		System.out.println("map 확인 : "+map);
+//		int exists = kpiService.selectExistsKpi(map);
+//		if(exists != 0) {
+//			redirectAttributes.addFlashAttribute("msg", "이미 등록된 내역입니다.");
+//			redirectAttributes.addFlashAttribute("kpiVO", map);
+//			return "redirect:/sl/kpi/kpimanagement/registKpi.do";
+//		}
 		
 		kpiService.registKpi(map);
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
-		return "redirect:/sl/production/kpi/kpiList.do";
+		return "redirect:/sl/kpi/kpimanagement/kpiList.do";
 	}
 	
-	@RequestMapping("/sl/production/kpi/modifyKpi.do")
+	@RequestMapping("/sl/kpi/kpimanagement/modifyKpi.do")
 	public String modifyKpi(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = kpiService.selectKpiInfo(map);
 		model.put("kpiVO", detail);
 		model.put("date", getYears());
-		return "sl/production/kpi/kpiModify";
+		return "sl/kpi/kpimanagement/kpiModify";
 	}
 	
-	@RequestMapping("/sl/production/kpi/modifyKpiOk.do")
+	@RequestMapping("/sl/kpi/kpi/modifyKpiOk.do")
 	public String modifyKpiOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		if(!map.get("curYear").equals(map.get("exYear")) && !map.get("curMonth").equals(map.get("exMonth"))) {
 			int exists = kpiService.selectExistsKpi(map);
 			if(exists != 0) {
 				redirectAttributes.addFlashAttribute("msg", "이미 등록된 내역입니다.");
 				redirectAttributes.addFlashAttribute("kpiVO", map);
-				return "redirect:/sl/production/kpi/modifyKpi.do";
+				return "redirect:/sl/kpi/kpimanagement/modifyKpi.do";
 			}
 		}
 		kpiService.modifyKpi(map);
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
-		return "redirect:/sl/production/kpi/kpiList.do";
+		return "redirect:/sl/kpi/kpimanagement/kpiList.do";
 	}
 	
-	@RequestMapping("/sl/production/kpi/deleteKpi.do")
+	@RequestMapping("/sl/kpi/kpimanagement/deleteKpi.do")
 	public String deleteKpi(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println(map);
 		kpiService.deleteKpi(map);
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");
-		return "redirect:/sl/production/kpi/kpiList.do";
+		return "redirect:/sl/kpi/kpimanagement/kpiList.do";
 	}
 	
 	private Map<String, Object> getYears(){
@@ -153,7 +156,7 @@ public class KpiController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("begin", begin);
 		map.put("end", end);
-		map.put("exYear", format.format(now));
+		map.put("kiYear", format.format(now));
 		return map;
 	}
 }
