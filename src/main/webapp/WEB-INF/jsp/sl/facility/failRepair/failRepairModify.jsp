@@ -63,10 +63,13 @@
 												<td><input type="text" class="form-control" name="tsType" value="${failRepairVO.tsType}"></td>
 											</tr>
 											<tr>
-												<th>조치내용</th>
-												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failRepairVO.tsComment}"></td>
+												
 												<th>조치일자<span class="req">*</span></th>
 												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="<fmt:formatDate value='${failRepairVO.tsDate}' pattern='yyyy-MM-dd' />"></td>
+											</tr>
+											<tr>
+												<th>조치내용</th>
+												<td colspan="3"><textArea name="tsComment" id="tsComment">${failRepairVO.tsComment}</textArea></td>
 											</tr>
 										</tbody>
 	                                </table>

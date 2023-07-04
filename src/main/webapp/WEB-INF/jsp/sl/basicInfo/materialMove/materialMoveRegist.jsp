@@ -115,8 +115,35 @@
 
 	<script>
 	function fn_regist_materialMove(){
+		
+		var num =  /^[0-9.]+$/;
+		
 		if($('#piId').val() == ''){
 			alert("바코드를 확인 바랍니다.");
+			return;
+		}
+		if(!num.test($('#mmIn').val())){
+			alert('입고수량을 확인바랍니다.');
+			return;
+		}
+		if(!num.test($('#mmInKg').val())){
+			alert('입고중량을 확인바랍니다.');
+			return;
+		}
+		if(!num.test($('#mmOut').val())){
+			alert('출고수량을 확인바랍니다.');
+			return;
+		}
+		if(!num.test($('#mmOutKg').val())){
+			alert('출고중량을 확인바랍니다.');
+			return;
+		}
+		if(!num.test($('#mmCnt').val())){
+			alert('재고수량을 확인바랍니다.');
+			return;
+		}
+		if(!num.test($('#mmCntKg').val())){
+			alert('재고중량을 확인바랍니다.');
 			return;
 		}
 		

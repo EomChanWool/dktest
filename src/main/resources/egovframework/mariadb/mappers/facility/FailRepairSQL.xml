@@ -15,10 +15,14 @@
 			b.tr_id,
 			a.ts_type,
 			a.ts_date,
-			a.ts_comment
+			a.ts_comment,
+			c.eq_id,
+			c.eq_name
 		FROM sm_troubleshooting a
 		JOIN sm_trouble_report b
 		ON a.tr_id = b.tr_id
+		join sm_equipment c
+		on b.eq_id = c.eq_id
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -78,10 +82,13 @@
 			a.ts_edt_date,
 			b.tr_type,
 			b.tr_date,
-			b.tr_comment
+			b.tr_comment,
+			c.eq_name
 		FROM sm_trouble_report b
 		JOIN sm_troubleshooting a
 		ON a.tr_id = b.tr_id
+		join sm_equipment c
+		on b.eq_id = c.eq_id
 		WHERE a.ts_id = #{tsId}
 	</select>
 	

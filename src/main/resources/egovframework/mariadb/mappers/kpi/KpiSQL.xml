@@ -36,7 +36,7 @@
 			AND ki_month = #{searchCondition3}
 		</if>
 		
-		ORDER BY ki_month DESC
+		ORDER BY ki_year DESC ,  ki_month DESC 
 		OFFSET #{firstIndex} ROWS
 		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
@@ -58,6 +58,7 @@
 		<if test="searchCondition3 != ''">
 			AND ki_month = #{searchCondition3}
 		</if>
+		ORDER BY ki_year asc ,  ki_month asc 
 	</select>
 	
 	<select id="selectErrorOutput" resultType="egovMap">

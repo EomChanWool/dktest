@@ -76,7 +76,7 @@
 											</tr>
 											<tr>
 												<th>비고</th>
-												<td colspan="3"><input type="text" class="form-control" name="eciNote" id="eciNote" value="${equipChkVO.eciNote}"></td>
+												<td colspan="3"><textArea name="eciNote" id="eciNote">${equipChkVO.eciNote}</textArea></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -154,7 +154,6 @@
 	}
 	
 	$(function() {
-		equipCheckEquipInfoAjax();
 		$('#facilityMenu').addClass("active");
 		$('#facility').addClass("show");
 		$('#equipChkList').addClass("active");
@@ -163,33 +162,8 @@
 		if(msg) {
 			alert(msg);
 		}
-// 		$('#prListIdx').change(function(){
-// 			$('#faCd').val("");
-// 			$('#prChkList').val("");
-// 			$('#faList').empty();
-// 			equipCheckEquipInfoAjax();
-// 		});
 	});
 	
-// 	function equipCheckEquipInfoAjax(){
-// 		$.ajax({
-// 			  type:"POST",
-// 			  url:"<c:url value='${pageContext.request.contextPath}/sl/facility/equipCheck/equipCheckEquipInfoAjax.do'/>",	  		  			  
-// 			  dataType:"JSON",
-// 			  data:{
-// 				  'prListIdx':$('#prListIdx').val()
-// 			  },
-// 			  success:function(result){
-// 				  for(var i=0;i<result.fa_info.length;i++){
-// 					  var option = $('<option value="'+result.fa_info[i].faCd+'">'+result.fa_info[i].faName+'</option>');
-// 					  $('#faList').append(option);
-// 				  }
-// 			  },
-// 			  error:function(request,status,error){ 
-// 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-// 			  }
-// 		  });
-// 	}
 	</script>
 </body>
 

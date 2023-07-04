@@ -71,13 +71,15 @@
 											<tr>
 												<th>작업자</th>
 												<td><input type="text" class="form-control" name="epmManager" id="epmManager" value="${equipPrevVO.epmManager}"></td>
-												<th>예방보수내용</th>
-												<td><input type="text" class="form-control" name="epmComment" id="epmComment" value="${equipPrevVO.epmComment}"></td>
-											</tr>
-											<tr>
 												<th>예방보수일자<span class="req">*</span></th>
 												<td><input type="date" class="form-control" name="epmDate" id="epmDate" value="${equipPrevVO.epmDate}"></td>
+												
 											</tr>
+											<tr>
+												<th>예방보수내용</th>
+												<td colspan="3"><textarea name="epmComment" id="epmComment">${equipPrevVO.epmComment}</textarea></td>
+											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>

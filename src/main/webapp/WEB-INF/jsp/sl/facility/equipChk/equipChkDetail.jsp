@@ -98,7 +98,7 @@
 										</tr>
 										<tr>
 											<th>비고</th>
-											<td colspan="3"><span class="form-control val-area">${equipChkVO.eciNote}</span></td>
+											<td colspan="3"><textArea disabled="disabled">${equipChkVO.eciNote}</textArea></td>
 										</tr>
 									</tbody>
                                 </table>

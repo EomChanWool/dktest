@@ -84,7 +84,6 @@
                                         <tr>
                                             <th>신고ID</th>
 											<th>고장구분</th>
-											<th>고장내용</th>
 											<th>처리여부</th>
 											<th>신고일자</th>
 											<th>수정/삭제</th>
@@ -95,8 +94,9 @@
 	                                   		<tr onclick="fn_detail_FailReport('${result.trId}')" style="cursor: pointer;">
 	                                            <td>${result.trId}</td>
 	                                            <td>${result.trType}</td>
-	                                            <td>${result.trComment}</td>
-	                                            <td>${result.trIscomp}</td>
+	                                            <td><c:if test="${result.trIscomp eq 0}">O</c:if>
+	                                            	<c:if test="${result.trIscomp eq 1}">X</c:if>
+	                                            </td>
 	                                            <td>
 	                                            	<fmt:formatDate value="${result.trDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>

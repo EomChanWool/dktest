@@ -54,43 +54,43 @@
 	                                    <tbody>
 											<tr>
 												<th>제품코드</th>
-												<td><input type="text" class="form-control" name="piId" value="${prodInfoVO.piId}" disabled="disabled"/></td>
+												<td><input type="text" class="form-control" name="piId" id="piId" value="${prodInfoVO.piId}" disabled="disabled"/></td>
 												<th>구분</th>
-												<td><input type="text" class="form-control" name="piItemType" value="${prodInfoVO.piItemType}"/></td>
+												<td><input type="text" class="form-control" name="piItemType" id="piItemType" value="${prodInfoVO.piItemType}"/></td>
 											</tr>
 											<tr>
 												<th>재질</th>
-												<td><input type="text" class="form-control" name=piItemCode01 value="${prodInfoVO.piItemCode01}"/></td>
+												<td><input type="text" class="form-control" name="piItemCode01" id="piItemCode01" value="${prodInfoVO.piItemCode01}"/></td>
 												<th>규격</th>
-												<td><input type="text" class="form-control" name="piItemCode02" value="${prodInfoVO.piItemCode02}"/></td>
+												<td><input type="text" class="form-control" name="piItemCode02" id="piItemCode02" value="${prodInfoVO.piItemCode02}"/></td>
 												
 											</tr>
 											<tr>
 												<th>두께</th>
-												<td><input type="text" class="form-control" name="piItemCode03" value="${prodInfoVO.piItemCode03}"/></td>
+												<td><input type="text" class="form-control" name="piItemCode03" id="piItemCode03" value="${prodInfoVO.piItemCode03}"/></td>
 												<th>길이</th>
-												<td><input type="text" class="form-control" name="piItemCode04" value="${prodInfoVO.piItemCode04}"/></td>
+												<td><input type="text" class="form-control" name="piItemCode04" id="piItemCode04" value="${prodInfoVO.piItemCode04}"/></td>
 												
 											</tr>
 											<tr>
 												<th>상태조건</th>
-												<td><input type="text" class="form-control" name="piItemState" value="${prodInfoVO.piItemState}"/></td>
+												<td><input type="text" class="form-control" name="piItemState" id="piItemState" value="${prodInfoVO.piItemState}"/></td>
 												<th>제품명</th>
 												<td><input type="text" class="form-control" name="piItemName" value="${prodInfoVO.piItemName}"/></td>
 												
 											</tr>
 											<tr>
 												<th>재고</th>
-												<td><input type="text" class="form-control" name="piCnt" value="${prodInfoVO.piCnt}"/></td>
+												<td><input type="text" class="form-control" name="piCnt" id="piCnt" value="${prodInfoVO.piCnt}"/></td>
 												<th>잔량</th>
-												<td><input type="text" class="form-control" name="piItemRemain" value="${prodInfoVO.piItemRemain}"/></td>
+												<td><input type="text" class="form-control" name="piItemRemain" id="piItemRemain" value="${prodInfoVO.piItemRemain}"/></td>
 												
 											</tr>
 											<tr>
 												<th>단가</th>
-												<td><input type="text" class="form-control" name="piPrice" value="${prodInfoVO.piPrice}"/></td>
+												<td><input type="text" class="form-control" name="piPrice" id="piPrice" value="${prodInfoVO.piPrice}"/></td>
 												<th>단중</th>
-												<td><input type="text" class="form-control" name="piItemMiddle" value="${prodInfoVO.piItemMiddle}"/></td>
+												<td><input type="text" class="form-control" name="piItemMiddle" id="piItemMiddle" value="${prodInfoVO.piItemMiddle}"/></td>
 												
 											</tr>
 											<tr>
@@ -139,15 +139,54 @@
 
 	<script>
 	function fn_modify_prodInfo(){
-// 		if($('#prodInfoType').val() == ''){
-// 			alert("분류를 확인 바랍니다.");
-// 			return;
-// 		}
 		
-// 		if($('#prodInfoName').val() == ''){
-// 			alert("품목명을 확인 바랍니다.");
-// 			return;
-// 		}
+		var num =  /^[0-9.]+$/;
+		
+ 		if($('#piId').val() == ''){
+ 			alert("제품코드를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemType').val() == ''){
+ 			alert("구분을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemCode01').val() == ''){
+ 			alert("재질을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemCode02').val() == ''){
+ 			alert("규격을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemCode03').val() == ''){
+ 			alert("두께를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemCode04').val() == ''){
+ 			alert("길이를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#piItemState').val() == ''){
+ 			alert("상태조건을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if(!num.test($('#piCnt').val())){
+ 			alert("재고에는 숫자만 입력됩니다.");
+			return;
+ 		}
+ 		if(!num.test($('#piItemRemain').val())){
+ 			alert("잔량에는 숫자만 입력됩니다.");
+			return;
+ 		}
+ 		if(!num.test($('#piPrice').val())){
+ 			alert("단가에는 숫자만 입력됩니다.");
+			return;
+ 		}
+ 		if(!num.test($('#piItemMiddle').val())){
+ 			alert("단중에는 숫자만 입력됩니다.");
+			return;
+ 		}
+
 		modifyForm.submit();
 	}
 	

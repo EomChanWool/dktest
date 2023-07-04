@@ -134,21 +134,38 @@
 
 	<script>
 	function fn_regist_kpi(){
+
 		var num =  /^[0-9.]+$/;
-// 		if($('#exYear').val() == ''){
-// 			alert("년도를 확인 바랍니다.");
-// 			return;
-// 		}
 		
-// 		if($('#exMonth').val() == ''){
-// 			alert("월을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#kiYear').val() == ''){
+ 			alert("년도를 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if(!num.test($('#exTrgError').val())){
-// 			alert("목표 불량율을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#kiMonth').val() == ''){
+ 			alert("월을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		
+ 		if($('#kiType').val() == ''){
+ 			alert("구분을 확인 바랍니다.");
+ 			return;
+ 		}
+		
+ 		if(!num.test($('#kiQty').val())){
+ 			alert("목표 생산량을 확인 바랍니다.");
+			return;
+ 		}
+ 		
+ 		if(!num.test($('#kiGoodQty').val())){
+ 			alert("목표 생산률을 확인 바랍니다.");
+			return;
+ 		}
+ 		
+ 		if(!num.test($('#kiBadQty').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
 		
 // 		if($('#exTrgSales').text() == ''){
 // 			alert("목표 생산량을 확인 바랍니다.");
@@ -168,48 +185,10 @@
 			alert(msg);
 		}
 		
-		$('#ex760n').change(function(){
-			prodPerPriceInfoAjax();
-		});
-		$('#ex760o').change(function(){
-			prodPerPriceInfoAjax();
-		});
-		$('#ex760w').change(function(){
-			prodPerPriceInfoAjax();
-		});
-		$('#ex560').change(function(){
-			prodPerPriceInfoAjax();
-		});
+		
 	});
 	
-	function prodPerPriceInfoAjax(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/kpi/kpi/prodPerPriceInfoAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-			  },
-			  success:function(result){
-				  const ex760n = Number($('#ex760n').val());
-				  const ex760o = Number($('#ex760o').val());
-				  const ex760w = Number($('#ex760w').val());
-				  const ex560 = Number($('#ex560').val());
-				  
-				  const ex760n_cnt = result.pp_info[0].itemPerPrice;
-				  const ex760o_cnt = result.pp_info[1].itemPerPrice;
-				  const ex760w_cnt = result.pp_info[2].itemPerPrice;
-				  const ex560_cnt = result.pp_info[3].itemPerPrice;
-				  
-				  const temp = ((ex760n * ex760n_cnt)+(ex760o * ex760o_cnt)+(ex760w * ex760w_cnt)+(ex560 * ex560_cnt))/10000;
-				  var trgSales = temp.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				  $('#exTrgSales').text(trgSales);
-				  registForm.exTrgSales.value = temp;
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
+
 	
 	</script>
 </body>

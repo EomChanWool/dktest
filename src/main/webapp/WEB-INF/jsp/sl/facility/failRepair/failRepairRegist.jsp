@@ -69,10 +69,13 @@
 												<td><input type="text" class="form-control" name="tsType" value="${failReportVO.tsType}"></td>
 											</tr>
 											<tr>
-												<th>조치내용</th>
-												<td><input type="text" class="form-control" name="tsComment" id="tsComment" value="${failReportVO.tsComment}"></td>
+												
 												<th>조치일자<span class="req">*</span></th>
 												<td><input type="date" class="form-control" name="tsDate" id="tsDate" value="${failReportVO.tsDate}"></td>
+											</tr>
+											<tr>
+												<th>조치내용</th>
+												<td colspan="3"><textArea name="tsComment" id="tsComment">${failRepairVO.tsComment}</textArea></td>
 											</tr>
 										</tbody>
 	                                </table>

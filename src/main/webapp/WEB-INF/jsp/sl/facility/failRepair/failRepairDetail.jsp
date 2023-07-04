@@ -67,10 +67,8 @@
 											<td><span class="form-control val-area">${failRepairVO.tsType}</span></td>
 										</tr>
 										<tr>
-											<th>고장내용</th>
-											<td><span class="form-control val-area">${failRepairVO.trComment}</span></td>
-											<th>조치내용</th>
-											<td><span class="form-control val-area">${failRepairVO.tsComment}</span></td>
+											<th>설비명</th>
+											<td><span class="form-control val-area">${failRepairVO.eqName}</span></td>
 										</tr>
 										<tr>
 											<th>신고일자</th>
@@ -105,6 +103,14 @@
 													<fmt:formatDate value="${failRepairVO.tsEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
+										</tr>
+										<tr>
+										<th>고장내용</th>
+										<td colspan="3"><textArea disabled="disabled">${failRepairVO.trComment}</textArea></td>
+										</tr>
+										<tr>
+										<th>조치내용</th>
+										<td colspan="3"><textArea disabled="disabled">${failRepairVO.tsComment}</textArea></td>
 										</tr>
 									</tbody>
                                 </table>

@@ -70,12 +70,6 @@
 												<td><input type="text" class="form-control" name="trType" value="${failReportVO.trType}"></td>
 											</tr>
 											<tr>
-												<th>고장내용</th>
-												<td><input type="text" class="form-control" name="trComment" id="trComment" value="${failReportVO.trComment}"></td>
-												<th>신고일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="trDate" id="trDate" value="${failReportVO.trDate}"></td>
-											</tr>
-											<tr>
 												<th>처리여부</th>
 												<td>
 													<select class="form-control" name="trIscomp">
@@ -84,6 +78,12 @@
 														<option value="1">X</option>
 													</select>
 												</td>
+												<th>신고일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="trDate" id="trDate" value="${failReportVO.trDate}"></td>
+											</tr>
+											<tr>
+												<th>고장내용</th>
+											<td colspan="3"><textArea name="trComment" id="trComment">${failReportVO.trComment}</textArea></td>
 											</tr>
 										</tbody>
 	                                </table>

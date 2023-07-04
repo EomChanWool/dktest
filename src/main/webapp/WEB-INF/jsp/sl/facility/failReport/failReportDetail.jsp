@@ -57,12 +57,8 @@
 										<tr>
 											<th>신고ID</th>
 											<td><span class="form-control val-area">${failReportVO.trId}</span></td>
-										</tr>
-										<tr>
 											<th>고장구분</th>
 											<td><span class="form-control val-area">${failReportVO.trType}</span></td>
-											<th>고장내용</th>
-											<td><span class="form-control val-area">${failReportVO.trComment}</span></td>
 										</tr>
 										<tr>
 											<th>신고일자</th>
@@ -72,7 +68,8 @@
 												</span>
 											</td>
 											<th>처리여부</th>
-											<td><span class="form-control val-area">${failReportVO.trIscomp}</span></td>
+											<td><span class="form-control val-area"><c:if test="${failReportVO.trIscomp eq 0}">O</c:if>
+	                                            	<c:if test="${failReportVO.trIscomp eq 1}">X</c:if></span></td>
 										</tr>
 										<tr>
 											<th>등록ID</th>
@@ -97,10 +94,13 @@
 										<tr>
 											<th>설비ID</th>
 											<td><span class="form-control val-area">${failReportVO.eqId}</span></td>
-										</tr>
-										<tr>
 											<th>설비구분</th>
 											<td><span class="form-control val-area">${failReportVO.eqType}</span></td>
+										</tr>
+										<tr>
+											
+										</tr>
+										<tr>
 											<th>설비명</th>
 											<td><span class="form-control val-area">${failReportVO.eqName}</span></td>
 										</tr>
@@ -116,7 +116,10 @@
 											<th>사용여부</th>
 											<td><span class="form-control val-area">${failReportVO.eqIsuse}</span></td>
 										</tr>
-										
+										<tr>
+										<th>고장내용</th>
+										<td colspan="3"><textArea disabled="disabled">${failReportVO.trComment}</textArea></td>
+									</tr>
 									</tbody>
                                 </table>
                                 <div class="btn_bottom_wrap">

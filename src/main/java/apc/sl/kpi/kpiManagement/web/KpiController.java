@@ -32,7 +32,7 @@ public class KpiController {
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex()); // 현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(5); // 한 페이지에 게시되는 게시물 건수
+		paginationInfo.setRecordCountPerPage(10); // 한 페이지에 게시되는 게시물 건수
 		paginationInfo.setPageSize(searchVO.getPageSize()); // 페이징 리스트의 사이즈
 		paginationInfo.setTotalRecordCount(totCnt);
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
@@ -54,7 +54,6 @@ public class KpiController {
 		  model.put("kpiList", kpiList);
 		  model.put("date", getYears());
 		  List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
-		  System.out.println("그래프확인" + kpiGraphList);
 		  
 		  model.put("kpiGraphList", kpiGraphList);
 //		  if(searchVO.getSearchCondition().equals("절단공정")) { //총생산량

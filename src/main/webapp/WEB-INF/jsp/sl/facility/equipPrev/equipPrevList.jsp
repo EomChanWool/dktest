@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장조치관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비예방보수관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -88,7 +88,6 @@
                                             <th>예방ID</th>
 											<th>예방보수구분</th>
 											<th>작업자</th>
-											<th>예방보수내용</th>
 											<th>예방보수일자</th>
 											<th>수정/삭제</th>
                                         </tr>
@@ -99,7 +98,6 @@
 	                                            <td>${result.epmId}</td>
 	                                            <td>${result.epmType}</td>
 	                                            <td>${result.epmManager}</td>
-	                                            <td>${result.epmComment}</td>
 	                                            <td>
 	                                            	<fmt:formatDate value="${result.epmDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>

@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">공정설비관리 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비체크시트 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -80,7 +80,7 @@
 											</tr>
 											<tr>
 												<th>비고</th>
-												<td colspan="3"><input type="text" class="form-control" name="eciNote" id="eciNote" value="${equipChkVO.eciNote}"></td>
+												<td colspan="3"><textArea name="eciNote" id="eciNote">${equipChkVO.eciNote}</textArea></td>
 											</tr>
 										</tbody>
 	                                </table>

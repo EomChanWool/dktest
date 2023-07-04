@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">고장조치 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">설비예방보수 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -69,10 +69,13 @@
 												<td><input type="text" class="form-control" name="epmManager" id="epmManager" value="${equipPrevVO.epmManager}"></td>
 											</tr>
 											<tr>
-												<th>예방보수내용</th>
-												<td><input type="text" class="form-control" name="epmComment" value="${equipPrevVO.epmComment}"></td>
 												<th>예방보수일자<span class="req">*</span></th>
 												<td><input type="date" class="form-control" name="epmDate" id="epmDate" value="<fmt:formatDate value='${equipPrevVO.epmDate}' pattern='yyyy-MM-dd' />"></td>
+											</tr>
+											<tr>
+												<th>예방보수내용</th>
+												<td colspan="3"><textarea name="epmComment" id="epmComment">${equipPrevVO.epmComment}</textarea></td>
+												
 											</tr>
 										</tbody>
 	                                </table>

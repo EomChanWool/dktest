@@ -67,8 +67,7 @@
 											<td><span class="form-control val-area">${equipPrevVO.epmManager}</span></td>
 										</tr>
 										<tr>
-											<th>예방보수내용</th>
-											<td><span class="form-control val-area">${equipPrevVO.epmComment}</span></td>
+											
 											<th>신고일자</th>
 											<td>
 												<span class="form-control val-area">
@@ -95,6 +94,10 @@
 													<fmt:formatDate value="${equipPrevVO.epmEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
+										</tr>
+										<tr>
+											<th>예방보수내용</th>
+											<td colspan="3"><textarea disabled="disabled">${equipPrevVO.epmComment}</textarea></td>
 										</tr>
 									</tbody>
                                 </table>

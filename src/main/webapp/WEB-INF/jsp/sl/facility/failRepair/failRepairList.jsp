@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">설비예방보수관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">고장조치관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -85,9 +85,9 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <thead>
                                         <tr>
+                                        	<th>설비명</th>
                                             <th>조치ID</th>
 											<th>조치구분</th>
-											<th>조치내용</th>
 											<th>조치일자</th>
 											<th>수정/삭제</th>
                                         </tr>
@@ -95,9 +95,9 @@
                                     <tbody>
                                     	<c:forEach var="result" items="${failRepairList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_FailRepair('${result.tsId}')" style="cursor: pointer;">
+	                                   			<td>${result.eqName}</td>
 	                                            <td>${result.tsId}</td>
 	                                            <td>${result.tsType}</td>
-	                                            <td>${result.tsComment}</td>
 	                                            <td>
 	                                            	<fmt:formatDate value="${result.tsDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>
