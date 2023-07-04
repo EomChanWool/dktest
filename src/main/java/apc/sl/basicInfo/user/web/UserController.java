@@ -59,7 +59,9 @@ public class UserController {
 	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws Exception {
 		String miPass = sha256.encrypt(map.get("miPass").toString());
 		map.put("miPass",miPass);
+		System.out.println("확인");
 		userService.registUser(map);
+		System.out.println("확인2");
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";
 	}

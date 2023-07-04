@@ -53,13 +53,13 @@
 	                                    <tbody>
 											<tr>
 												<th>아이디 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="miId" value="${userVO.miId}"/></td>
+												<td><input type="text" class="form-control" name="miId" id="miId" value="${userVO.miId}"/></td>
 												<th>비밀번호 <span class="req">*</span></th>
-												<td><input type="password" class="form-control" name="miPass" value="${userVO.miPass}"/></td>
+												<td><input type="password" class="form-control" name="miPass" id="miPass" value="${userVO.miPass}"/></td>
 											</tr>
 											<tr>
 												<th>이름 </th>
-												<td><input type="text" class="form-control" name="miName" value="${userVO.miName}"/></td>
+												<td><input type="text" class="form-control" name="miName" id="miName" value="${userVO.miName}"/></td>
 												<th>부서명 </th>
 												<td><input type="text" class="form-control" name="miDepartment" value="${userVO.miDepartment}"/></td>
 											</tr>
@@ -74,13 +74,14 @@
 												<td><input type="text" class="form-control" name="miPhone" value="${userVO.miPhone}"/></td>
 												<th>사용권한</th>
 												<td>
-													<select class="form-control" name="miLevel">
-														<option>선택</option>
+													<select class="form-control" name="miLevel" id="miLevel">
+														<option value="">선택</option>
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
 														<option value="4">4</option>
 													</select>
+													
 <%-- 												<input type="text" class="form-control" name="miLevel" value="${userVO.miLevel}"/> --%>
 												</td>
 											</tr>
@@ -130,39 +131,32 @@
 			var localPhone = /^(0(2|3[1-3]|4[1-4]|5[1-5]|6[1-4]))-(\d{3,4})-(\d{4})$/;
 			var cellPhone = /^\d{3}-\d{3,4}-\d{4}$/;
 			//사업자 등록번호
-			const regitNo = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
 			//이메일
 			const email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 			
-// 			if(registForm.cName.value == ''){
-// 				alert("사업장명을 확인 바랍니다.");
-// 				return;
-// 			}
 			
-// 			if(registForm.cAddr.value == ''){
-// 				alert("주소를 확인 바랍니다.");
-// 				return;
-// 			}
+			if($('#miId').val() == ''){
+				alert("아이디를 확인 바랍니다.");
+				return;
+			}
+			if($('#miPass').val() == ''){
+				alert("비밀번호를 확인 바랍니다.");
+				return;
+			}
+			if($('#miName').val() == ''){
+				alert("이름을 확인 바랍니다.");
+				return;
+			}
+			if($('#miLevel').val() == ''){
+				alert("사용권한을 확인 바랍니다.");
+				return;
+			}
 			
-// 			if(registForm.cTel.value != '' && !localPhone.test(registForm.cTel.value)){
-// 				alert("전화번호를 확인 바랍니다.");
-// 				return;
-// 			}
 			
-// 			if(registForm.cFax.value != '' && !localPhone.test(registForm.cFax.value)){
-// 				alert("팩스번호를 확인 바랍니다.");
-// 				return;
-// 			}
-			
-// 			if(registForm.cRegitNo.value != '' && !regitNo.test(registForm.cRegitNo.value)){
-// 				alert("사업자등록 번호를 확인 바랍니다.");
-// 				return;
-// 			}
-			
-// 			if(registForm.cEmail.value != '' && !email.test(registForm.cEmail.value)){
-// 				alert("이메일을 확인 바랍니다.");
-// 				return;
-// 			}
+			if(registForm.miEmail.value != '' && !email.test(registForm.miEmail.value)){
+ 				alert("이메일을 확인 바랍니다.");
+ 				return;
+ 			}
 			
 			registForm.submit();
 		}

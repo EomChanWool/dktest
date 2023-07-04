@@ -129,8 +129,7 @@
 			//연락처
 			var localPhone = /^(0(2|3[1-3]|4[1-4]|5[1-5]|6[1-4]))-(\d{3,4})-(\d{4})$/;
 			var cellPhone = /^\d{3}-\d{3,4}-\d{4}$/;
-			//사업자 등록번호
-			const regitNo = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
+			
 			//이메일
 			const email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 			
@@ -159,10 +158,10 @@
 // 				return;
 // 			}
 			
-// 			if(modifyForm.cEmail.value != '' && !email.test(modifyForm.cEmail.value)){
-// 				alert("이메일을 확인 바랍니다.");
-// 				return;
-// 			}
+			if(modifyForm.miEmail.value != '' && !email.test(modifyForm.miEmail.value)){
+ 				alert("이메일을 확인 바랍니다.");
+ 				return;
+ 			}
 			modifyForm.submit();
 		}
 		

@@ -28,7 +28,8 @@
 		AND ma_state = 1
 		ORDER BY ma_idx DESC
 		OFFSET (#{firstIndex}) ROWS
-		FETCH NEXT
+		FETCH
+		NEXT
 		#{recordCountPerPage} ROWS ONLY
 	</select>
 
@@ -54,14 +55,19 @@
 		GROUP BY
 		MI_LEVEL
 	</select>
-	
+
 	<select id="menuState" resultType="int">
-	SELECT ma_state
+		SELECT ma_state
 		FROM
 		sm_member_auth
 		WHERE MA_URL LIKE CONCAT('%',#{str},'%')
 		GROUP BY
 		MA_STATE
+	</select>
+
+	<select id="selectExistAuth" resultType="int">
+		SELECT COUNT(*) FROM sm_member_auth
+		WHERE ma_idx = #{maIdx}
 	</select>
 
 	<select id="selectNotInfo" resultType="egovMap">
@@ -74,21 +80,22 @@
 	<update id="registUserAuthority">
 		update sm_member_auth set
 		ma_state = 1 ,
-		mi_level = #{miLevel}
+		mi_level =
+		#{miLevel}
 		where ma_idx = #{maIdx}
 
 	</update>
 	<update id="modifyUserAuthority">
-	UPDATE sm_member_auth SET
-	mi_level = #{miLevel}
-	where ma_idx =#{maIdx}
-	
+		UPDATE sm_member_auth SET
+		mi_level = #{miLevel}
+		where ma_idx =#{maIdx}
+
 	</update>
-	
+
 	<update id="deleteUserAuthority">
-	UPDATE sm_member_auth SET
-	ma_state = 0
-	where ma_idx = #{maIdx}
+		UPDATE sm_member_auth SET
+		ma_state = 0
+		where ma_idx = #{maIdx}
 	</update>
 
 	<!-- <delete id="deleteUserAuthority"> -->

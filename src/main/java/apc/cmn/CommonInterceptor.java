@@ -30,8 +30,10 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		int menuState = userAuthorityService.menuState(str2[5]);
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");
 		
+		System.out.println("accessLevel : " + accessLevel);
+		System.out.println("유저레벨 : " + userMap.get("miLevel"));
 		if(menuState == 0) {
-			ScriptAlert.alertAndMovePage(response, "등록되지않은 메뉴입니다.","/sl/main.do");
+			ScriptAlert.alertAndMovePage(response, "등록되지않은 메뉴입니다.","/sl/basicInfo/materialMove/materialMoveList.do");
 			return false;
 		}
 		
@@ -40,7 +42,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		}else {
 			if(accessLevel > Integer.parseInt(userMap.get("miLevel")+"")) {
-				ScriptAlert.alertAndMovePage(response, "접근 권한이 없습니다","/sl/basicInfo/prodInfo/prodInfoList.do");
+				ScriptAlert.alertAndMovePage(response, "접근 권한이 없습니다","/sl/basicInfo/materialMove/materialMoveList.do");
 				return false;
 			}
 		}

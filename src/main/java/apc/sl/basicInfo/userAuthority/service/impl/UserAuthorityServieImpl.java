@@ -63,4 +63,9 @@ public class UserAuthorityServieImpl implements UserAuthorityService {
 	public int menuState(String str) {
 		return userAuthorityMapper.menuState(str);
 	}
+
+	@Override
+	public int selectExistAuth(Map<String, Object> map) {
+		return userAuthorityMapper.selectExistAuth(map);
+	}
 }

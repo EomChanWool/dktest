@@ -39,7 +39,6 @@ public class UserAuthorityController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> userAuthorityList = userAuthorityService.selectUserAuthorityList(searchVO);
-		System.out.println("확인");
 		model.put("atList", userAuthorityList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/basicInfo/userAuthority/userAuthorityList";
@@ -60,13 +59,20 @@ public class UserAuthorityController {
 		List<?> list = userAuthorityService.selectNotInfo(map);
 		mav.setViewName("jsonView");
 		mav.addObject("pro_info", list);
-		System.out.println("에이젝스 : " + list);
 		return mav;
 	}
 	
 	@RequestMapping("/sl/basicInfo/Authority/registUserAuthorityOk.do")
 	public String registUserAuthorityOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		System.out.println("맵확인 " + map);
+		
+		
+		int exists = userAuthorityService.selectExistAuth(map);
+		
+		if(exists == 0) {
+			redirectAttributes.addFlashAttribute("msg","없는 프로그램입니다.");
+			return "redirect:/sl/basicInfo/Authority/registUserAuthority.do";
+		}
+		
 		userAuthorityService.registUserAuthority(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
@@ -90,12 +96,22 @@ public class UserAuthorityController {
 	public String deleteUserAuthority(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
 		if(map.get("maPname").equals("사원권한관리")) {
-			redirectAttributes.addFlashAttribute("msg","사원권한관리는 삭제할수 없습니다.");
+			redirectAttributes.addFlashAttribute("msg","사원권한관리는 삭제할 수 없습니다.");
 			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
 		}
 		
 		if(map.get("maPname").equals("사원관리")) {
-			redirectAttributes.addFlashAttribute("msg","사원관리는 삭제할수 없습니다.");
+			redirectAttributes.addFlashAttribute("msg","사원관리는 삭제할 수 없습니다.");
+			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
+		}
+		
+		if(map.get("maPname").equals("제품정보관리")) {
+			redirectAttributes.addFlashAttribute("msg", "제품정보관리는 삭제할 수 없습니다.");
+			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
+		}
+		
+		if(map.get("maPname").equals("자재이동관리")) {
+			redirectAttributes.addFlashAttribute("msg", "자재이동관리는 삭제할 수 없습니다.");
 			return "redirect:/sl/basicInfo/Authority/userAuthorityList.do";
 		}
 		

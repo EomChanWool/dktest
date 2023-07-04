@@ -25,6 +25,8 @@ public interface UserAuthorityMapper {
 	
 	int menuState(String str);
 	
+	int selectExistAuth(Map<String, Object> map);
+	
 	List<?> selectNotPro();
 	
 	List<?> selectNotInfo(Map<String, Object> map);

@@ -129,6 +129,10 @@
 	<script>
 		function fn_regist_account(){
 			
+			if(registForm.maIdx.value == ''){
+				alert("프로그램명을 확인 바랍니다.");
+				return;
+			}
 			
 			if(registForm.miLevel.value == ''){
 				alert("권한레벨을 확인 바랍니다.");
