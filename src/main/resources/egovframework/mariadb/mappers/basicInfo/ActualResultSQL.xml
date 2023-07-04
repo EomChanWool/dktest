@@ -39,26 +39,22 @@
 		SELECT ma_idx, mi_level FROM sm_member_auth
 	</select>
 	
-<!-- 	<insert id="insertSystemLog"> -->
-<!-- 		INSERT INTO sm_system_log -->
-<!-- 			( -->
-<!-- 			sl_idx, -->
-<!-- 			sl_id, -->
-<!-- 			sl_name, -->
-<!-- 			sl_belong, -->
-<!-- 			sl_dte, -->
-<!-- 			sl_note -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT CONCAT('LOG', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.sl_idx),0) FROM sm_system_log a),'[a-z]','')))+1,10,0))), -->
-<!-- 			#{mId}, -->
-<!-- 			#{mName}, -->
-<!-- 			#{mBelong}, -->
-<!-- 			NOW(), -->
-<!-- 			#{note} -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="insertSystemLog">
+		INSERT INTO sm_ms_log
+			(
+			ml_id,
+			ml_ip,
+			ml_date,
+			ml_comment
+			)
+		VALUES
+			(
+			#{miId},
+			#{ip},
+			getdate(),
+			#{comment}
+			)
+	</insert>
 	
 <!-- 	<insert id="registMemberOk"> -->
 <!-- 		INSERT INTO sm_member -->

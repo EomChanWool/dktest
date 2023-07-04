@@ -56,7 +56,7 @@
 												<th>아이디 <span class="req">*</span></th>
 												<td><input type="text" class="form-control" value="${userVO.miId}" disabled="disabled"/></td>
 												<th>새 비밀번호 <span class="req">*</span></th>
-												<td><input type="password" class="form-control" name="miPass" value=""/></td>
+												<td><input type="password" class="form-control" name="miPass" id="miPass" value=""/></td>
 											</tr>
 											<tr>
 												<th>이름 </th>

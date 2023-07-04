@@ -77,7 +77,7 @@
 	
 	<update id="modifyUser">
 		UPDATE sm_member_info SET
-			mi_pass = #{miPass},
+		<if test="miPass != ''">mi_pass = #{miPass},</if>
 			mi_name = #{miName},
 			mi_department = #{miDepartment},
 			mi_position = #{miPosition},

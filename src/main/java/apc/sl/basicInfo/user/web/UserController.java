@@ -73,8 +73,12 @@ public class UserController {
 	
 	@RequestMapping("/sl/basicInfo/user/modifyUserOk.do")
 	public String modifyUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws Exception {
-		String miPass = sha256.encrypt(map.get("miPass").toString());
-		map.put("miPass",miPass);
+		
+		if(!map.get("miPass").toString().equals("")) {
+			String miPass = sha256.encrypt(map.get("miPass").toString());
+			map.put("miPass",miPass);
+		}
+		
 		
 		CreateFile(map);
 		

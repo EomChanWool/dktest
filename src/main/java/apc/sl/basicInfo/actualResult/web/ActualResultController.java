@@ -1,5 +1,6 @@
 package apc.sl.basicInfo.actualResult.web;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -55,8 +58,9 @@ public class ActualResultController {
 		session.setMaxInactiveInterval(0);
 		
 		//시스템로그 기록
-//		member.put("note", "로그인");
-//		actualResultService.insertSystemLog(member);
+		member.put("ip", getUserIp());
+		member.put("comment", "로그인");
+		actualResultService.insertSystemLog(member);
 		
 //		메뉴 권한 목록
 //		List<?> miLevel = actualResultService.selectMenuLevel();
@@ -85,9 +89,10 @@ public class ActualResultController {
 		Object obj = session.getAttribute("memberVO");
 		
 		//시스템로그 기록
-//		Map<String, Object> log = (Map<String, Object>) session.getAttribute("memberVO");
-//		log.put("note","로그아웃");
-//		actualResultService.insertSystemLog(log);
+		Map<String, Object> log = (Map<String, Object>) session.getAttribute("memberVO");
+		log.put("ip", getUserIp());
+		log.put("comment","로그아웃");
+		actualResultService.insertSystemLog(log);
 		
 		if(obj != null) {
 			session.removeAttribute("memberVO");
@@ -162,5 +167,43 @@ public class ActualResultController {
 		actualResultService.deleteMember(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/member/memberList.do";
+	}
+	
+	public String getUserIp() throws Exception {
+		String ip = null;
+        HttpServletRequest request = 
+        ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        ip = request.getHeader("X-Forwarded-For");
+        
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("Proxy-Client-IP"); 
+        } 
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("WL-Proxy-Client-IP"); 
+        } 
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("HTTP_CLIENT_IP"); 
+        } 
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR"); 
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("X-Real-IP"); 
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("X-RealIP"); 
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("REMOTE_ADDR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getRemoteAddr(); 
+        }
+        if(ip.equals("0:0:0:0:0:0:0:1") || ip.equals("127.0.0.1")) {
+        	InetAddress address = InetAddress.getLocalHost();
+        	ip = address.getHostAddress();
+        }
+		return ip;
 	}
 }
