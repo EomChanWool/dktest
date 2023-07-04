@@ -1,13 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/sl/monitoring/dashBoard.do">
+<c:if test="${memberVO.miLevel eq 4}">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/sl/basicInfo/user/userList.do">
     <div class="sidebar-brand-icon rotate-n-15">
 <!--         <i class="fas fa-laugh-wink"></i> -->
 		<!-- <img alt="로고" src="/resources/conf/images/jungin.png" style="width: 55px; transform: rotate(15deg);"> -->
     </div>
     <div class="sidebar-brand-text mx-3">(주)대경벤드</div>
 </a>
-
+</c:if>
+<c:if test="${memberVO.miLevel ne 4}">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do">
+    <div class="sidebar-brand-icon rotate-n-15">
+<!--         <i class="fas fa-laugh-wink"></i> -->
+		<!-- <img alt="로고" src="/resources/conf/images/jungin.png" style="width: 55px; transform: rotate(15deg);"> -->
+    </div>
+    <div class="sidebar-brand-text mx-3">(주)대경벤드</div>
+</a>
+</c:if>
 <!-- Divider -->
 <hr class="sidebar-divider my-0">
 <c:if test="${mLevel.P0032 <= memberVO.mLev}">

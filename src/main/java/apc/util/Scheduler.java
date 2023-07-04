@@ -66,8 +66,8 @@ public class Scheduler {
 				if (row != null) {
 					int cells = row.getPhysicalNumberOfCells();	// 셀의 수
 					cells = row.getPhysicalNumberOfCells();    // 열의 수
-					Map<String, Object> rowMap = new HashMap<String, Object>();
-					Map<String, Object> map = new HashMap<String, Object>();
+					Map<String, Object> rowMap = new HashMap<String, Object>();//제품정보관리 데이터
+					Map<String, Object> map = new HashMap<String, Object>();//자재이동관리 데이터
 					int boolcnt = 0;
 					for (columnindex = 0; columnindex < cells; columnindex++) {	// 열의 수만큼 반복
 						HSSFCell cell_filter = row.getCell(columnindex);	// 셀값을 읽는다
