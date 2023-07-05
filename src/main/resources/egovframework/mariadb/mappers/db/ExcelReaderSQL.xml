@@ -18,6 +18,7 @@
 		pi_price,
 		pi_item_middle,
 		pi_heat,
+		mi_reg_id,
 		pi_reg_date) VALUES(
 		#{piId},
 		#{piItemType},
@@ -32,6 +33,7 @@
 		CONVERT(INT,CONVERT(float,#{piPrice})),
 		CONVERT(float,#{piItemMiddle}),
 		#{piHeat},
+		#{miRegId},
 		GETDATE()
 		)
 

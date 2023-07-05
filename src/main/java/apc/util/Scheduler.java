@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -17,23 +20,32 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import apc.sl.db.service.ExcelReaderService;
 import egovframework.rte.fdl.filehandling.EgovFileUtil;
 
 @Component
 public class Scheduler {
+	static String user_id = "";
+	
 	@Autowired
 	private ExcelReaderService excelReaderService;
 	
-	@Scheduled(cron = "10 5 8 * * *")
+	
+	
+	@Scheduled(cron = "10 55 8 * * *")
 	public void delete1() throws Exception{
 		excelReaderService.deletedb();
 		excelReaderService.deleteMm();
 	}
 	
-	@Scheduled(cron = "20 5 8 * * *")
+	@Scheduled(cron = "20 55 8 * * *")
 	public void autoUpdate1() throws Exception {
+		
+		
 		String fileName = "C:\\test\\datatest.xls";
 		FileInputStream fis = new FileInputStream(fileName);
 
@@ -100,13 +112,15 @@ public class Scheduler {
 						}
 						if (selectedIndexes.contains(columnindex)) {
 				            rowMap.put(excelCol[columnindex],value);
+				            rowMap.put("miRegId", user_id);
+				            
 				        }
 						if(selectedIndexes2.contains(columnindex)) {
 				        	if((columnindex == 7 || columnindex == 8) && value == "") {
 				        		boolcnt++;
 				        	}
 				        	map.put(excelCol[columnindex], value);
-				        	map.put("mmRegId","admin");
+				        	map.put("mmRegId",user_id);
 				        }
 					} 
 					if(rowMap.size() != 0) {
@@ -122,6 +136,11 @@ public class Scheduler {
 		//db업데이트후 파일 지우기
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
+	}
+
+	
+	public static void setUserId(String userId) {
+		user_id = userId;
 	}
 	
 }

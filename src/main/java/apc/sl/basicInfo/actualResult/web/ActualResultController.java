@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.basicInfo.actualResult.service.ActualResultService;
 import apc.util.SHA256;
+import apc.util.Scheduler;
 import apc.util.SearchVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -39,8 +40,11 @@ public class ActualResultController {
 	
 	@RequestMapping("/sl/login.do")
 	public String login(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response,HttpSession session) throws Exception {
-		System.out.println("로그인맵 : " + sha256.encrypt(map.get("password")+""));
+		
 		Map<String, Object> member = actualResultService.selectActualResult(map);
+		
+		
+		
 		if(member == null) {
 			redirectAttributes.addFlashAttribute("msg", "아이디가없습니다");
 			return "redirect:/sl/main.do";
@@ -55,8 +59,10 @@ public class ActualResultController {
 		session.setAttribute("memberVO", member);
 		session.setAttribute("user_id", member.get("miId"));
 		
-		session.setMaxInactiveInterval(0);
 		
+		Scheduler.setUserId(member.get("miId")+"");
+		
+		session.setMaxInactiveInterval(0);
 		//시스템로그 기록
 		member.put("ip", getUserIp());
 		member.put("comment", "로그인");
