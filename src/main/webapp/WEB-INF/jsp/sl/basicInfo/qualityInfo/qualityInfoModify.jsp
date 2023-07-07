@@ -152,10 +152,15 @@
 
 	<script>
 	function fn_regist_qualityInfo(){
-	/* 	if(registForm.pIdx.value == ''){
-			alert("메뉴명을 확인 바랍니다.");
-			return;
-		} */
+		
+		 if(registForm.qiType.value == ''){
+			 alert("정성/정량 구분을 확인바랍니다.")
+			 return;
+		 }
+		 if(registForm.qiIsuse.value == ''){
+			 alert("사용여부를 확인바랍니다.")
+			 return;
+		 }
 		registForm.submit();
 	}
 	

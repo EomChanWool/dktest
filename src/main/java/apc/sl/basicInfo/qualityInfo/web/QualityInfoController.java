@@ -64,6 +64,12 @@ public class QualityInfoController {
 	@RequestMapping("/sl/basicInfo/qualityInfo/registQualityInfoOk.do")
 	public String registQualityInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId",session.getAttribute("user_id"));
+		int exists = qualityInfoService.selectExistsQualInfo(map);
+		
+		if(exists == 1) {
+			redirectAttributes.addFlashAttribute("msg","이미등록된 정보입니다.");
+			return "redirect:/sl/basicInfo/qualityInfo/registQualityInfo.do";
+		}
 		
 		qualityInfoService.registQualityInfo(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");

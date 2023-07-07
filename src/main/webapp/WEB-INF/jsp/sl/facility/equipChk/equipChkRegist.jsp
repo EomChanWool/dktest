@@ -66,7 +66,7 @@
 													</select>
 												</td>
 												<th>설비체크명</th>
-												<td><input type="text" class="form-control" name="eciName" value="${equipChkVO.eciName}"></td>
+												<td><input type="text" class="form-control" name="eciName" id="eciName" value="${equipChkVO.eciName}"></td>
 											</tr>
 											<tr>
 												<th>점검내용</th>
@@ -124,35 +124,26 @@
 
 	<script>
 	function fn_regist_equipChk(){
-// 		if($('#prListIdx').val() == ''){
-// 			alert("공정번호를 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eqId').val() == ''){
+ 			alert("설비ID를 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if($('#faCd').val() == ''){
-// 			alert("설비코드를 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eciName').val() == ''){
+ 			alert("설비체크명을 확인 바랍니다.");
+ 			return;
+ 		}
+ 		
+ 		if($('#eciManager').val() == ''){
+ 			alert("점검자를 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if($('#prChkList').val() == ''){
-// 			alert("점검항목을 확인 바랍니다.");
-// 			return;
-// 		}
-		
-// 		if($('#prChkDte').val() == ''){
-// 			alert("점검일을 확인 바랍니다.");
-// 			return;
-// 		}
-		
-// 		if($('#prChkManager').val() == ''){
-// 			alert("담당자를 확인 바랍니다.");
-// 			return;
-// 		}
-		
-// 		if($('#prChkInsp').val() == ''){
-// 			alert("점검내역을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eciDate').val() == ''){
+ 			alert("점검일을 확인 바랍니다.");
+ 			return;
+ 		}
+
 		
 		registForm.submit();
 	}

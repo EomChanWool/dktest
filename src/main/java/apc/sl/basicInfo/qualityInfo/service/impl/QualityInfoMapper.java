@@ -12,6 +12,8 @@ public interface QualityInfoMapper {
 	int selectQualityInfoToCnt(SearchVO searchVO);
 	
 	int selectStandardInfoToCnt(SearchVO searchVO);
+	
+	int selectExistsQualInfo(Map<String, Object> map);
 
 	List<?> selectQualityInfoList(SearchVO searchVO);
 	

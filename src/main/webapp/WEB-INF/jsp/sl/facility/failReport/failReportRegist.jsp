@@ -72,8 +72,8 @@
 											<tr>
 												<th>처리여부</th>
 												<td>
-													<select class="form-control" name="trIscomp">
-														<option>선택</option>
+													<select class="form-control" name="trIscomp" id="trIscomp">
+														<option value="">선택</option>
 														<option value="0">O</option>
 														<option value="1">X</option>
 													</select>
@@ -128,10 +128,20 @@
 	<script>
 	function fn_regist_failReport(){
 		var num = /^\d+$/;
-// 		if($('#woIdx').val() == ''){
-// 			alert("작업지시번호를 확인 바랍니다.");
-// 			return;
-// 		}
+		
+ 		if($('#eqId').val() == ''){
+ 			alert("설비ID를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#trIscomp').val() == ''){
+ 			alert("처리여부를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		
+ 		if($('#trDate').val() == ''){
+ 			alert("신고일자를 확인 바랍니다.");
+ 			return;
+ 		}
 		
 // 		if(!num.test($('#prReCnt').val())){
 // 			alert("생산수량을 확인 바랍니다.");

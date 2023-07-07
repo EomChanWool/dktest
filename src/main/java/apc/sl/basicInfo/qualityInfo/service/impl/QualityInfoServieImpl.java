@@ -89,6 +89,11 @@ public class QualityInfoServieImpl implements QualityInfoService {
 		qualityInfoMapper.deleteStandardInfo(map);
 	}
 
+	@Override
+	public int selectExistsQualInfo(Map<String, Object> map) {
+		return qualityInfoMapper.selectExistsQualInfo(map);
+	}
+
 	
 
 }

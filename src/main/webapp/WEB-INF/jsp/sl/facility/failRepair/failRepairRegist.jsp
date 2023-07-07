@@ -119,15 +119,15 @@
 
 	<script>
 	function fn_regist_failRepair(){
-// 		if($('#faName').val() == ''){
-// 			alert("설비명을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#trId').val() == ''){
+ 			alert("신고ID를 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if($('#faCtlVal').val() == ''){
-// 			alert("설정값을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#tsDate').val() == ''){
+ 			alert("조치일자를 확인 바랍니다.");
+ 			return;
+ 		}
 		
 // 		if($('#faStatus').val() == ''){
 // 			alert("상태를 확인 바랍니다.");

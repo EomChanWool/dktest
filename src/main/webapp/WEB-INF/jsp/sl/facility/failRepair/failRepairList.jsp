@@ -60,9 +60,9 @@
 									
 									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
-							    		<option value="제품" <c:if test="${searchVO.searchCondition eq '제품'}">selected="selected"</c:if>>설비구분</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>고장구분</option>
-							    		<option value="자재" <c:if test="${searchVO.searchCondition eq '자재'}">selected="selected"</c:if>>조치구분</option>
+							    		<option value="eq_name" <c:if test="${searchVO.searchCondition eq 'eq_name'}">selected="selected"</c:if>>설비구분</option>
+							    		<option value="tr_type" <c:if test="${searchVO.searchCondition eq 'tr_type'}">selected="selected"</c:if>>고장구분</option>
+							    		<option value="ts_type" <c:if test="${searchVO.searchCondition eq 'ts_type'}">selected="selected"</c:if>>조치구분</option>
 						    		</select>
 									
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -157,6 +157,11 @@
 	}
 	
 	function fn_search_failRepair(){
+		if($('#searchCondition').val() == ''){
+			alert("검색종류를 선택해주세요");
+			return;
+		}
+		
 		listForm.submit();
 	}
 	

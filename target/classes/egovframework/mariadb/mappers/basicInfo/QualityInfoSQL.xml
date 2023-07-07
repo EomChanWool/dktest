@@ -27,6 +27,11 @@
 		#{recordCountPerPage} ROWS ONLY
 	</select>
 
+	<select id="selectExistsQualInfo" resultType="int">
+		SELECT COUNT(*) FROM sm_quality_info
+		WHERE GI_GROUPCODE = #{giGroupcode}
+	</select>
+
 	<select id="selectStandard" resultType="egovMap">
 		SELECT * FROM
 		sm_standard_info
@@ -142,7 +147,7 @@
 	<delete id="deleteQualityInfo">
 		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
 	</delete>
-	
+
 	<delete id="deleteStandardInfo">
 		delete from sm_standard_info where si_id =#{siId}
 	</delete>

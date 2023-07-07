@@ -4,8 +4,8 @@
 	<select id="selectFailRepairListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_troubleshooting
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		<if test="searchCondition != ''">
+			AND #{searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
 	</select>
 	
@@ -24,8 +24,8 @@
 		join sm_equipment c
 		on b.eq_id = c.eq_id
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		<if test="searchCondition != ''">
+			AND ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
 		ORDER BY ts_id DESC
 		OFFSET #{firstIndex} ROWS

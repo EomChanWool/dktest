@@ -62,7 +62,7 @@
 														<option value="3">ASME</option>
 													</select>
 												</td>
-												<th>관리항목명</th>
+												<th>규격명</th>
 												<td><input type="text" class="form-control" name="siName" id="siName"/></td>
 											</tr>
 										</tbody>
@@ -108,10 +108,15 @@
 
 	<script>
 	function fn_regist_qualityInfo(){
-		/* if(registForm.pIdx.value == ''){
-			alert("메뉴명을 확인 바랍니다.");
-			return;
-		} */
+		
+		 if(registForm.siType.value == ''){
+			 alert("규격구분을 확인바랍니다.")
+			 return;
+		 }
+		 if(registForm.siName.value == ''){
+			 alert("규격명을 확인바랍니다.")
+			 return;
+		 }
 		registForm.submit();
 	}
 	

@@ -55,6 +55,7 @@
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do" method="post">
 									<input type="hidden" name="qiCode">
+									<input type="hidden" name="giGroupcode">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="관리항목명을 입력해 주세요"

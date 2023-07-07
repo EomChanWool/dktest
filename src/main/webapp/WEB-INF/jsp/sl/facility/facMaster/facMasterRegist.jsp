@@ -55,29 +55,29 @@
 <!-- 												<th>설비ID</th> -->
 <%-- 												<td><input type="text" class="form-control" name="eqId" value="${facMasterVO.eqId}"/></td> --%>
 												<th>설비구분</th>
-												<td><input type="text" class="form-control" name="eqType" value="${facMasterVO.eqType}"/></td>
+												<td><input type="text" class="form-control" name="eqType" id="eqType" value="${facMasterVO.eqType}"/></td>
 												<th>설비명</th>
-												<td><input type="text" class="form-control" name=eqName value="${facMasterVO.eqName}"/></td>
+												<td><input type="text" class="form-control" name="eqName" id="eqName" value="${facMasterVO.eqName}"/></td>
 											</tr>
 											<tr>
 												<th>센서ID</th>
-												<td><input type="text" class="form-control" name="eqSensorid" value="${facMasterVO.eqSensorid}"/></td>
+												<td><input type="text" class="form-control" name="eqSensorid" id="eqSensorid" value="${facMasterVO.eqSensorid}"/></td>
 												<th>설치장소</th>
-												<td><input type="text" class="form-control" name="eqPlace" value="${facMasterVO.eqPlace}"/></td>
+												<td><input type="text" class="form-control" name="eqPlace" id="eqPlace" value="${facMasterVO.eqPlace}"/></td>
 											</tr>
 											<tr>
 												<th>설비상태</th>
 												<td>
-													<select class="form-control" name="eqOpState">
-														<option>선택</option>
+													<select class="form-control" name="eqOpState" id="eqOpState">
+														<option value="">선택</option>
 														<option value="정상">정상</option>
 														<option value="고장">고장</option>
 													</select>
 												</td>
 												<th>사용여부</th>
 												<td>
-													<select class="form-control" name="eqIsuse">
-														<option>선택</option>
+													<select class="form-control" name="eqIsuse" id="eqIsuse">
+														<option value="">선택</option>
 														<option value="0">사용</option>
 														<option value="1">미사용</option>
 													</select>
@@ -125,20 +125,32 @@
 
 	<script>
 	function fn_regist_facMaster(){
-// 		if($('#facMasterType').val() == ''){
-// 			alert("분류를 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eqType').val() == ''){
+ 			alert("설비구분을 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if($('#facMasterName').val() == ''){
-// 			alert("품목명을 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eqName').val() == ''){
+ 			alert("설비명을 확인 바랍니다.");
+ 			return;
+ 		}
 		
-// 		if($('#facMasterUom').val() == ''){
-// 			alert("단위를 확인 바랍니다.");
-// 			return;
-// 		}
+ 		if($('#eqSensorid').val() == ''){
+ 			alert("센서ID를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#eqPlace').val() == ''){
+ 			alert("설치장소를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#eqOpState').val() == ''){
+ 			alert("설비상태를 확인 바랍니다.");
+ 			return;
+ 		}
+ 		if($('#eqIsuse').val() == ''){
+ 			alert("사용여부를 확인 바랍니다.");
+ 			return;
+ 		}
 		
 		registForm.submit();
 	}
