@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.facility.equipPrev.service.impl.EquipPrevMapper">
 	<select id="selectEquipPrevListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_equip_prev_maintenance
+		SELECT COUNT(*) FROM sm_equip_prev_maintenance a
+		join sm_equipment b
+		on a.eq_id = b.eq_id
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		<if test="searchCondition != ''">
+			AND b.eq_id LIKE CONCAT('%', #{searchCondition}, '%')
 		</if>
 	</select>
 	
@@ -21,8 +23,8 @@
 		JOIN sm_equipment b
 		ON a.eq_id = b.eq_id
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND fa_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		<if test="searchCondition != ''">
+			AND b.eq_id = #{searchCondition}
 		</if>
 		ORDER BY epm_id DESC
 		OFFSET #{firstIndex} ROWS
@@ -31,7 +33,7 @@
 	
 	<select id="selectEquipmentList" resultType="egovMap">
 		SELECT
-			eq_id
+			eq_id, eq_name
 		FROM sm_equipment
 	</select>
 	

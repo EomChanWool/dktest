@@ -81,7 +81,7 @@ public class ActualResultController {
 //		session.setAttribute("miLevel", miLev);
 		if(Integer.parseInt(member.get("miLevel")+"") == 4) {
 			return "redirect:/sl/basicInfo/user/userList.do";
-		}if(Integer.parseInt(member.get("miLevel")+"") < 4 && Integer.parseInt(member.get("miLevel")+"") > 1) {
+		}else if(Integer.parseInt(member.get("miLevel")+"") < 4 && Integer.parseInt(member.get("miLevel")+"") > 1) {
 			return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";
 		}else {
 			return "redirect:/sl/basicInfo/materialMove/materialMoveList.do";

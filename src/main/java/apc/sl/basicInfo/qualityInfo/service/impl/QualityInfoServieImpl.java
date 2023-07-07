@@ -25,8 +25,8 @@ public class QualityInfoServieImpl implements QualityInfoService {
 	}
 
 	@Override
-	public List<?> selectProgramName() {
-		return qualityInfoMapper.selectProgramName();
+	public List<?> selectStandard() {
+		return qualityInfoMapper.selectStandard();
 	}
 
 	@Override
@@ -54,5 +54,41 @@ public class QualityInfoServieImpl implements QualityInfoService {
 		return qualityInfoMapper.selectAccessLevel(str);
 	}
 
+	@Override
+	public List<?> selectStandardAjaxInfo(Map<String, Object> map) {
+		return qualityInfoMapper.selectStandardAjaxInfo(map);
+	}
+
+	@Override
+	public Map<String, Object> selectDetailQualInfo(Map<String, Object> map) {
+		return qualityInfoMapper.selectDetailQualInfo(map);
+	}
+
+	@Override
+	public List<?> selectStandardList() {
+		return qualityInfoMapper.selectStandardList();
+	}
+
+	@Override
+	public void registStandard(Map<String, Object> map) {
+		qualityInfoMapper.registStandard(map);
+	}
+
+	@Override
+	public int selectStandardInfoToCnt(SearchVO searchVO) {
+		return qualityInfoMapper.selectStandardInfoToCnt(searchVO);
+	}
+
+	@Override
+	public List<?> selectStandardInfo(SearchVO searchVO) {
+		return qualityInfoMapper.selectStandardInfo(searchVO);
+	}
+
+	@Override
+	public void deleteStandardInfo(Map<String, Object> map) {
+		qualityInfoMapper.deleteStandardInfo(map);
+	}
+
+	
 
 }

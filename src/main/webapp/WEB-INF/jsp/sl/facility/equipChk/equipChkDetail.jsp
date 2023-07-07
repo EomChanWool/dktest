@@ -86,6 +86,7 @@
 												</span>
 											</td>
 										</tr>
+										<c:if test="${not empty equipChkVO.eciEdtId}">
 										<tr>
 											<th>수정ID</th>
 											<td><span class="form-control val-area">${equipChkVO.eciEdtId}</span></td>
@@ -96,6 +97,7 @@
 												</span>
 											</td>
 										</tr>
+										</c:if>
 										<tr>
 											<th>비고</th>
 											<td colspan="3"><textArea disabled="disabled">${equipChkVO.eciNote}</textArea></td>

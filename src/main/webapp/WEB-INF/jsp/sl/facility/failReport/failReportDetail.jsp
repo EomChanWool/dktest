@@ -81,6 +81,7 @@
 												</span>
 											</td>
 										</tr>
+										<c:if test="${not empty failReportVO.trEdtId}">
 										<tr>
 											<th>수정ID</th>
 											<td><span class="form-control val-area">${failReportVO.trEdtId}</span></td>
@@ -91,6 +92,7 @@
 												</span>
 											</td>
 										</tr>
+										</c:if>
 										<tr>
 											<th>설비ID</th>
 											<td><span class="form-control val-area">${failReportVO.eqId}</span></td>

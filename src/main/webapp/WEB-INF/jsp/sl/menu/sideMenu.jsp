@@ -67,7 +67,7 @@
     </div>
 </li>
 </c:if>
-<c:if test="${mLevel.P0012 <= memberVO.mLev || mLevel.P0013 <= memberVO.mLev || mLevel.P0014 <= memberVO.mLev || mLevel.P0015 <= memberVO.mLev}">
+<%-- <c:if test="${mLevel.P0012 <= memberVO.mLev || mLevel.P0013 <= memberVO.mLev || mLevel.P0014 <= memberVO.mLev || mLevel.P0015 <= memberVO.mLev}">
 <li class="nav-item" id="qualityMenu">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#quality"
         aria-expanded="true" aria-controls="quality">
@@ -83,7 +83,7 @@
 		</div>
     </div>
 </li>
-</c:if>
+</c:if> --%>
 <c:if test="${mLevel.P0016 <= memberVO.mLev || mLevel.P0017 <= memberVO.mLev || mLevel.P0018 <= memberVO.mLev || mLevel.P0019 <= memberVO.mLev || mLevel.P0020 <= memberVO.mLev}">
 <li class="nav-item" id="facilityMenu">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#facility"

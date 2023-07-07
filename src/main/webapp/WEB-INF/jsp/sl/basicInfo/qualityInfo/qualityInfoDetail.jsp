@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">설비 상세</h1>
+                    <h1 class="h3 mb-2 text-gray-800">품질정보 상세</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -55,56 +55,71 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>설비ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqId}</span></td>
-											<th>설비구분</th>
-											<td><span class="form-control val-area">${facMasterVO.eqType}</span></td>
+											<th>관리항목그룹코드</th>
+											<td><span class="form-control val-area">${detail.giGroupcode}</span></td>
+											<th>관리항목명</th>
+											<td><span class="form-control val-area">${detail.qiName}</span></td>
 										</tr>
 										<tr>
-											<th>설비명</th>
-											<td><span class="form-control val-area">${facMasterVO.eqName}</span></td>
-											<th>센서ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqSensorid}</span></td>
-										</tr>
-										<tr>
-											<th>설치장소</th>
-											<td><span class="form-control val-area">${facMasterVO.eqPlace}</span></td>
-											<th>설비상태</th>
-											<td><span class="form-control val-area">${facMasterVO.eqOpState}</span></td>
+											<th>신뢰성구분</th>
+											<c:if test="${detail.qiTrustType eq 1}">
+											<td><span class="form-control val-area">KS</span></td></c:if>
+											<c:if test="${detail.qiTrustType eq 2}">
+											<td><span class="form-control val-area">JIS</span></td></c:if>
+											<c:if test="${detail.qiTrustType eq 3}">
+											<td><span class="form-control val-area">ASME</span></td></c:if>
+											<th>정성/정량구분</th>
+											<c:if test="${detail.qiType eq 1}">
+											<td><span class="form-control val-area">정성</span></td></c:if>
+											<c:if test="${detail.qiType eq 2}">
+											<td><span class="form-control val-area">정량</span></td></c:if>
 										</tr>
 										<tr>
 											<th>사용여부</th>
-											<td><span class="form-control val-area">${facMasterVO.eqIsuse}</span></td>
+											<c:if test="${detail.qiIsuse eq 1}">
+											<td><span class="form-control val-area">사용</span></td></c:if>
+											<c:if test="${detail.qiIsuse eq 0}">
+											<td><span class="form-control val-area">미사용</span></td></c:if>
 											
 										</tr>
 										<tr>
 											<th>등록ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqRegId}</span></td>
+											<td><span class="form-control val-area">${detail.qiRegId}</span></td>
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${detail.qiRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
 										</tr>
-											<c:if test="${not empty facMasterVO.eqEdtId}">
+										<c:if test="${not empty detail.qiEdtId}">
 										<tr>
-										
 											<th>수정ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqEdtId}</span></td>
+											<td><span class="form-control val-area">${detail.qiEdtId}</span></td>
 											<th>수정일</th>
 											<td>
 												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
+													<fmt:formatDate value="${detail.qiEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
 												</span>
 											</td>
-											
+										</tr>
+										</c:if>
+										<c:if test="${not empty detail.qiComment}">
+										<tr>
+											<th>부적합내용</th>
+											<td colspan="3"><textarea disabled="disabled">${detail.qiComment}</textarea></td>
+										</tr>
+										</c:if>
+										<c:if test="${not empty detail.qiRemark}">
+										<tr>
+											<th>비고</th>
+											<td colspan="3"><textarea disabled="disabled">${detail.qiRemark}</textarea></td>
 										</tr>
 										</c:if>
 									</tbody>
                                 </table>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/facMaster/facMasterList.do'">목록</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -141,9 +156,9 @@
 
 	<script>
 	$(function() {
-		$('#facilityMenu').addClass("active");
-		$('#facility').addClass("show");
-		$('#facMasterList').addClass("active");
+		$('#basicInfoMenu').addClass("active");
+		$('#basicInfo').addClass("show");
+		$('#qualityInfoList').addClass("active");
 	});
 	</script>
 </body>

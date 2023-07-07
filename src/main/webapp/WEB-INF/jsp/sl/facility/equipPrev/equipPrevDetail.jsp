@@ -85,6 +85,7 @@
 												</span>
 											</td>
 										</tr>
+										<c:if test="${not empty equipPrevVO.epmEdtId}">
 										<tr>
 											<th>수정ID</th>
 											<td><span class="form-control val-area">${equipPrevVO.epmEdtId}</span></td>
@@ -95,6 +96,7 @@
 												</span>
 											</td>
 										</tr>
+										</c:if>
 										<tr>
 											<th>예방보수내용</th>
 											<td colspan="3"><textarea disabled="disabled">${equipPrevVO.epmComment}</textarea></td>

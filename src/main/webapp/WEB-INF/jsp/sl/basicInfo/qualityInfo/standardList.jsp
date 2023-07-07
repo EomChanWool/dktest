@@ -47,17 +47,17 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">품질정보관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">규격정보관리</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do" method="post">
-									<input type="hidden" name="qiCode">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/listStandard.do" method="post">
+									<input type="hidden" name="siId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="관리항목명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="규격명을 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_qualityInfo()" style="margin-left: 0.3rem;">
@@ -66,14 +66,9 @@
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_qualityInfo()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_qualityInfo()" style="float: right; margin-left: 0.5rem;">
-	                                <span class="text">등록</span>
-	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_list_standard()" style="float: right; margin-left: 0.3rem;">
-	                                <span class="text">규격삭제</span>
-	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_standard()" style="float: right;">
-	                                <span class="text">규격등록</span>
+	                            
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_back_standard()" style="float: right;">
+	                                <span class="text">돌아가기</span>
 	                            </a>
 							</div>
                         </div>
@@ -82,36 +77,30 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-											<th>관리항목명</th>
-											<th>신뢰성구분</th>
-											<th>정성/정량구분</th>
-											<th>사용여부</th>
-											<th>수정/삭제</th>
+											<th>규격항목명</th>
+											<th>규격타입</th>
+											<th>삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${qualityInfoList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_qualityInfo('${result.qiCode}')" style="cursor: pointer;">
-	                                            <td>${result.qiName}</td>
-	                                            <c:if test="${result.qiTrustType eq '1'}"><td>KS</td></c:if>
-	                                            <c:if test="${result.qiTrustType eq '2'}"><td>JIS</td></c:if>
-	                                            <c:if test="${result.qiTrustType eq '3'}"><td>ASME</td></c:if>
+                                    	<c:forEach var="result" items="${standardList}" varStatus="status">
+	                                   		<tr>
+	                                            <td>${result.siName}</td>
+	                                            <c:if test="${result.siType eq '1'}"><td>KS</td></c:if>
+	                                            <c:if test="${result.siType eq '2'}"><td>JIS</td></c:if>
+	                                            <c:if test="${result.siType eq '3'}"><td>ASME</td></c:if>
 	                                            
-	                                            <c:if test="${result.qiType eq 1}"><td>정성</td></c:if>
-	                                            <c:if test="${result.qiType eq 2}"><td>정량</td></c:if>
-	                                            <c:if test="${result.qiIsuse eq 0}"><td>X</td></c:if>
-	                                            <c:if test="${result.qiIsuse eq 1}"><td>O</td></c:if>
-	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.qiCode}')">
-				                                        <span class="text">수정</span>
-				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_qualityInfo('${result.qiCode}')">
+	                                            
+	                                            
+	                                            <td style="padding: 5px 0px;">
+	                                            	
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_standard('${result.siId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty qualityInfoList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty standardList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -166,36 +155,22 @@
 			listForm.submit();
 		}
 	
-		function fn_regist_qualityInfo(){
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/registQualityInfo.do";
+		
+		
+		function fn_back_standard(){
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do";
 			listForm.submit();
 		}
 		
-		function fn_regist_standard(){
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/registStandard.do";
-			listForm.submit();
-		}
 		
-		function fn_list_standard(){
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/listStandard.do";
-			listForm.submit();
-		}
 	
-		function fn_modify_qualityInfo_go(qiCode){
-			listForm.qiCode.value = qiCode;
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfo.do";
-			listForm.submit();
-		}
-		function fn_detail_qualityInfo(qiCode){
-			listForm.qiCode.value = qiCode;
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/detailQualityInfo.do";
-			listForm.submit();
-		}
+		
+		
 	
-		function fn_delete_qualityInfo(idx){
+		function fn_delete_standard(idx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.qiCode.value = idx;
-				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/deleteQualityInfo.do";
+				listForm.siId.value = idx;
+				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/deleteStandard.do";
 				listForm.submit();
 			}
 		}

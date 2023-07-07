@@ -8,10 +8,6 @@
 	.table th{
 		padding-top: 1.3rem;
 	}
-	
-	.val-area{
-		text-align: left;
-	}
 </style>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -38,7 +34,7 @@
                     </form>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav FacMaster - User Information -->
+                        <!-- Nav qualityInfo - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
                     </ul>
                 </nav>
@@ -47,64 +43,35 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">설비 상세</h1>
+                    <h1 class="h3 mb-2 text-gray-800">규격 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable">
-                                    <tbody>
-										<tr>
-											<th>설비ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqId}</span></td>
-											<th>설비구분</th>
-											<td><span class="form-control val-area">${facMasterVO.eqType}</span></td>
-										</tr>
-										<tr>
-											<th>설비명</th>
-											<td><span class="form-control val-area">${facMasterVO.eqName}</span></td>
-											<th>센서ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqSensorid}</span></td>
-										</tr>
-										<tr>
-											<th>설치장소</th>
-											<td><span class="form-control val-area">${facMasterVO.eqPlace}</span></td>
-											<th>설비상태</th>
-											<td><span class="form-control val-area">${facMasterVO.eqOpState}</span></td>
-										</tr>
-										<tr>
-											<th>사용여부</th>
-											<td><span class="form-control val-area">${facMasterVO.eqIsuse}</span></td>
-											
-										</tr>
-										<tr>
-											<th>등록ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqRegId}</span></td>
-											<th>등록일</th>
-											<td>
-												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqRegDate}" pattern="yyyy-MM-dd HH:mm"/> 
-												</span>
-											</td>
-										</tr>
-											<c:if test="${not empty facMasterVO.eqEdtId}">
-										<tr>
-										
-											<th>수정ID</th>
-											<td><span class="form-control val-area">${facMasterVO.eqEdtId}</span></td>
-											<th>수정일</th>
-											<td>
-												<span class="form-control val-area">
-													<fmt:formatDate value="${facMasterVO.eqEdtDate}" pattern="yyyy-MM-dd HH:mm"/> 
-												</span>
-											</td>
-											
-										</tr>
-										</c:if>
-									</tbody>
-                                </table>
+                            	<form action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/registStandardOk.do" name="registForm" method="post">
+                            	<input type="hidden" name=qiTrustType id="qiTrustType"/>
+	                                <table class="table table-bordered" id="dataTable">
+	                                    <tbody>
+											<tr>
+												<th>규격구분<span class="req">*</span></th>
+												<td>
+													<select name="siType" id="siType" class="form-control">
+														<option value="">선택</option>
+														<option value="1">KS</option>
+														<option value="2">JIS</option>
+														<option value="3">ASME</option>
+													</select>
+												</td>
+												<th>관리항목명</th>
+												<td><input type="text" class="form-control" name="siName" id="siName"/></td>
+											</tr>
+										</tbody>
+	                                </table>
+	                               
+                                </form>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/facility/facMaster/facMasterList.do'">목록</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_qualityInfo()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -140,11 +107,32 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
+	function fn_regist_qualityInfo(){
+		/* if(registForm.pIdx.value == ''){
+			alert("메뉴명을 확인 바랍니다.");
+			return;
+		} */
+		registForm.submit();
+	}
+	
+	
+	
+	
 	$(function() {
-		$('#facilityMenu').addClass("active");
-		$('#facility').addClass("show");
-		$('#facMasterList').addClass("active");
+		$('#basicInfoMenu').addClass("active");
+		$('#basicInfo').addClass("show");
+		$('#qualityInfoList').addClass("active");
+		
+		let msg = '${msg}';
+		if(msg) {
+			alert(msg);
+		}
+		
+		
 	});
+	
+	
+
 	</script>
 </body>
 

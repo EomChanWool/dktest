@@ -35,7 +35,9 @@ public class EquipPrevController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		List<?> eqList = equipPrevService.selectEquipmentList();
 		List<?> equipPrevList = equipPrevService.selectEquipPrevList(searchVO);
+		model.put("eqList", eqList);
 		model.put("equipPrevList", equipPrevList);
 		model.put("paginationInfo", paginationInfo);
 		

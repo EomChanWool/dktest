@@ -43,35 +43,75 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">권한 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">품질정보 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfoOk.do" name="registForm" method="post">
-                            		<input type="hidden" name="curPIdx" value="${qualityInfoVO.pIdx}">
+                            		<input type="hidden" name="qiCode" value="${qualityInfoVO.qiCode}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>메뉴명 <span class="req">*</span></th>
+												<th>관리항목명 <span class="req">*</span></th>
 												<td>
-													<select name="pIdx" class="form-control">
-														<option value="${qualityInfoVO.pIdx}">${qualityInfoVO.pName}</option>
-														<c:forEach var="list" items="${programNameList}" varStatus="status">
-															<option value="${list.pIdx}" <c:if test="${qualityInfoVO.pIdx eq list.pIdx}">selected="selected"</c:if>>${list.pName}</option>
-														</c:forEach>
-													</select>
+													<input type="text" class="form-control" name=qiName id="qiName" value="${qualityInfoVO.qiName}" readonly/>
 												</td>
-												<th>권한 레벨</th>
-												<td>
-													<select name="aLev" class="form-control">
-														<option value="1" <c:if test="${qualityInfoVO.aLev eq '1'}">selected="selected"</c:if>>작업자</option>
-														<option value="2" <c:if test="${qualityInfoVO.aLev eq '2'}">selected="selected"</c:if>>관리자</option>
-													</select>
-												</td>
+												<th>신뢰성구분</th>
+												<c:if test="${qualityInfoVO.qiTrustType eq '1'}"><td>
+												<input type="text" class="form-control" name=qiName id="qiName" value="KS" readonly/></td></c:if>
+												<c:if test="${qualityInfoVO.qiTrustType eq '2'}"><td>
+												<input type="text" class="form-control" name=qiName id="qiName" value="JIS" readonly/></td></c:if>
+												<c:if test="${qualityInfoVO.qiTrustType eq '3'}"><td>
+												<input type="text" class="form-control" name=qiName id="qiName" value="ASME" readonly/></td></c:if>
+												
+											</tr>
+											<tr>
+											<th>정성/정량구분</th>
+											<td>
+											<select name="qiType" class="form-control">
+											<option value="">선택</option>
+											<option value="1" ${qualityInfoVO.qiType == 1 ? 'selected' : ''}>정성</option>
+											<option value="2" ${qualityInfoVO.qiType == 2 ? 'selected' : ''}>정량</option>
+											</select>
+											</td>
+											<th>사용여부</th>
+											<td>
+											<select name="qiIsuse" class="form-control">
+											<option value="">선택</option>
+											<option value="1" ${qualityInfoVO.qiIsuse == 1 ? 'selected' : ''}>사용</option>
+											<option value="0" ${qualityInfoVO.qiIsuse == 0 ? 'selected' : ''}>미사용</option>
+											</select>
+											</td>
 											</tr>
 										</tbody>
 	                                </table>
+	                                
+	                                 <table class="table table-bordered" id="dataTable">
+	                                	<thead>
+											<tr>
+												<th colspan="3"><span onclick="qiBtn()" id="qiBtn" style="cursor: pointer; width:100%; height:30px; margin-top: 10px;">펼치기</span></th>
+											</tr>
+											</thead>
+											<tbody class="qiList" style="display: none;">
+											
+											<tr>
+											<th colspan="3">부적합내용(없으면 빈칸)</th>
+											
+											
+											</tr>
+											<tr><td colspan="3"><textArea name="qiComment" id="qiComment">${qualityInfoVO.qiComment}</textArea></td></tr>
+											<tr>
+											<th>비고</th>
+											
+											</tr>
+											<tr><td colspan="3"><textArea name="qiRemark" id="qiRemark">${qualityInfoVO.qiRemark}</textArea></td></tr>
+											
+											</tbody>
+											
+											</table>
+	                                
+	                                
                                 </form>
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_qualityInfo()" style="border:none;">확인</button>
@@ -112,12 +152,24 @@
 
 	<script>
 	function fn_regist_qualityInfo(){
-		if(registForm.pIdx.value == ''){
+	/* 	if(registForm.pIdx.value == ''){
 			alert("메뉴명을 확인 바랍니다.");
 			return;
-		}
+		} */
 		registForm.submit();
 	}
+	
+	function qiBtn(){
+		if($('#qiBtn').text() == '펼치기'){
+			$('#qiBtn').text("접기");
+			$('.qiList').show();
+		}else{
+			$('#qiBtn').text("펼치기");
+			$('.qiList').hide();
+		}
+	}
+	
+	
 	
 	$(function() {
 		$('#basicInfoMenu').addClass("active");

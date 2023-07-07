@@ -94,6 +94,7 @@
 												</span>
 											</td>
 										</tr>
+										<c:if test="${not empty failRepairVO.tsEdtId}">
 										<tr>
 											<th>수정ID</th>
 											<td><span class="form-control val-area">${failRepairVO.tsEdtId}</span></td>
@@ -104,6 +105,7 @@
 												</span>
 											</td>
 										</tr>
+										</c:if>
 										<tr>
 										<th>고장내용</th>
 										<td colspan="3"><textArea disabled="disabled">${failRepairVO.trComment}</textArea></td>
