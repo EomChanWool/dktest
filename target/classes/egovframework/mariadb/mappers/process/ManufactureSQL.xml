@@ -5,24 +5,43 @@
 
 	<select id="selectManufactureListToCnt" resultType="int">
 		SELECT COUNT(*)
-		FROM sm_insp_change
+		FROM sm_mf_proc
+		<if test="searchKeyword != ''">
+			AND po_lotno LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND mp_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND mp_reg_date <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
 
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		SELECT a.ch_idx, b.IN_NAME, a.ch_state, DATE_FORMAT(a.ch_reg_dte,
-		'%Y-%m-%d') as ch_reg_dte FROM
-		sm_insp_change a
-		JOIN sm_incongruity b
-		ON
-		a.IN_IDX = b.IN_IDX
+		select mp_mfno,
+		eq_id,
+		po_lotno,
+		pi_item_type,
+		mp_mf_qty,
+		mp_bad_qty
+		from sm_mf_proc
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND b.in_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			AND po_lotno LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND mp_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND mp_reg_date <![CDATA[<=]]>
+			#{searchEdDate}
 		</if>
 
-		ORDER BY ch_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY mp_mfno DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 
 	</select>
 

@@ -112,7 +112,7 @@ public class Scheduler {
 						}
 						if (selectedIndexes.contains(columnindex)) {
 				            rowMap.put(excelCol[columnindex],value);
-				            rowMap.put("miRegId", user_id);
+				            rowMap.put("miRegId", "admin");
 				            
 				        }
 						if(selectedIndexes2.contains(columnindex)) {
@@ -120,7 +120,7 @@ public class Scheduler {
 				        		boolcnt++;
 				        	}
 				        	map.put(excelCol[columnindex], value);
-				        	map.put("mmRegId",user_id);
+				        	map.put("mmRegId","admin");
 				        }
 					} 
 					if(rowMap.size() != 0) {

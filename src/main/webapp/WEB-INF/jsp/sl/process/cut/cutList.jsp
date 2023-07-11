@@ -52,11 +52,7 @@
                     <!-- Page Heading -->
                     <div class="btn_bottom_wrap">
                     	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정관리</h1>
-                    	<div style="display: inline-block; float: right; margin-top: -5px;">
-                   			<button type="button" class="btn btn-success btn-icon-split" style="border:none;" onclick="analysisState()">
-                   				<span class="text">검사</span>
-                   			</button>
-                   		</div>
+                    	
                     </div>
 
                     <!-- DataTales Example -->
@@ -65,12 +61,10 @@
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/cut/cutList.do" method="post">
 									<input type="hidden" name="tiIdx">
-									<input type="hidden" name="doIdx">
-									<input type="hidden" name="woIdx">
 									
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="검사명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin: 0 0.3rem 0 0;">
 						    									
 									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
@@ -94,14 +88,10 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>번호</th>
-                                            <th>지시일자</th>
+                                            <th>설비</th>
                                             <th>LOT번호</th>
-                                            <th>제품명</th>
-                                            <th>지시수량</th>
-                                            <th>공정시작일시</th>
-                                            <th>공정종료일시</th>
-                                            <th>생산수량</th>
+                                            <th>제품타입</th>
+                                            <th>절단수량</th>
                                             <th>불량수량</th>
 											<th>수정/삭제</th>
                                         </tr>
@@ -109,9 +99,6 @@
                                     <tbody>
                                     	<c:forEach var="result" items="${cutList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_cut('${result.tiIdx}')" style="cursor: pointer;">
-	                                   			<td></td>
-	                                   			<td></td>
-	                                   			<td></td>
 	                                   			<td></td>
 	                                   			<td></td>
 	                                   			<td></td>
@@ -128,7 +115,7 @@
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty cutList}"><tr><td colspan='10'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty cutList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

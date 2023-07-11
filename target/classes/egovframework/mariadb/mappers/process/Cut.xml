@@ -3,44 +3,44 @@
 <mapper
 	namespace="apc.sl.process.cut.service.impl.CutMapper">
 	<select id="selectCutListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_analysis_info
+		SELECT COUNT(*) FROM sm_cut_proc
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND ti_name LIKE CONCAT('%',#{searchKeyword},'%')
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND ti_dte >= #{searchStDate}
+			AND cp_reg_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND ti_dte <![CDATA[<=]]>
+			AND cp_reg_date <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 	</select>
 
 	<select id="selectCutList" resultType="egovMap">
 		SELECT
-		ti_idx,
-		do_idx,
-		ti_name,
-		ti_analyst,
-		ti_dte,
-		ti_state,
-		wo_idx
+		eq_id,
+		po_lotno,
+		pi_item_type,
+		cp_cutno,
+		cp_cut_qty,
+		cp_bad_qty
 		FROM
-		sm_analysis_info
+		sm_cut_proc
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND ti_name LIKE CONCAT('%',#{searchKeyword},'%')
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND ti_dte >= #{searchStDate}
+			AND cp_reg_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND ti_dte <![CDATA[<=]]>
+			AND cp_reg_date <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
-		ORDER BY ti_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY cp_cutno DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
 
 	<select id="selectWorkOrderList" resultType="egovMap">

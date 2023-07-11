@@ -42,7 +42,7 @@
 		    <c:if test="${mLevel.P0001 <= memberVO.mLev}"><a class="collapse-item" id="userList" href="${pageContext.request.contextPath}/sl/basicInfo/user/userList.do">사원관리</a></c:if>
 		    <c:if test="${mLevel.P0002 <= memberVO.mLev}"><a class="collapse-item" id="userAuthorityList" href="${pageContext.request.contextPath}/sl/basicInfo/Authority/userAuthorityList.do">사원권한관리</a></c:if>
 		    <c:if test="${mLevel.P0003 <= memberVO.mLev}"><a class="collapse-item" id="prodInfoList" href="${pageContext.request.contextPath}/sl/basicInfo/prodInfo/prodInfoList.do">제품정보관리</a></c:if>
-		    <c:if test="${mLevel.P0004 <= memberVO.mLev}"><a class="collapse-item" id="actualResultList" href="${pageContext.request.contextPath}/sl/basicInfo/actualResult/actualResultList.do">생산실적관리</a></c:if>
+		    <c:if test="${mLevel.P0004 <= memberVO.mLev}"><a class="collapse-item" id="prPerformanceList" href="${pageContext.request.contextPath}/sl/basicInfo/prPerformance/prPerformanceList.do">생산실적관리</a></c:if>
 		    <c:if test="${mLevel.P0005 <= memberVO.mLev}"><a class="collapse-item" id="materialMoveList" href="${pageContext.request.contextPath}/sl/basicInfo/materialMove/materialMoveList.do">자재이동관리</a></c:if>
 		    <c:if test="${mLevel.P0006 <= memberVO.mLev}"><a class="collapse-item" id="qualityInfoList" href="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do">품질정보관리</a></c:if>
 		    <c:if test="${mLevel.P0007 <= memberVO.mLev}"><a class="collapse-item" id="goalList" href="${pageContext.request.contextPath}/sl/basicInfo/goal/goalList.do">목표관리정보관리</a></c:if>
@@ -112,7 +112,7 @@
     </a>
     <div id="process" class="collapse" aria-labelledby="headingProcess" data-parent="#accordionSidebar">
     	<div class="bg-white py-2 collapse-inner rounded">
-		    <c:if test="${mLevel.P0021 <= memberVO.mLev}"><a class="collapse-item" id="cutList" href="${pageContext.request.contextPath}/sl/process/cut/cutList.do">절단공정관리</a></c:if>
+		    <c:if test="${mLevel.P0021 <= memberVO.mLev}"><a class="collapse-item" id="cutList" href="${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do">절단공정관리</a></c:if>
 		    <c:if test="${mLevel.P0022 <= memberVO.mLev}"><a class="collapse-item" id="manufactureList" href="${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do">가공공정관리</a></c:if>
 		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="inspectList" href="${pageContext.request.contextPath}/sl/process/inspect/inspectList.do">검사공정관리</a></c:if>
 		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="performanceList" href="${pageContext.request.contextPath}/sl/process/performance/performanceList.do">성능시험관리</a></c:if>

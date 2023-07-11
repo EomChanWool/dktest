@@ -27,9 +27,10 @@ public class CutController {
 	@Autowired
 	private FailReportService failReportService;
 	
-	@RequestMapping("/sl/process/cut/cutList.do")
+	@RequestMapping("/sl/process/cutProcess/cutList.do")
 	public String cutList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		int totCnt = cutService.selectCutListToCnt(searchVO);
+		
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();

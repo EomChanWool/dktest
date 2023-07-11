@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.basicInfo.prPerformance.service.impl.PrPerformanceMapper">
+
+	<select id="selectPrPerformanceToCnt" resultType="int">
+		select count(*) from sm_product_order
+		where 1=1
+		<if test="searchKeyword != ''">
+			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND po_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND po_reg_date <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+
+	<select id="selectPrPerformanceList" resultType="egovMap">
+		SELECT po_lotno, po_lot_date, po_client, po_order_no, pi_id,
+		po_order_qty,po_state FROM sm_product_order
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND po_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND po_reg_date <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY po_lotno DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+
+	</select>
+	
+	<select id="selectExistsPrPer" resultType="int">
+	SELECT COUNT(*) FROM sm_product_info
+	WHERE pi_id = #{piId}
+	</select>
+	
+	<select id="selectPrPerDetail" resultType="egovMap">
+	SELECT po_lotno, po_lot_date, po_client, po_order_no, pi_id,
+		po_order_qty,po_state FROM sm_product_order
+		WHERE po_lotno = #{poLotno}
+	</select>
+
+
+	<insert id="registPrPerformance">
+		INSERT INTO sm_product_order (
+		po_lotno,
+		po_lot_date,
+		po_client,
+		po_order_no,
+		pi_id,
+		po_order_qty,
+		po_reg_date,
+		po_reg_id,
+		po_state
+		) VALUES
+		(
+		#{poLotno},
+		#{poLotDate},
+		#{poClient},
+		#{poOrderNo},
+		#{piId},
+		#{poOrderQty},
+		GETDATE(),
+		#{userId},
+		#{poState}
+		)
+	</insert>
+	
+	<update id="modifyPrPerformance">
+	UPDATE sm_product_order SET
+po_lot_date = #{poLotDate},
+po_client = #{poClient},
+po_order_no = #{poOrderNo},
+pi_id = #{piId},
+po_order_qty = #{poOrderQty},
+po_edt_id = #{userId},
+po_edt_date = GETDATE()
+WHERE po_lotno = #{poLotno}
+	</update>
+	
+	<delete id="deletePrPerfomance">
+	delete from sm_product_order where po_lotno = #{poLotno}
+	</delete>
+
+</mapper>
