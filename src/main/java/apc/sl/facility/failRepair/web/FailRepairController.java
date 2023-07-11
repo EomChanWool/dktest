@@ -39,8 +39,6 @@ public class FailRepairController {
 		List<?> failRepairList = failRepairService.selectFailRepairList(searchVO);
 		model.put("failRepairList", failRepairList);
 		model.put("paginationInfo", paginationInfo);
-		System.out.println("서치컨디션 : " + searchVO.getSearchCondition());
-		System.out.println("서치키워드 : " + searchVO.getSearchKeyword());
 		return "sl/facility/failRepair/failRepairList";
 	}
 	
