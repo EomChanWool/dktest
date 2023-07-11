@@ -59,8 +59,8 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/cut/cutList.do" method="post">
-									<input type="hidden" name="tiIdx">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do" method="post">
+									<input type="hidden" name="cpCutno">
 									
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -88,6 +88,7 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
+                                        	<th>절단공정번호</th>
                                             <th>설비</th>
                                             <th>LOT번호</th>
                                             <th>제품타입</th>
@@ -98,24 +99,24 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${cutList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_cut('${result.tiIdx}')" style="cursor: pointer;">
-	                                   			<td></td>
-	                                   			<td></td>
-	                                   			<td></td>
-	                                   			<td></td>
-	                                   			<td></td>
-	                                   			<td></td>
+	                                   		<tr onclick="fn_detail_cut('${result.cpCutno}')" style="cursor: pointer;">
+	                                   			<td>${result.cpCutno}</td>
+	                                   			<td>${result.eqName}</td>
+	                                   			<td>${result.poLotno}</td>
+	                                   			<td>${result.piItemType}</td>
+	                                   			<td>${result.cpCutQty}</td>
+	                                   			<td>${result.cpBadQty}</td>
 	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cut_go('${result.tiIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cut_go('${result.cpCutno}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cut('${result.tiIdx}', '${result.doIdx}', '${result.woIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cut('${result.cpCutno}', '${result.doIdx}', '${result.woIdx}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty cutList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty cutList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -173,20 +174,20 @@
 	}
 	
 	function fn_regist_cut(){
-		listForm.action = "${pageContext.request.contextPath}/sl/production/cut/registCut.do";
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/registCut.do";
 		listForm.submit();
 	}
 	
 	function fn_modify_cut_go(tiIdx){
 		listForm.tiIdx.value = tiIdx;
-		listForm.action = "${pageContext.request.contextPath}/sl/production/cut/modifyCut.do";
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/modifyCut.do";
 		listForm.submit();
 	}
 	
 	
 	function fn_detail_cut(tiIdx){
 		listForm.tiIdx.value = tiIdx;
-		listForm.action = "${pageContext.request.contextPath}/sl/production/cut/detailCut.do";
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/detailCut.do";
 		listForm.submit();
 	}
 	
@@ -195,7 +196,7 @@
 			listForm.tiIdx.value = tiIdx;
 			listForm.doIdx.value = doIdx;
 			listForm.woIdx.value = woIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/production/cut/deleteCut.do";
+			listForm.action = "${pageContext.request.contextPath}/sl/cutProcess/cut/deleteCut.do";
 			listForm.submit();
 		}
 	}

@@ -48,96 +48,60 @@ public class CutController {
 		return "sl/process/cut/cutList";
 	}
 	
-	@RequestMapping("/sl/production/cut/registCut.do")
+	@RequestMapping("/sl/process/cutProcess/registCut.do")
 	public String registCut(ModelMap model) {
-		List<?> workOrderList = cutService.selectWorkOrderList("품질검사");
-		model.put("workOrderList", workOrderList);
-		List<?> documentList = cutService.selectDocumentList("검사기준서");
-		model.put("documentList", documentList);
+		List<?> eqList = cutService.selectEQList();
+		List<?> lotnoList = cutService.selectLotnoList();
+		model.put("eqList", eqList);
+		model.put("lotnoList", lotnoList);
 		return "sl/process/cut/cutRegist";
 	}
 	
-	@RequestMapping(value="/sl/process/cut/registAnalysisDataAjax.do", method=RequestMethod.POST)
+	@RequestMapping(value="/sl/process/cutProcess/cutAjax.do", method=RequestMethod.POST)
 	public ModelAndView registNonOperFacilityListAjax(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
 		//cutService.registAnalysisData(map);
-		Map<String, Object> list = cutService.selectAzIdx();
+		Map<String, Object> list = cutService.selectCutAjax(map);
 		mav.setViewName("jsonView");
-		mav.addObject("analysis_ajax", list);
+		mav.addObject("cut_ajax", list);
 		return mav;
 	}
 	
-	@RequestMapping(value="/sl/process/cut/registAnalysisDataAjax2.do", method=RequestMethod.POST)
-	public ModelAndView registAnalysisDataAjax2(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		
-		Map<String, Object> list = cutService.selectAzIdxData();
-		mav.setViewName("jsonView");
-		mav.addObject("analysis_ajax2", list);
-		
-		return mav;
-	}
+
 	
-	@RequestMapping("/sl/production/cut/registCutOk.do")
+	@RequestMapping("/sl/process/cutProcess/registCutOk.do")
 	public String registCutOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//작업지시서 체크
-		int exists = cutService.selectExistsAzIdx(map);
+		//설비체크
+		int exists = cutService.selctExistsEq(map);
 		
 		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 작업지서번호 입니다.");
-			redirectAttributes.addFlashAttribute("cutVO", map);
-			return "redirect:/sl/production/cut/registCut.do";
+			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
+			return "redirect:/sl/process/cutProcess/registCut.do";
 		}
 		
 		
 		
 		
-		//성적서 체크
-		if(!map.get("doIdx").equals("")) {
-			exists = cutService.selectExistsDocumentIdx(map);
+		//로트번호 체크
+		if(!map.get("poLotno").equals("")) {
+			exists = cutService.selectExistsLot(map);
 			if(exists == 0) {
-				redirectAttributes.addFlashAttribute("msg", "존재하지 않는 성적서번호 입니다.");
-				redirectAttributes.addFlashAttribute("cutVO", map);
-				return "redirect:/sl/production/cut/registCut.do";
+				redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
+				return "redirect:/sl/process/cutProcess/registCut.do";
 			}
 			map.put("state", "1");
-			cutService.updateDocumnetState(map);
+			cutService.updatePoState(map);
 		}
 		
 		map.put("userId", session.getAttribute("user_id"));
 		cutService.registCut(map);
-		
-		
-		
-		
-		
 	
-		 
-		 
-		
-		//sm_prod_result에 wo_idx가 없으면 생산실적에도 등록
-		map.put("prNm","품질검사");
-		exists = cutService.selectExistsProdResult(map);
-		
-		if(exists == 0) {
-			map.put("cut", "true");
-			map.put("prReEdD0te", map.get("tiDte"));
-			map.put("prReManager", map.get("tiAnalyst"));
-			map.put("prReState", "1");
-			
-			updateProcess(map);
-		}
-		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
-		return "redirect:/sl/process/cut/cutList.do";
+		return "redirect:/sl/process/cutProcess/cutList.do";
 	}
 	
 	@RequestMapping("/sl/production/cut/modifyCut.do")
 	public String modifyCut(@RequestParam Map<String, Object> map, ModelMap model) {
-		List<?> workOrderList = cutService.selectWorkOrderList("품질검사");
-		model.put("workOrderList", workOrderList);
-		List<?> documentList = cutService.selectDocumentList("검사기준서");
-		model.put("documentList", documentList);
 		
 		if(!map.isEmpty()) {
 			Map<String, Object> detail = cutService.selectCutInfo(map);
@@ -158,12 +122,11 @@ public class CutController {
 	@RequestMapping("/sl/production/cut/modifyCutOk.do")
 	public String modfiyCutOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		//성적서 체크
-		if(!map.get("doIdx").equals("")) {
-			int exists = cutService.selectExistsDocumentIdx(map);
+		if(!map.get("poLotno").equals("")) {
+			int exists = cutService.selectExistsLot(map);
 			if(exists == 0) {
-				redirectAttributes.addFlashAttribute("msg", "존재하지 않는 성적서번호 입니다.");
-				redirectAttributes.addFlashAttribute("cutVO", map);
-				return "redirect:/sl/production/cut/registCut.do";
+				redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
+				return "redirect:/sl/process/cutProcess/cutList.do";
 			}
 		}
 		
@@ -172,14 +135,14 @@ public class CutController {
 		
 		if(!map.get("doIdx").equals("")) {
 			map.put("state", "1");
-			cutService.updateDocumnetState(map);
+			cutService.updatePoState(map);
 		}
 		
 		//성적서가 변경되었거나 없어졌으면 이전 성적서 상태 변경
 		if(!map.get("curDoIdx").equals(map.get("doIdx"))) {
 			map.put("state", "0");
 			map.replace("doIdx", map.get("curDoIdx"));
-			cutService.updateDocumnetState(map);
+			cutService.updatePoState(map);
 		}
 		if(map.get("tiState").equals("부적합")) { 
 			
@@ -208,7 +171,7 @@ public class CutController {
 	public String deleteCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		cutService.deleteCut(map);
 		map.put("state", "0");
-		cutService.updateDocumnetState(map);
+		cutService.updatePoState(map);
 		System.out.println("맵확인 : " + map);
 		
 		//삭제시 공정변경
@@ -240,38 +203,38 @@ public class CutController {
 		return "sl/process/cut/cutGraph";
 	}
 	
-	private void updateProcess(Map<String, Object> map) {
-		
-		
-		
-		
-		if(map.get("tiState").equals("부적합")) {
-			
-			map.put("prReReSt", map.get("tiState"));
-//			prodResultService.updatePrReReSt(map);
-			
-		}
-		if(!map.get("tiState").equals("부적합")) {
-//			failReportService.registProdResult(map);
-		}
-		
-		
-		
-	
-		
-		map.put("modify","true");
-		Map<String, Object> process = failReportService.selectProcessSeqInfo(map);
-		int processSeq = Integer.parseInt(process.get("prCurSeq")+"");
-		System.out.println("확인 : " + processSeq);
-		map.put("curSeq", processSeq);
-		map.put("curStDte", "pr_st_time"+processSeq);
-		map.put("curEdDte", "pr_ed_time"+processSeq);
-		map.put("curCnt", "pr_cnt"+processSeq);
-		map.put("curFaulty", "pr_faulty"+processSeq);
-		map.put("nextIdx", "pr_list_idx"+(processSeq+1));
-		map.put("nextNm", "pr_list_nm"+(processSeq+1));
-		failReportService.updateProcess(map);
-	
-		
-	}
+//	private void updateProcess(Map<String, Object> map) {
+//		
+//		
+//		
+//		
+//		if(map.get("tiState").equals("부적합")) {
+//			
+//			map.put("prReReSt", map.get("tiState"));
+////			prodResultService.updatePrReReSt(map);
+//			
+//		}
+//		if(!map.get("tiState").equals("부적합")) {
+////			failReportService.registProdResult(map);
+//		}
+//		
+//		
+//		
+//	
+//		
+//		map.put("modify","true");
+//		Map<String, Object> process = failReportService.selectProcessSeqInfo(map);
+//		int processSeq = Integer.parseInt(process.get("prCurSeq")+"");
+//		System.out.println("확인 : " + processSeq);
+//		map.put("curSeq", processSeq);
+//		map.put("curStDte", "pr_st_time"+processSeq);
+//		map.put("curEdDte", "pr_ed_time"+processSeq);
+//		map.put("curCnt", "pr_cnt"+processSeq);
+//		map.put("curFaulty", "pr_faulty"+processSeq);
+//		map.put("nextIdx", "pr_list_idx"+(processSeq+1));
+//		map.put("nextNm", "pr_list_nm"+(processSeq+1));
+//		failReportService.updateProcess(map);
+//	
+//		
+//	}
 }

@@ -48,12 +48,8 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="btn_bottom_wrap">
-                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">검사결과 수정</h1>
-                    	<div style="display: inline-block; float: right; margin-top: -5px;">
-                   			<button type="button" class="btn btn-success btn-icon-split" style="border:none;" data-toggle="modal" data-target="#analysis">
-                   				<span class="text">분석데이터 입력</span>
-                   			</button>
-                   		</div>
+                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정 수정</h1>
+                    	
                     </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -79,11 +75,7 @@
 												<td><span class="form-control val-area" id="azIdx">${analyManageVO.azIdx}</span></td>
 												<th>적합여부 <span class="req">*</span></th>
 												<td>
-													<%-- <select class="form-control" name="tiState" id="tiState">
-														<option value="">선택</option>
-														<option value="적합" <c:if test="${analyManageVO.tiState eq '적합'}">selected="selected"</c:if>>적합</option>
-														<option value="부적합" <c:if test="${analyManageVO.tiState eq '부적합'}">selected="selected"</c:if>>부적합</option>
-													</select> --%>
+													
 													<span class="form-control val-area" id="azIdx">${analyManageVO.tiState}</span>
 												</td>
 											</tr>

@@ -26,35 +26,10 @@ public class CutServieImpl implements CutService {
 	}
 
 	@Override
-	public List<?> selectWorkOrderList(String str) {
-		return cutMapper.selectWorkOrderList(str);
-	}
-
-	@Override
-	public List<?> selectDocumentList(String str) {
-		return cutMapper.selectDocumentList(str);
-	}
-	
-	@Override
 	public void registAnalysisData(Map<String, Object> map) {
 		cutMapper.registAnalysisData(map);
 	}
-
-	@Override
-	public Map<String, Object> selectAzIdx() {
-		return cutMapper.selectAzIdx();
-	}
-
-	@Override
-	public int selectExistsAzIdx(Map<String, Object> map) {
-		return cutMapper.selectExistsAzIdx(map);
-	}
 	
-	@Override
-	public int selectExistsDocumentIdx(Map<String, Object> map) {
-		return cutMapper.selectExistsDocumentIdx(map);
-	}
-
 	@Override
 	public void registCut(Map<String, Object> map) {
 		cutMapper.registCut(map);
@@ -91,8 +66,8 @@ public class CutServieImpl implements CutService {
 	}
 
 	@Override
-	public void updateDocumnetState(Map<String, Object> map) {
-		cutMapper.updateDocumnetState(map);
+	public void updatePoState(Map<String, Object> map) {
+		cutMapper.updatePoState(map);
 	}
 
 	@Override
@@ -105,10 +80,6 @@ public class CutServieImpl implements CutService {
 		return cutMapper.detailAnalysis(map);
 	}
 
-	@Override
-	public Map<String, Object> selectAzIdxData() {
-		return cutMapper.selectAzIdxData();
-	}
 
 	@Override
 	public void updateProcess2(Map<String, Object> map) {
@@ -123,5 +94,30 @@ public class CutServieImpl implements CutService {
 	@Override
 	public Map<String, Object> selectOrderState(Map<String, Object> map) {
 		return cutMapper.selectOrderState(map);
+	}
+
+	@Override
+	public List<?> selectEQList() {
+		return cutMapper.selectEQList();
+	}
+
+	@Override
+	public List<?> selectLotnoList() {
+		return cutMapper.selectLotnoList();
+	}
+
+	@Override
+	public Map<String, Object> selectCutAjax(Map<String, Object> map) {
+		return cutMapper.selectCutAjax(map);
+	}
+
+	@Override
+	public int selctExistsEq(Map<String, Object> map) {
+		return cutMapper.selctExistsEq(map);
+	}
+
+	@Override
+	public int selectExistsLot(Map<String, Object> map) {
+		return cutMapper.selectExistsLot(map);
 	}
 }

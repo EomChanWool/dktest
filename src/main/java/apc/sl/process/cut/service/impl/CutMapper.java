@@ -12,20 +12,18 @@ public interface CutMapper {
 	int selectCutListToCnt(SearchVO searchVO);
 
 	List<?> selectCutList(SearchVO searchVO);
-
-	List<?> selectWorkOrderList(String str);
-
-	List<?> selectDocumentList(String str);
+	
+	List<?> selectEQList();
+	
+	List<?> selectLotnoList();
 
 	void registAnalysisData(Map<String, Object> map);
 
-	Map<String, Object> selectAzIdx();
-	
-	Map<String, Object> selectAzIdxData();
+	Map<String, Object> selectCutAjax(Map<String, Object> map);
 
-	int selectExistsAzIdx(Map<String, Object> map);
+	int selctExistsEq(Map<String, Object> map);
 
-	int selectExistsDocumentIdx(Map<String, Object> map);
+	int selectExistsLot(Map<String, Object> map);
 
 	void registCut(Map<String, Object> map);
 
@@ -45,7 +43,7 @@ public interface CutMapper {
 	
 	Map<String, Object> detailAnalysis(Map<String, Object> map);
 
-	void updateDocumnetState(Map<String, Object> map);
+	void updatePoState(Map<String, Object> map);
 	
 	void updatePrReReSt(Map<String, Object> map);
 	
