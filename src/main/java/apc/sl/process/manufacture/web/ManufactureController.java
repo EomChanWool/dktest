@@ -176,8 +176,6 @@ public class ManufactureController {
 		Map<String, Object> detail = manufactureService.selectDetailManufacture(map);
 		
 		model.put("checkVO", detail);
-		
-		
 		return "sl/process/manufacture/manufactureDetail";
 	}
 	
