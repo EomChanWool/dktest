@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do" method="post">
-									<input type="hidden" name="chIdx">
+									<input type="hidden" name="mpIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
@@ -79,6 +79,7 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
+                                        	<th>가공공정번호</th>
                                         	<th>설비</th>
                                             <th>LOT번호</th>
                                             <th>제품타입</th>
@@ -89,24 +90,25 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${manufactureList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_manufacture('${result.chIdx}')" style="cursor: pointer;">
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
+	                                   		<tr onclick="fn_detail_manufacture('${result.mpIdx}')" style="cursor: pointer;">
+	                                   			<td>${result.mpMfno }</td>
+												<td>${result.eqId}</td>
+												<td>${result.poLotno}</td>
+												<td>${result.piItemType}</td>
+												<td>${result.mpMfQty}</td>
+												<td>${result.mpBadQty}</td>
 											
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_manufacture_go('${result.chIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_manufacture_go('${result.mpIdx}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_manufacture('${result.chIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_manufacture('${result.mpIdx}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty manufactureList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty manufactureList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -157,31 +159,33 @@
 	
 		function fn_searchAll_manufacture(){
 			listForm.searchKeyword.value = "";
+			listForm.searchStDate.value = "";
+			listForm.searchEdDate.value = "";
 			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	
 		function fn_regist_manufacture(){
-			listForm.action = "${pageContext.request.contextPath}/sl/quality/manufacture/registManufacture.do";
+			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/registManufacture.do";
 			listForm.submit();
 		}
 	
-		function fn_modify_manufacture_go(chIdx){
-			listForm.chIdx.value = chIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/quality/manufacture/modifyManufacture.do";
+		function fn_modify_manufacture_go(mpIdx){
+			listForm.mpIdx.value = mpIdx;
+			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/modifyManufacture.do";
 			listForm.submit();
 		}
 		
-		function fn_detail_manufacture(chIdx){
-			listForm.chIdx.value = chIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/quality/manufacture/detailManufacture.do";
+		function fn_detail_manufacture(mpIdx){
+			listForm.mpIdx.value = mpIdx;
+			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/detailManufacture.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_manufacture(chIdx){
+		function fn_delete_manufacture(mpIdx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.chIdx.value = chIdx;
-				listForm.action = "${pageContext.request.contextPath}/sl/quality/manufacture/deleteManufacture.do";
+				listForm.mpIdx.value = mpIdx;
+				listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/deleteManufacture.do";
 				listForm.submit();
 			}
 		}

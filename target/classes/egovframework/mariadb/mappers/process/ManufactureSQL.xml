@@ -20,7 +20,9 @@
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		select mp_mfno,
+		select
+		mp_idx, 
+		mp_mfno,
 		eq_id,
 		po_lotno,
 		pi_item_type,

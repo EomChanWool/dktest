@@ -8,16 +8,17 @@
 			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND cp_reg_date >= #{searchStDate}
+			AND cp_Starttime >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND cp_reg_date <![CDATA[<=]]>
+			AND cp_Starttime <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 	</select>
 
 	<select id="selectCutList" resultType="egovMap">
 		SELECT
+		a.cp_idx,
 		a.eq_id,
 		a.po_lotno,
 		a.pi_item_type,
@@ -27,16 +28,17 @@
 		b.eq_name
 		FROM
 		sm_cut_proc a
-		join sm_equipment b on a.eq_id = b.eq_id
+		join sm_equipment
+		b on a.eq_id = b.eq_id
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND cp_reg_date >= #{searchStDate}
+			AND cp_Starttime >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND cp_reg_date <![CDATA[<=]]>
+			AND cp_Starttime <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 		ORDER BY cp_cutno DESC
@@ -44,7 +46,10 @@
 		FETCH NEXT
 		#{recordCountPerPage} ROWS ONLY
 	</select>
-
+	
+	<select id="detailCut" resultType="egovMap">
+	select * from sm_cut_proc where cp_idx = #{cpIdx}
+	</select>
 
 
 	<select id="selectEQList" resultType="egovMap">
@@ -53,19 +58,23 @@
 	</select>
 
 	<select id="selectLotnoList" resultType="egovMap">
-		SELECT po_lotno FROM sm_product_order
+		SELECT po_lotno FROM
+		sm_product_order
+		where po_state IN (0,1)
 	</select>
 
 	<select id="selectCutAjax" resultType="egovMap">
-		SELECT a.po_lotno, b.pi_item_type,a.po_order_qty FROM
+		SELECT a.po_lotno,
+		b.pi_item_type,a.po_order_qty , a.po_state FROM
 		sm_product_order a JOIN
 		sm_product_info b ON a.PI_ID=b.PI_ID
 		WHERE a.po_lotno = #{poLotno}
 	</select>
 
 	<update id="updatePoState">
-	update sm_product_order set
-	po_state = #{state}
+		update sm_product_order set
+		po_state = #{poState}
+		where po_lotno = #{poLotno}
 	</update>
 
 
@@ -77,7 +86,8 @@
 
 	<select id="selectExistsLot" resultType="int">
 		SELECT COUNT(*)
-		FROM sm_product_order WHERE po_lotno = #{poLotno}
+		FROM
+		sm_product_order WHERE po_lotno = #{poLotno}
 	</select>
 
 	<select id="selectExistsProdResult" resultType="int">
@@ -86,62 +96,52 @@
 	</select>
 
 	<insert id="registCut">
-	insert into sm_cut_proc (
-	cp_cutno,
-	eq_id,
-	po_lotno,
-	pi_item_type,
-	cp_starttime,
-	cp_endtime,
-	cp_cut_qty,
-	cp_bad_qty,
-	cp_reg_id,
-	cp_reg_date
-	) values(
-	#{cpCutno},
-	#{eqId},
-	#{poLotno},
-	#{piItemType},
-	#{cpStarttime},
-	#{cpEndtime},
-	#{cpCutQty},
-	#{cpBadQty},
-	#{userId},
-	GETDATE()
-	)
+		insert into sm_cut_proc (
+		cp_cutno,
+		eq_id,
+		po_lotno,
+		pi_item_type,
+		cp_starttime,
+		cp_endtime,
+		cp_cut_qty,
+		cp_bad_qty,
+		cp_reg_id,
+		cp_reg_date
+		) values(
+		#{cpCutno},
+		#{eqId},
+		#{poLotno},
+		#{piItemType},
+		#{cpStarttime},
+		#{cpEndtime},
+		#{cpCutQty},
+		#{cpBadQty},
+		#{userId},
+		GETDATE()
+		)
 	</insert>
 
 	<select id="selectCutInfo" resultType="egovMap">
 		SELECT
-		a.ti_idx,
-		a.wo_idx,
-		a.do_idx,
-		a.ti_name,
-		a.ti_sample,
-		a.az_idx,
-		a.ti_analyst,
-		a.ti_dte,
-		a.ti_state,
-		a.ti_note,
-		b.az_brix_std, b.az_brix,
-		b.az_water_std,
-		b.az_water,
-		b.az_ph_std, b.az_ph,
-		b.az_temp_std,
-		b.az_temp,
-		b.az_viscosity_std, b.az_viscosity,
-		b.az_sg_std, b.az_sg,
-		c.wo_name
+		a.cp_idx,
+		a.eq_id,
+		a.po_lotno,
+		a.pi_item_type,
+		a.cp_cutno,
+		a.cp_cut_qty,
+		a.cp_bad_qty,
+		b.eq_name,
+		c.po_state,
+		a.cp_starttime,
+		a.cp_endtime
 		FROM
-		sm_analysis_info a
-		JOIN sm_anlz_data b
-		ON a.az_idx =
-		b.az_idx
-		JOIN
-		sm_work_order c
-		ON a.wo_idx = c.wo_idx
-		WHERE ti_idx =
-		#{tiIdx}
+		sm_cut_proc a
+		join
+		sm_equipment b on a.eq_id = b.eq_id
+		JOIN sm_product_order c ON
+		a.po_lotno = c.po_lotno
+		WHERE 1=1
+		AND cp_idx = #{cpIdx}
 	</select>
 	<!-- <update id="updateProcess2"> -->
 	<!-- UPDATE sm_process SET -->
@@ -177,21 +177,27 @@
 	<!-- WHERE az_idx = #{azIdx} -->
 	<!-- </update> -->
 
-	<!-- <update id="modifyCut"> -->
-	<!-- UPDATE sm_analysis_info SET -->
-	<!-- do_idx = #{doIdx}, -->
-	<!-- ti_name -->
-	<!-- = #{tiName}, -->
-	<!-- ti_sample = #{tiSample}, -->
-	<!-- ti_analyst = #{tiAnalyst}, -->
-	<!-- ti_dte = -->
-	<!-- #{tiDte}, -->
-	<!-- ti_state = #{tiState}, -->
-	<!-- ti_note = #{tiNote}, -->
-	<!-- ti_edt_dte = NOW(), -->
-	<!-- ti_edt_mem = #{userId} -->
-	<!-- WHERE ti_idx = #{tiIdx} -->
-	<!-- </update> -->
+	<update id="modifyCut">
+		UPDATE sm_cut_proc
+		SET eq_id = #{eqId},
+		cp_cutno = #{cpCutno},
+		cp_starttime = #{cpStarttime},
+		cp_endtime = #{cpEndtime},
+		cp_cut_qty = #{cpCutQty},
+		cp_bad_qty = #{cpBadQty},
+		cp_edt_date = GETDATE(),
+		cp_edt_id = #{userId}
+		WHERE cp_idx = #{cpIdx}
+		
+		UPDATE sm_product_order
+		SET po_state = #{poState}
+		WHERE po_lotno = (
+    	SELECT po_lotno
+    	FROM sm_cut_proc
+    	WHERE cp_idx = #{cpIdx}
+		)
+
+	</update>
 
 	<!-- <update id="updatePrReReSt"> -->
 	<!-- UPDATE sm_prod_result a JOIN sm_work_order b ON -->
@@ -209,9 +215,9 @@
 
 	<!-- </update> -->
 
-	<!-- <delete id="deleteCut"> -->
-	<!-- DELETE FROM sm_analysis_info WHERE ti_idx = #{tiIdx} -->
-	<!-- </delete> -->
+	<delete id="deleteCut">
+	DELETE FROM sm_cut_proc WHERE cp_idx = #{cpIdx}
+	</delete>
 	<!-- <delete id="deleteProdResult"> -->
 	<!-- DELETE FROM sm_prod_result WHERE wo_idx = #{woIdx} -->
 	<!-- AND PR_LIST_NM = '품질검사' -->

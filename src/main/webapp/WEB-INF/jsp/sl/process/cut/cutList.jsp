@@ -60,7 +60,8 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do" method="post">
-									<input type="hidden" name="cpCutno">
+									<input type="hidden" name="cpIdx">
+									<input type="hidden" name="poLotno">
 									
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -99,7 +100,7 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${cutList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_cut('${result.cpCutno}')" style="cursor: pointer;">
+	                                   		<tr onclick="fn_detail_cut('${result.cpIdx}')" style="cursor: pointer;">
 	                                   			<td>${result.cpCutno}</td>
 	                                   			<td>${result.eqName}</td>
 	                                   			<td>${result.poLotno}</td>
@@ -107,10 +108,10 @@
 	                                   			<td>${result.cpCutQty}</td>
 	                                   			<td>${result.cpBadQty}</td>
 	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cut_go('${result.cpCutno}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cut_go('${result.cpIdx}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cut('${result.cpCutno}', '${result.doIdx}', '${result.woIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cut('${result.cpIdx}', '${result.poLotno}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -178,34 +179,29 @@
 		listForm.submit();
 	}
 	
-	function fn_modify_cut_go(tiIdx){
-		listForm.tiIdx.value = tiIdx;
+	function fn_modify_cut_go(cpIdx){
+		listForm.cpIdx.value = cpIdx;
 		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/modifyCut.do";
 		listForm.submit();
 	}
 	
 	
-	function fn_detail_cut(tiIdx){
-		listForm.tiIdx.value = tiIdx;
+	function fn_detail_cut(cpIdx){
+		listForm.cpIdx.value = cpIdx;
 		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/detailCut.do";
 		listForm.submit();
 	}
 	
-	function fn_delete_cut(tiIdx, doIdx, woIdx){
+	function fn_delete_cut(cpIdx, poLotno){
 		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.tiIdx.value = tiIdx;
-			listForm.doIdx.value = doIdx;
-			listForm.woIdx.value = woIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/cutProcess/cut/deleteCut.do";
+			listForm.cpIdx.value = cpIdx; 
+			listForm.poLotno.value = poLotno; 
+			listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/deleteCut.do";
 			listForm.submit();
 		}
 	}
 	
-	function analysisState(){
-		listForm.action = "${pageContext.request.contextPath}/sl/production/cut/graphCut.do";
-		listForm.submit();
-	}
-	
+
 	$(function() {
 		$('#processMenu').addClass("active");
 		$('#process').addClass("show");

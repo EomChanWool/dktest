@@ -55,57 +55,59 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/production/analyManage/modifyAnalyManageOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="tiIdx" value="${analyManageVO.tiIdx}">
-                            		<input type="hidden" name="curDoIdx" value="${analyManageVO.doIdx}">
+                            	<form action="${pageContext.request.contextPath}/sl/process/cutProcess/modifyCutOk.do" name="modifyForm" method="post">
+                            	<input type="hidden" name="cpIdx" value="${cutVO.cpIdx}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>작업지시서</th>
-												<td colspan="3"><span class="form-control val-area">${analyManageVO.woIdx} (${analyManageVO.woName})</span></td>
-											</tr>
-											<tr>
-												<th>검사명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="tiName" id="tiName" value="${analyManageVO.tiName}"></td>
-												<th>검사자 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="tiAnalyst" id="tiAnalyst" value="${analyManageVO.tiAnalyst}"></td>
-											</tr>
-											<tr>
-												<th>샘플 분석 결과 코드 <span class="req">*</span></th>
-												<td><span class="form-control val-area" id="azIdx">${analyManageVO.azIdx}</span></td>
-												<th>적합여부 <span class="req">*</span></th>
+												<th>설비</th>
 												<td>
-													
-													<span class="form-control val-area" id="azIdx">${analyManageVO.tiState}</span>
-												</td>
-											</tr>
-											<tr>
-												<th>검사일 <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="tiDte" id="tiDte" value="${analyManageVO.tiDte}"></td>
-												<th>성적서</th>
-												<td>
-													<input type="text" class="form-control" name="doIdx" id="doIdx" value="${analyManageVO.doIdx}" list="doList" autocomplete="off">
-													<datalist id="doList">
-														<c:forEach var="list" items="${documentList}" varStatus="status">
-															<option value="${list.doIdx}">${list.doName}</option>
+													<input type="text" class="form-control" name="eqId" id="eqId" list="eqList" autocomplete="off" value="${cutVO.eqId}">
+													<datalist id="eqList">
+														<c:forEach var="list" items="${eqList}" varStatus="status">
+															<option value="${list.eqId}">${list.eqName}</option>
 														</c:forEach>
 													</datalist>
 												</td>
+												<th>절단공정번호</th>
+												<td><input type="text" class="form-control" name="cpCutno" id="cpCutno" value="${cutVO.cpCutno}"></td>
 											</tr>
 											<tr>
-												<th>샘플 정보</th>
-												<td colspan="3"><input type="text" class="form-control" name="tiSample" id="tiSample" value="${analyManageVO.tiSample}"></td>
+												<th>로트번호<span class="req">*</span></th>
+												<td>
+													<span class="form-control val-area" id="poLotno">${cutVO.poLotno}</span>
+											</td>
+												<th>타입 <span class="req">*</span></th>
+												<td><span class="form-control val-area" id="piItemType">${cutVO.piItemType}</span></td>
 											</tr>
 											<tr>
-												<th>특이사항</th>
-												<td colspan="3"><textArea name="tiNote">${analyManageVO.tiNote}</textArea></td>
+												<th>시작일시</th>
+												<td><input type="datetime-local" class="form-control" name="cpStarttime" id="cpStarttime" value="<fmt:formatDate value='${cutVO.cpStarttime}' pattern='yyyy-MM-dd HH:MM' />"></td>
+												<th>종료일시</th>
+												<td><input type="datetime-local" class="form-control" name="cpEndtime" id="cpEndtime" value="<fmt:formatDate value='${cutVO.cpEndtime}' pattern='yyyy-MM-dd HH:MM' />"></td>
+											</tr>
+											<tr>
+												<th>절단수량</th>
+												<td><input type="text" class="form-control" name="cpCutQty" id="cpCutQty" value="${cutVO.cpCutQty}"></td>
+												<th>불량수량</th>
+												<td><input type="text" class="form-control" name="cpBadQty" id="cpBadQty" value="${cutVO.cpBadQty}"></td>
+											</tr>
+											<tr>
+												<th>공정상태</th>
+													<td>
+													<select class="form-control" name="poState" id="poState">
+														<option value="">선택</option>
+														<option value="1" ${cutVO.poState == 1 ? 'selected' : ''}>진행중</option>
+														<option value="2" ${cutVO.poState == 2 ? 'selected' : ''}>작업완료</option>
+													</select>
+													</td>
 											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_analyManage()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/analyManage/analyManageList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_cut()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -122,71 +124,7 @@
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
-    <div class="modal fade" id="analysis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	    <div class="modal-dialog modal-lg" role="document">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title" id="exampleModalLabel">데이터 입력</h5>
-	               
-	                <a class="btn btn-primary" style="position: relative; left: 30px;" href="#" onclick="registAnalysisDataAjax2()">데이터불러오기</a>
-	              
-	                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-	                
-	                    <span aria-hidden="true">×</span>
-	                </button>
-	                
-	            </div>
-	            <div class="modal-body">
-	            <form action="#" name="registForm2" method="post">x
-					<table class="table table-bordered">
-						<tbody>
-							<tr>
-								<th>Brix 기준값</th>
-								<td><input type="text" class="form-control" name="azBrixStd" id="azBrixStd" value="${analyManageVO.azBrixStd}"></td>
-								<th>Brix</th>
-								<td><input type="text" class="form-control" name="azBrix" id="azBrix" value="${analyManageVO.azBrix}"></td>
-							</tr>
-							<tr>
-								<th>수분 기준값</th>
-								<td><input type="text" class="form-control" name="azWaterStd" id="azWaterStd" value="${analyManageVO.azWaterStd}"></td>
-								<th>수분</th>
-								<td><input type="text" class="form-control" name="azWater" id="azWater" value="${analyManageVO.azWater}"></td>
-							</tr>
-							<tr>
-								<th>PH 기준값</th>
-								<td><input type="text" class="form-control" name="azPhStd" id="azPhStd" value="${analyManageVO.azPhStd}"></td>
-								<th>PH</th>
-								<td><input type="text" class="form-control" name="azPh" id="azPh" value="${analyManageVO.azPh}"></td>
-							</tr>
-							<tr>
-								<th>온도 기준값</th>
-								<td><input type="text" class="form-control" name="azTempStd" id="azTempStd" value="${analyManageVO.azTempStd}"></td>
-								<th>온도</th>
-								<td><input type="text" class="form-control" name="azTemp" id="azTemp" value="${analyManageVO.azTemp}"></td>
-							</tr>
-							<tr>
-								<th>점도 기준값</th>
-								<td><input type="text" class="form-control" name="azViscosityStd" id="azViscosityStd" value="${analyManageVO.azViscosityStd}"></td>
-								<th>점도</th>
-								<td><input type="text" class="form-control" name="azViscosity" id="azViscosity" value="${analyManageVO.azViscosity}"></td>
-							</tr>
-							<tr>
-								<th>비중 기준값</th>
-								<td><input type="text" class="form-control" name="azSgStd" id="azSgStd" value="${analyManageVO.azSgStd}"></td>
-								<th>비중</th>
-								<td><input type="text" class="form-control" name="azSg" id="azSg" value="${analyManageVO.azSg}"></td>
-							</tr>
-						</tbody>
-					</table>
-					</form>
-				</div>
-	            <div class="modal-footer">
-	                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="closeBtn">취소</button>
-	                <a class="btn btn-primary" href="#" onclick="modifyData()">수정</a>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+   
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -206,114 +144,53 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_analyManage(){
-		if($('#tiName').val() == ''){
-			alert("검사명을 확인 바랍니다.");
+	function fn_modify_cut(){
+		if($('#eqId').val() == ''){
+			alert("설비를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#tiAnalyst').val() == ''){
-			alert("검사자를 확인 바랍니다.");
+		if($('#cpCutno').val() == ''){
+			alert("공정번호를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#tiState').val() == ''){
-			alert("적합여부를 확인 바랍니다.");
+		
+		if($('#cpStarttime').val == ''){
+			alert("시작일을 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#tiDte').val() == ''){
-			alert("검사일을 확인 바랍니다.");
+		
+		if($('#cpEndtime').val() == ''){
+			alert("종료일을 확인 바랍니다.");
+			return;
+		}
+		if($('#cpCutQty').val() == ''){
+			alert("절단수량을 확인 바랍니다.");
 			return;
 		}
 		
 		modifyForm.submit();
 	}
 	
-	function modifyData(){
-		modifyAnalysisDataAjax();
-		$('#closeBtn').click();
-	}
+	
 	
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#analyManageList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#cutList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		if($('#tiDte').val() == ''){
-			$('#tiDte').val(new Date().toISOString().slice(0,10));	
-		}
+		
 	});
 	
-	function modifyAnalysisDataAjax(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/quality/analyManage/modifyAnalysisDataAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'azBrixStd': $('#azBrixStd').val(),
-				  'azWaterStd': $('#azWaterStd').val(),
-				  'azPhStd': $('#azPhStd').val(),
-				  'azTempStd': $('#azTempStd').val(),
-				  'azViscosityStd': $('#azViscosityStd').val(),
-				  'azSgStd': $('#azSgStd').val(),
-				  'azIdx': $('#azIdx').text(),
-				  'azBrix': $('#azBrix').val(),
-				  'azWater': $('#azWater').val(),
-				  'azPh': $('#azPh').val(),
-				  'azTemp': $('#azTemp').val(),
-				  'azViscosity': $('#azViscosity').val(),
-				  'azSg': $('#azSg').val()
-			  },
-			  success:function(result){
-				  if(result.analysis_ajax != null){
-					  alert("수정 되었습니다.");  
-				  }
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
-	function registAnalysisDataAjax2(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/quality/analyManage/registAnalysisDataAjax2.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'azBrixStd': $('#azBrixStd').val(),
-				  'azWaterStd': $('#azWaterStd').val(),
-				  'azPhStd': $('#azPhStd').val(),
-				  'azTempStd': $('#azTempStd').val(),
-				  'azViscosityStd': $('#azViscosityStd').val(),
-				  'azSgStd': $('#azSgStd').val(),
-				  'azBrix': $('#azBrix').val(),
-				  'azWater': $('#azWater').val(),
-				  'azPh': $('#azPh').val(),
-				  'azTemp': $('#azTemp').val(),
-				  'azViscosity': $('#azViscosity').val(),
-				  'azSg': $('#azSg').val()
-			  },
-			  success:function(result){
-				  console.log(result.analysis_ajax2);
-				  registForm2.azBrix.value = result.analysis_ajax2.azBrix;
-				  registForm2.azWater.value = result.analysis_ajax2.azWater;
-				  registForm2.azPh.value = result.analysis_ajax2.azPh;
-				  registForm2.azTemp.value = result.analysis_ajax2.azTemp;
-				  registForm2.azViscosity.value = result.analysis_ajax2.azViscosity;
-				  registForm2.azSg.value = result.analysis_ajax2.azSg;
-				 
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
+	
+	
 	</script>
 </body>
 

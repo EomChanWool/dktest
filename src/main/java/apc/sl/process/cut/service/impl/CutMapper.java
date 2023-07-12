@@ -41,7 +41,7 @@ public interface CutMapper {
 
 	Map<String, Object> selectAnalysisCnt();
 	
-	Map<String, Object> detailAnalysis(Map<String, Object> map);
+	Map<String, Object> detailCut(Map<String, Object> map);
 
 	void updatePoState(Map<String, Object> map);
 	

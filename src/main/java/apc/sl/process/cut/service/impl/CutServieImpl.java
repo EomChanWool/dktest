@@ -76,8 +76,8 @@ public class CutServieImpl implements CutService {
 	}
 
 	@Override
-	public Map<String, Object> detailAnalysis(Map<String, Object> map) {
-		return cutMapper.detailAnalysis(map);
+	public Map<String, Object> detailCut(Map<String, Object> map) {
+		return cutMapper.detailCut(map);
 	}
 
 

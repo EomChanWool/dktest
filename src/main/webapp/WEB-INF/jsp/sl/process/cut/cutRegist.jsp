@@ -86,9 +86,9 @@
 											</tr>
 											<tr>
 											<th>시작일시</th>
-											<td><input type="date" class="form-control" name="cpStarttime" id="cpStarttime" ></td>
+											<td><input type="datetime-local" class="form-control" name="cpStarttime" id="cpStarttime" ></td>
 											<th>종료일시</th>
-											<td><input type="date" class="form-control" name="cpEndtime" id="cpEndtime" ></td>
+											<td><input type="datetime-local" class="form-control" name="cpEndtime" id="cpEndtime" ></td>
 											</tr>
 											<tr>
 											<th>절단수량</th>
@@ -96,11 +96,21 @@
 											<th>불량수량</th>
 											<td><input type="text" class="form-control" name="cpBadQty" id="cpBadQty"></td>
 											</tr>
+											<tr>
+												<th>공정상태</th>
+													<td>
+													<select class="form-control" name="poState" id="poState">
+														<option value="">선택</option>
+														<option value="1">진행중</option>
+														<option value="2">작업완료</option>
+													</select>
+													</td>
+											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_regist_analyManage()" style="border:none;">확인</button>
+									<button type="submit" class="btn_ok" onclick="fn_regist_cut()" style="border:none;">확인</button>
 									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do'">취소</span>
 								</div>
                             </div>
@@ -138,7 +148,7 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_regist_analyManage(){
+	function fn_regist_cut(){
 		if($('#eqId').val() == ''){
 			alert("설비를 확인 바랍니다.");
 			return;
@@ -169,6 +179,8 @@
 			return;
 		}
 		
+		
+		
 		registForm.submit();
 	}
 	
@@ -189,6 +201,7 @@
 		$('#poLotno').change(function(){
 			cutAjax();
 		});
+		
 	});
 	
 	
@@ -204,12 +217,17 @@
 			  success:function(result){
 				  registForm.piItemType.value = result.cut_ajax.piItemType;
 				  registForm.cpCutQty.value = result.cut_ajax.poOrderQty;
+				  if(result.cut_ajax.poState == 0 || result.cut_ajax.poState == 1){
+					  $('#poState').val("1");
+				  }
 			  },
 			  error:function(request,status,error){ 
 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
 			  }
 		  });
 	}
+	
+	
 	</script>
 </body>
 

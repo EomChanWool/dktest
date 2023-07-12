@@ -113,16 +113,9 @@
 				<div class="container-fluid">
 					<!-- Page Heading -->
 					<div class="btn_bottom_wrap">
-						<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">검사
-							상세</h1>
-						<div
-							style="display: inline-block; float: right; margin-top: -5px;">
-							<button type="button" class="btn btn-success btn-icon-split"
-								style="border: none;" data-toggle="modal"
-								data-target="#analysis">
-								<span class="text">인쇄양식</span>
-							</button>
-						</div>
+						<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정 상세
+							</h1>
+						
 					</div>
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
@@ -131,29 +124,50 @@
 								<table class="table table-bordered" id="dataTable">
 									<tbody>
 										<tr>
-											<th>검사번호</th>
-											<td><span class="form-control val-area">${analyVO.tiIdx}</span></td>
-											<th>로트번호(작업지시서)</th>
-											<td><span class="form-control val-area">${analyVO.woIdx}</span></td>
+											<th>공정번호</th>
+											<td><span class="form-control val-area">${cutVO.cpCutno}</span></td>
+											<th>설비</th>
+											<td><span class="form-control val-area">${cutVO.eqId}</span></td>
 										</tr>
 										<tr>
-											<th>분석데이터번호</th>
-											<td><span class="form-control val-area">${analyVO.azIdx}</span></td>
-											<th>상태</th>
-											<td><span class="form-control val-area">${analyVO.tiState}</span></td>
+											<th>로트번호</th>
+											<td><span class="form-control val-area">${cutVO.poLotno}</span></td>
+											<th>타입</th>
+											<td><span class="form-control val-area">${cutVO.piItemType}</span></td>
 										</tr>
 										<tr>
-											<th>검사자</th>
-											<td><span class="form-control val-area">${analyVO.tiAnalyst}</span></td>
-											<th>검사일</th>
-											<td><span class="form-control val-area">${analyVO.tiRegDte}</span></td>
+											<th>작업시작일</th>
+											<td><span class="form-control val-area">${cutVO.cpStarttime}</span></td>
+											<th>작업종료일</th>
+											<td><span class="form-control val-area">${cutVO.cpEndtime}</span></td>
 										</tr>
+										<tr>
+											<th>절단수량</th>
+											<td><span class="form-control val-area">${cutVO.cpCutQty}</span></td>
+											<th>불량수량</th>
+											<td><span class="form-control val-area">${cutVO.cpBadQty}</span></td>
+										</tr>
+										<tr>
+											<th>등록자</th>
+											<td><span class="form-control val-area">${cutVO.cpRegId}</span></td>
+											<th>등록일</th>
+											<td><span class="form-control val-area">${cutVO.cpRegDate}</span></td>
+										</tr>
+										<c:if test="${not empty cutVO.cpEdtId}">
+										<tr>
+											<th>수정자</th>
+											<td><span class="form-control val-area">${cutVO.cpEdtId}</span></td>
+											<th>수정일</th>
+											<td><span class="form-control val-area">${cutVO.cpEdtDate}</span></td>
+										</tr>
+										
+										</c:if>
 
 									</tbody>
 								</table>
 								<div class="btn_bottom_wrap">
 									<span class="btn_cancel"
-										onclick="location.href='${pageContext.request.contextPath}/sl/quality/analyManage/analyManageList.do'">목록</span>
+										onclick="location.href='${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do'">목록</span>
 								</div>
 							</div>
 						</div>
@@ -168,83 +182,7 @@
 			<!-- End of Footer -->
 		</div>
 		<!-- End of Content Wrapper -->
-	</div>
-	<!-- End of Page Wrapper -->
-	<div class="modal fade" id="analysis" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">인쇄영역</h5>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-
-				<div class="modal-body" id="modalAn">
-					<form name="listForm" class="listForm"
-						action="${pageContext.request.contextPath}/sl/production/analyManage/detailAnalyManage.do"
-						method="post">
-						<input type="hidden" name="tiIdx" value="${analyVO.tiIdx}">
-						<%-- <table class="table table-bordered">
-						<tbody>
-							<tr>
-								<th>검사번호</th>
-								<td><input type="text" class="form-control" name="tiIdx2" id="tiIdx2" value="${analyVO.tiIdx}"></td>								
-							</tr>
-							<tr>
-								<th>로트번호</th>
-								<td><input type="text" class="form-control" name="woIdx" id="woIdx" value="${analyVO.woIdx}"></td>
-							</tr>
-							<tr>
-								<th>분석번호</th>
-								<td><input type="text" class="form-control" name="azIdx" id="azIdx" value="${analyVO.azIdx}"></td>								
-							</tr>
-							<tr>
-								<th>검사결과</th>
-								<td><input type="text" class="form-control" name="tiState" id="tiState" value="${analyVO.tiState}"></td>
-							</tr>
-							<tr>
-								<th>검사자</th>
-								<td><input type="text" class="form-control" name="tiAnalyst" id="tiAnalyst" value="${analyVO.tiAnalyst}"></td>
-							</tr>
-							<tr>
-								<th>검사일</th>
-								<td><input type="text" class="form-control" name="tiRegDte" id="tiRegDte" value="${analyVO.tiRegDte}"></td>
-							</tr>
-							
-							<img alt="label" src="/resources/conf/images/label.png" style="width: 450px; height: 600px" ;>
-						</tbody>
-					</table> --%>
-
-						<div class="text-on-img">
-							<div class="background-wrap">
-								<div class="content">
-									<span style="margin-left:90px;">${analyVO.itemName}</span> 									
-								</div>
-								<div class="content">
-									<span style="display:inline-block; margin-left:80px; width:140px;">${analyVO.acName}</span><span style="margin-left:80px;font-size:20px;">${analyVO.woPdtCnt}kg</span> 
-																
-								</div>
-								<div class="content" style="margin-top:15px;">
-									<span style="margin-left:90px;">${analyVO.woIdx}</span> 									
-								</div>
-							</div>
-						</div>
-
-					</form>
-				</div>
-
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button"
-						data-dismiss="modal" id="closeBtn">취소</button>
-					<a class="btn btn-primary" href="#" onclick="fn_print()">인쇄</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
+	
 
 	<!-- Scroll to Top Button-->
 	<a class="scroll-to-top rounded" href="#page-top"> <i
@@ -266,23 +204,17 @@
 	<script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-		function fn_print() {
-
-			window.onbeforeprint = function() {
-				document.body.innerHTML = document.getElementById('modalAn').innerHTML;
-			}
-			window.onafterprint = function() {
-				//document.body.innerHTML = initBody;
-				listForm.submit();
-			}
-			window.print();
-		}
+		
 
 		$(function() {
-			$('#materialMenu').addClass("active");
-			$('#quality').addClass("show");
-			$('#analyManageList').addClass("active");
-
+			$('#processMenu').addClass("active");
+			$('#process').addClass("show");
+			$('#cutList').addClass("active");
+			
+			let msg = '${msg}';
+			if(msg) {
+				alert(msg);
+			}
 		});
 	</script>
 
