@@ -158,7 +158,6 @@ public class ManufactureController {
 				}
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다");
-		
 		return "redirect:/sl/process/manufacture/manufactureList.do";
 	}
 	
