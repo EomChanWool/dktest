@@ -48,27 +48,57 @@
 	</select>
 
 
-	<select id="selelctInList" resultType="egovMap">
-
-		SELECT in_idx, in_name,
-		(SELECT bi_name FROM sm_bad_item c WHERE c.BI_IDX = a.BI_IDX) AS
-		ch_state FROM sm_incongruity a
-		WHERE in_idx NOT IN (SELECT in_idx FROM
-		sm_insp_change b)
-
+	<select id="selelctEQList" resultType="egovMap">
+	SELECT eq_id,eq_name FROM
+		sm_equipment
+	</select>
+	
+	<select id="selectLotnoList" resultType="egovMap">
+		SELECT po_lotno FROM
+		sm_product_order
+		where po_state IN (0,1)
+	</select>
+	
+	<select id="selectExistsLot" resultType="int">
+	SELECT COUNT(*)
+		FROM
+		sm_product_order WHERE po_lotno = #{poLotno}
 	</select>
 
 	<select id="selectInfo" resultType="egovMap">
-		SELECT in_name, (SELECT
-		bi_name FROM sm_bad_item c WHERE c.BI_IDX =
-		a.BI_IDX) AS
-		ch_state FROM
-		sm_incongruity a WHERE a.in_idx = #{inIdx}
+		SELECT a.po_lotno,
+		b.pi_item_type,a.po_order_qty , a.po_state FROM
+		sm_product_order a JOIN
+		sm_product_info b ON a.PI_ID=b.PI_ID
+		WHERE a.po_lotno = #{poLotno}
+	</select>
+	
+	<select id="selectMfInfo" resultType="egovMap">
+	SELECT
+		a.mp_idx,
+		a.eq_id,
+		a.po_lotno,
+		a.pi_item_type,
+		a.mp_mfno,
+		a.mp_mf_qty,
+		a.mp_bad_qty,
+		b.eq_name,
+		c.po_state,
+		a.mp_starttime,
+		a.mp_endtime
+		FROM
+		sm_mf_proc a
+		join
+		sm_equipment b on a.eq_id = b.eq_id
+		JOIN sm_product_order c ON
+		a.po_lotno = c.po_lotno
+		WHERE 1=1
+		AND mp_idx = #{mpIdx}
 	</select>
 
-	<select id="selectInIdx" resultType="int">
+	<select id="selctExistsEq" resultType="int">
 		SELECT COUNT(*) FROM
-		sm_incongruity WHERE in_idx= #{inIdx}
+		sm_equipment WHERE eq_id = #{eqId}
 	</select>
 
 	<select id="selectCheck" resultType="egovMap">
@@ -96,48 +126,52 @@
 	</select>
 
 
-<!-- 	<insert id="registManufacture"> -->
-<!-- 		insert into sm_insp_change ( ch_idx, in_idx, ch_state, ch_recycle,  -->
-<!-- 			ch_reason, ch_reg_dte, ch_reg_mem) values( (SELECT CONCAT('CH', LPAD((SELECT  -->
-<!-- 			(SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.in_idx),0) FROM sm_insp_change  -->
-<!-- 			a),'[a-z]','')))+1,10,0))), #{inIdx}, #{chState}, #{chRecycle}, #{chReason},  -->
-<!-- 			now(), #{userId}) -->
-<!-- 		insert into sm_insp_change ( -->
-<!-- 		ch_idx, -->
-<!-- 		in_idx, -->
-<!-- 		ch_state, -->
-<!-- 		ch_recycle, -->
-<!-- 		ch_reason, -->
-<!-- 		ch_reg_dte, -->
-<!-- 		ch_reg_mem, -->
-<!-- 		wo_idx) -->
-<!-- 		values( -->
-<!-- 		(SELECT -->
-<!-- 		CONCAT('CH', -->
-<!-- 		LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT -->
-<!-- 		IFNULL(MAX(a.in_idx),0) -->
-<!-- 		FROM sm_insp_change a),'[a-z]','')))+1,10,0))), -->
-<!-- 		#{inIdx}, -->
-<!-- 		#{chState}, -->
-<!-- 		#{chRecycle}, -->
-<!-- 		#{chReason}, -->
-<!-- 		now(), -->
-<!-- 		#{userId}, -->
-<!-- 		(SELECT a.WO_IDX FROM -->
-<!-- 		sm_analysis_info a JOIN -->
-<!-- 		sm_incongruity b ON a.TI_IDX = b.TI_IDX -->
-<!-- 		WHERE b.IN_IDX = #{inIdx}) -->
-<!-- 		) -->
-<!-- 	</insert> -->
+	<insert id="registManufacture">
+		insert into sm_mf_proc (
+		mp_mfno,
+		eq_id,
+		po_lotno,
+		pi_item_type,
+		mp_starttime,
+		mp_endtime,
+		mp_mf_qty,
+		mp_bad_qty,
+		mp_reg_id,
+		mp_reg_date
+		) values(
+		#{mpMfno},
+		#{eqId},
+		#{poLotno},
+		#{piItemType},
+		#{mpStarttime},
+		#{mpEndtime},
+		#{mpMfQty},
+		#{mpBadQty},
+		#{userId},
+		GETDATE()
+		)
+	</insert>
 
-<!-- 	<update id="modifyManufacture"> -->
-<!-- 		UPDATE sm_insp_change SET -->
-<!-- 		ch_recycle = #{chRecycle}, -->
-<!-- 		ch_reason = #{chReason}, -->
-<!-- 		ch_edt_dte = now(), -->
-<!-- 		ch_edt_mem = #{userId} -->
-<!-- 		where ch_idx = #{chIdx} -->
-<!-- 	</update> -->
+	<update id="modifyManufacture">
+		UPDATE sm_mf_proc
+		SET eq_id = #{eqId},
+		mp_mfno = #{mpMfno},
+		mp_starttime = #{mpStarttime},
+		mp_endtime = #{mpEndtime},
+		mp_mf_qty = #{mpMfQty},
+		mp_bad_qty = #{mpBadQty},
+		mp_edt_date = GETDATE(),
+		mp_edt_id = #{userId}
+		WHERE mp_idx = #{mpIdx}
+		
+		UPDATE sm_product_order
+		SET po_state = #{poState}
+		WHERE po_lotno = (
+    	SELECT po_lotno
+    	FROM sm_mf_proc
+    	WHERE mp_idx = #{mpIdx}
+		)
+	</update>
 
 <!-- 	<delete id="deleteManufacture"> -->
 

@@ -13,15 +13,21 @@ public interface ManufactureMapper {
 	
 	List<?> selectManufactureList(SearchVO searchVO);
 	
-	List<?> selelctInList();
+	List<?> selelctEQList();
+	
+	List<?> selectLotnoList();
 	
 	Map<String, Object> selectInfo(Map<String,Object> map);
 	
-	int selectInIdx(Map<String, Object> map);
+	int selctExistsEq(Map<String, Object> map);
+	
+	int selectExistsLot(Map<String, Object> map);
 	
 	void registManufacture(Map<String, Object> map);
 	
 	Map<String, Object> selectCheck(Map<String, Object> map);
+	
+	Map<String, Object> selectMfInfo(Map<String, Object> map);
 	
 	void modifyManufacture(Map<String, Object> map);
 	

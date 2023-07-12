@@ -12,6 +12,7 @@
 	.val-area{
 		text-align: left;
 	}
+	
 </style>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -38,7 +39,7 @@
                     </form>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Nav document - User Information -->
+                        <!-- Nav analyManage - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
                     </ul>
                 </nav>
@@ -47,48 +48,70 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">유무검사관리 등록</h1>
+                    <div class="btn_bottom_wrap">
+                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정 등록</h1>
+                    	
+                    </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/quality/checkProd/registCheckProdOk.do" name="registForm" method="post" encType="multipart/form-data">
+                            	<form action="${pageContext.request.contextPath}/sl/process/manufacture/registManufactureOk.do" name="registForm" method="post">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>부적합 번호 <span class="req">*</span></th>
+												<th>설비 <span class="req">*</span></th>
 												<td>
-												<input type="text" class="form-control" name="inIdx" id="inIdx" list="inList" autocomplete="off">
-													<datalist id="inList">
-														<c:forEach var="list" items="${inList}" varStatus="status">
-															<option value="${list.inIdx}">${list.inName}</option>
+													<input type="text" class="form-control" name="eqId" id="eqId"  list="eqList" autocomplete="off">
+													<datalist id="eqList">
+														<c:forEach var="list" items="${eqList}" varStatus="status">
+															<option value="${list.eqId}">${list.eqName}</option>
 														</c:forEach>
 													</datalist>
-													</td>
-												<th>부적합명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="inName" id="inName" readonly></td>
+												</td>
+												<th>가공공정번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno" ></td>
 											</tr>
 											<tr>
-												<th>불량 유형 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="chState" id="chState" readonly></td>
-												<th>재사용 여부 <span class="req">*</span></th>
-												<td><select class="form-control" name="chRecycle" id="chRecycle">
+											<th>로트번호</th>
+											<td><input type="text" class="form-control" name="poLotno" id="poLotno"  list="lotList" autocomplete="off">
+											<datalist id="lotList">
+												<c:forEach var="list" items="${lotnoList}" varStatus="status">
+													<option value="${list.poLotno}">${list.poLotno}</option>
+												</c:forEach>
+											</datalist>
+											</td>
+											<th>타입</th>
+											<td><input type="text" class="form-control" name="piItemType" id="piItemType" readonly></td>
+											</tr>
+											<tr>
+											<th>시작일시</th>
+											<td><input type="datetime-local" class="form-control" name="mpStarttime" id="mpStarttime" ></td>
+											<th>종료일시</th>
+											<td><input type="datetime-local" class="form-control" name="mpEndtime" id="mpEndtime" ></td>
+											</tr>
+											<tr>
+											<th>가공수량</th>
+											<td><input type="text" class="form-control" name="mpMfQty" id="mpMfQty"></td>
+											<th>불량수량</th>
+											<td><input type="text" class="form-control" name="mpBadQty" id="mpBadQty"></td>
+											</tr>
+											<tr>
+												<th>공정상태</th>
+													<td>
+													<select class="form-control" name="poState" id="poState">
 														<option value="">선택</option>
-														<option value="Y" <c:if test="${inspVO.chRecycle eq 'Y'}">selected="selected"</c:if>>Y</option>
-														<option value="N" <c:if test="${inspVO.chRecycle eq 'N'}">selected="selected"</c:if>>N</option>
-													</select></td>
+														<option value="1">진행중</option>
+														<option value="2">작업완료</option>
+													</select>
+													</td>
 											</tr>
-											<tr>
-												<th>변경이유</th>
-												<td colspan="3"><textArea name="chReason" id="chReason"></textArea></td>
-											</tr>
-											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_regist_document()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/checkProd/checkProdList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_manufacture()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -105,6 +128,7 @@
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
+    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -124,14 +148,34 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_regist_document(){
-		if($('#inIdx').val() == ''){
-			alert("부적합번호를 확인 바랍니다.");
+	function fn_regist_manufacture(){
+		if($('#eqId').val() == ''){
+			alert("설비를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#chRecycle').val() == ''){
-			alert("재사용 여부를 선택해주세요");
+		if($('#mpMfno').val() == ''){
+			alert("공정번호를 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#poLotno').val() == ''){
+			alert("로트번호를 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#mpStarttime').val() == ''){
+			alert("시작일을 확인 바랍니다.");
+			return;
+		}
+		
+		
+		if($('#mpEndtime').val() == ''){
+			alert("종료일을 확인 바랍니다.");
+			return;
+		}
+		if($('#mpMfQty').val() == ''){
+			alert("가공수량을 확인 바랍니다.");
 			return;
 		}
 		
@@ -140,47 +184,50 @@
 		registForm.submit();
 	}
 	
+	
+	
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#checkProdList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#manufactureList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		$('#inIdx').change(function(){
-			checkProdInfoAjax();
+		
+		
+		$('#poLotno').change(function(){
+			manufactureAjax();
 		});
 		
-		
-	function checkProdInfoAjax(){
+	});
+	
+	
+	function manufactureAjax(){
 		$.ajax({
 			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/quality/checkProd/checkProdInfoAjax.do'/>",	  		  			  
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/manufacture/manufactureInfoAjax.do'/>",	  		  			  
 			  dataType:"JSON",
 			  data:{
-				  'inIdx':$('#inIdx').val()
+				  'poLotno': $('#poLotno').val(),
+				  
 			  },
 			  success:function(result){
-				  
-				  $('#inName').text(result.inInfo.inName)
-				  $('#chState').text(result.inInfo.chState)
-				  registForm.chState.value = result.inInfo.chState;
-				  registForm.inName.value = result.inInfo.inName;
+				  registForm.piItemType.value = result.mf_ajax.piItemType;
+				  registForm.mpMfQty.value = result.mf_ajax.poOrderQty;
+				  if(result.mf_ajax.poState == 0 || result.mf_ajax.poState == 1){
+					  $('#poState').val("1");
+				  }
 			  },
 			  error:function(request,status,error){ 
 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
 			  }
 		  });
-		
-		
-	}	
-		
-		
-		
-	});
+	}
+	
+	
 	</script>
 </body>
 

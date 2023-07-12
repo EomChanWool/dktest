@@ -27,8 +27,8 @@ public class ManufactureServieImple implements ManufactureService {
 	}
 
 	@Override
-	public List<?> selelctInList() {
-		return manufactureMapper.selelctInList();
+	public List<?> selelctEQList() {
+		return manufactureMapper.selelctEQList();
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class ManufactureServieImple implements ManufactureService {
 	}
 
 	@Override
-	public int selectInIdx(Map<String, Object> map) {
-		return manufactureMapper.selectInIdx(map);
+	public int selctExistsEq(Map<String, Object> map) {
+		return manufactureMapper.selctExistsEq(map);
 	}
 
 	@Override
@@ -67,6 +67,21 @@ public class ManufactureServieImple implements ManufactureService {
 	public Map<String, Object> selectDetailManufacture(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return manufactureMapper.selectDetailManufacture(map);
+	}
+
+	@Override
+	public List<?> selectLotnoList() {
+		return manufactureMapper.selectLotnoList();
+	}
+
+	@Override
+	public int selectExistsLot(Map<String, Object> map) {
+		return manufactureMapper.selectExistsLot(map);
+	}
+
+	@Override
+	public Map<String, Object> selectMfInfo(Map<String, Object> map) {
+		return manufactureMapper.selectMfInfo(map);
 	}
 
 }

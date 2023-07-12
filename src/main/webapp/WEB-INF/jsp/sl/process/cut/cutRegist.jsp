@@ -164,7 +164,7 @@
 			return;
 		}
 		
-		if($('#cpStarttime').val == ''){
+		if($('#cpStarttime').val() == ''){
 			alert("시작일을 확인 바랍니다.");
 			return;
 		}

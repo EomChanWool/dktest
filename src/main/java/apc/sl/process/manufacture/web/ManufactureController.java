@@ -53,11 +53,11 @@ public class ManufactureController {
 	@RequestMapping("/sl/process/manufacture/registManufacture.do")
 	public String registManufacture(ModelMap model) {
 		
-		List<?> inList = manufactureService.selelctInList();
+		List<?> eqList = manufactureService.selelctEQList();
+		List<?> lotnoList = manufactureService.selectLotnoList();
 		
-		model.put("inList", inList);
-		
-		
+		model.put("eqList", eqList);
+		model.put("lotnoList", lotnoList);
 		
 		return "sl/process/manufacture/manufactureRegist";
 	}
@@ -68,7 +68,7 @@ public class ManufactureController {
 		Map<String, Object> list = manufactureService.selectInfo(map);
 		
 		mav.setViewName("jsonView");
-		mav.addObject("inInfo", list);
+		mav.addObject("mf_ajax", list);
 		
 		return mav;
 	}
@@ -76,21 +76,40 @@ public class ManufactureController {
 	
 	@RequestMapping("/sl/process/manufacture/registManufactureOk.do")
 	public String registManufactureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		int exists = manufactureService.selectInIdx(map);
+		
+		//mssql형식의 맞게 변환
+				String time1 = map.get("mpStarttime")+"";
+				String[] time11 = time1.split("T");
+				
+				String time111 = time11[0]+" "+time11[1]+":00";
+				String time2 = map.get("mpEndtime")+"";
+				
+				String[] time22 = time2.split("T");
+				
+				String time222 = time22[0] + " " + time22[1]+ ":00";
+				map.replace("mpStarttime",time111);
+				map.replace("mpEndtime", time222);
+				
+		int exists = manufactureService.selctExistsEq(map);
 		
 		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 부적합번호 입니다.");
-			map.replace("inIdx", "");
-			redirectAttributes.addFlashAttribute("inspVO", map);
+			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
 			return "redirect:/sl/process/manufacture/registManufacture.do";
 		}
+		//로트번호 체크
+				if(!map.get("poLotno").equals("")) {
+					exists = manufactureService.selectExistsLot(map);
+					if(exists == 0) {
+						redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
+						return "redirect:/sl/process/manufacture/registManufacture.do";
+					}
+					
+					
+				}
 		map.put("userId", session.getAttribute("user_id"));
-		
 		manufactureService.registManufacture(map);
-		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
 		
-				
 		
 		return "redirect:/sl/process/manufacture/manufactureList.do";
 	}
@@ -98,19 +117,45 @@ public class ManufactureController {
 	@RequestMapping("/sl/process/manufacture/modifyManufacture.do")
 	public String modifyManufacture(@RequestParam Map<String, Object> map, ModelMap model) { 
 		
-		Map<String, Object> list = manufactureService.selectCheck(map);
+		List<?> eqList = manufactureService.selelctEQList();
+		List<?> lotnoList = manufactureService.selectLotnoList();
 		
-		model.put("checkVO", list);
-		
+		model.put("eqList", eqList);
+		model.put("lotnoList", lotnoList);
+		if(!map.isEmpty()) {
+			Map<String, Object> detail = manufactureService.selectMfInfo(map);
+			model.put("mfVO", detail);
+		}
 		
 		return "sl/process/manufacture/manufactureModify";
 	}
 	
 	@RequestMapping("/sl/process/manufacture/modifyManufactureOk.do")
 	public String modifyManufactureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		//mssql형식의 맞게 변환
+		String time1 = map.get("mpStarttime")+"";
+		String[] time11 = time1.split("T");
+		
+		String time111 = time11[0]+" "+time11[1]+":00";
+		String time2 = map.get("mpEndtime")+"";
+		
+		String[] time22 = time2.split("T");
+		
+		String time222 = time22[0] + " " + time22[1]+ ":00";
+		map.replace("mpStarttime",time111);
+		map.replace("mpEndtime", time222);
+		
 
 		map.put("userId", session.getAttribute("user_id"));
 		manufactureService.modifyManufacture(map);
+		
+		int exists = manufactureService.selctExistsEq(map);
+		
+			if(exists == 0) {
+				redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
+				return "redirect:/sl/process/manufacture/registManufacture.do";
+				}
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다");
 		

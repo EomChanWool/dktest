@@ -47,45 +47,64 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">유무검사관리 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">가공공정 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/quality/checkProd/modifyCheckProdOk.do" name="modifyForm" method="post" encType="multipart/form-data">
-                            		<input type="hidden" name="chIdx" value="${checkVO.chIdx}">
-                            		
+                            	<form action="${pageContext.request.contextPath}/sl/process/manufacture/modifyManufactureOk.do" name="modifyForm" method="post">
+                            	<input type="hidden" name="mpIdx" value="${mfVO.mpIdx}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>부적합 번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="inIdx" id="inIdx" value="${checkVO.inIdx}" readonly></td>
-												<th>부적합명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="inName" id="inName" value="${checkVO.inName}" readonly></td>
-											</tr>
-											<tr>
-												<th>불량 유형 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="chState" id="chState" value="${checkVO.chState}" readonly></td>
-												<th>재사용 여부 <span class="req">*</span></th>
+												<th>설비</th>
 												<td>
-												<select class="form-control" name="chRecycle" id="chRecycle">
-														<option value="">선택</option>
-														<option value="Y" <c:if test="${checkVO.chRecycle eq 'Y'}">selected="selected"</c:if>>Y</option>
-														<option value="N" <c:if test="${checkVO.chRecycle eq 'N'}">selected="selected"</c:if>>N</option>
-													</select>
+													<input type="text" class="form-control" name="eqId" id="eqId" list="eqList" autocomplete="off" value="${mfVO.eqId}">
+													<datalist id="eqList">
+														<c:forEach var="list" items="${eqList}" varStatus="status">
+															<option value="${list.eqId}">${list.eqName}</option>
+														</c:forEach>
+													</datalist>
 												</td>
+												<th>절단공정번호</th>
+												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno" value="${mfVO.mpMfno}"></td>
 											</tr>
 											<tr>
-												<th>변경이유</th>
-												<td colspan="3"><textArea name="chReason" id="chReason">${checkVO.chReason}</textArea></td>
+												<th>로트번호<span class="req">*</span></th>
+												<td>
+													<span class="form-control val-area" id="poLotno">${mfVO.poLotno}</span>
+											</td>
+												<th>타입 <span class="req">*</span></th>
+												<td><span class="form-control val-area" id="piItemType">${mfVO.piItemType}</span></td>
 											</tr>
-											
+											<tr>
+												<th>시작일시</th>
+												<td><input type="datetime-local" class="form-control" name="mpStarttime" id="mpStarttime" value="<fmt:formatDate value='${mfVO.mpStarttime}' pattern='yyyy-MM-dd HH:MM' />"></td>
+												<th>종료일시</th>
+												<td><input type="datetime-local" class="form-control" name="mpEndtime" id="mpEndtime" value="<fmt:formatDate value='${mfVO.mpEndtime}' pattern='yyyy-MM-dd HH:MM' />"></td>
+											</tr>
+											<tr>
+												<th>절단수량</th>
+												<td><input type="text" class="form-control" name="mpMfQty" id="mpMfQty" value="${mfVO.mpMfQty}"></td>
+												<th>불량수량</th>
+												<td><input type="text" class="form-control" name="mpBadQty" id="mpBadQty" value="${mfVO.mpBadQty}"></td>
+											</tr>
+											<tr>
+												<th>공정상태</th>
+													<td>
+													<select class="form-control" name="poState" id="poState">
+														<option value="">선택</option>
+														<option value="1" ${mfVO.poState == 1 ? 'selected' : ''}>진행중</option>
+														<option value="2" ${mfVO.poState == 2 ? 'selected' : ''}>작업완료</option>
+													</select>
+													</td>
+											</tr>
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_checkProd()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/checkProd/checkProdList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_manufacture()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -121,9 +140,31 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_checkProd(){
-		if($('#chRecycle').val() == ''){
-			alert("재사용 여부를 선택 바랍니다.");
+	function fn_modify_manufacture(){
+		if($('#eqId').val() == ''){
+			alert("설비를 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#mpMfno').val() == ''){
+			alert("공정번호를 확인 바랍니다.");
+			return;
+		}
+		
+		
+		
+		if($('#mpStarttime').val() == ''){
+			alert("시작일을 확인 바랍니다.");
+			return;
+		}
+		
+		
+		if($('#mpEndtime').val() == ''){
+			alert("종료일을 확인 바랍니다.");
+			return;
+		}
+		if($('#mpMfQty').val() == ''){
+			alert("가공수량을 확인 바랍니다.");
 			return;
 		}
 		
@@ -133,9 +174,9 @@
 	}
 	
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#checkProdList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#manufactureList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
