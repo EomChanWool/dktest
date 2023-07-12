@@ -174,9 +174,6 @@ public class ManufactureController {
 	
 	@RequestMapping("/sl/process/manufacture/detailManufacture.do")
 	public String detailManufacture(@RequestParam Map<String, Object> map, ModelMap model) {
-		
-	
-		
 		Map<String, Object> detail = manufactureService.selectDetailManufacture(map);
 		
 		model.put("checkVO", detail);

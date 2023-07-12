@@ -147,7 +147,6 @@ public class CutController {
 				String[] time11 = time1.split("T");
 				
 				String time111 = time11[0]+" "+time11[1]+":00";
-				System.out.println("타임확인 : " + time111);
 				String time2 = map.get("cpEndtime")+"";
 				
 				String[] time22 = time2.split("T");
