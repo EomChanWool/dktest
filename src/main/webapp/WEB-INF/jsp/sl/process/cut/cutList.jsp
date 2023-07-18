@@ -60,17 +60,13 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do" method="post">
-									<input type="hidden" name="cpIdx">
-									<input type="hidden" name="poLotno">
-									
+									<input type="hidden" name="orId">
+									<input type="hidden" name="cpsIdx">
+									<input type="hidden" name="cplManager" id="cplManage">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
+									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" id="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="수주번호를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin: 0 0.3rem 0 0;">
-						    									
-									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
-									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
 									
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_cut()" style="margin-left: 0.3rem;">
@@ -79,9 +75,10 @@
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_cut()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_cut()" style="float: right;">
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_cutProcess()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
+	                            
 							</div>
                         </div>
                         <div class="card-body">
@@ -89,35 +86,73 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                        	<th>절단공정번호</th>
-                                            <th>설비</th>
-                                            <th>LOT번호</th>
-                                            <th>제품타입</th>
-                                            <th>절단수량</th>
-                                            <th>불량수량</th>
+                                        	<th>수주번호</th>
+                                            <th>품목</th>
+                                            <th>수주량</th>
+                                            <th>현재공정</th>
+                                            <th>진행/중단/재개</th>
+                                            <th>가공공정이동</th>
+											<th>작업완료</th>
 											<th>수정/삭제</th>
+											<th>작업자</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${cutList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_cut('${result.cpIdx}')" style="cursor: pointer;">
-	                                   			<td>${result.cpCutno}</td>
-	                                   			<td>${result.eqName}</td>
-	                                   			<td>${result.poLotno}</td>
-	                                   			<td>${result.piItemType}</td>
-	                                   			<td>${result.cpCutQty}</td>
-	                                   			<td>${result.cpBadQty}</td>
-	                                            <td class="list_btn" onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cut_go('${result.cpIdx}')">
+	                                   		<tr>
+	                                   			<td>${result.orId}</td>
+	                                   			<td>${result.orProd}</td>
+	                                   			<td>${result.orQty}</td>
+	                                   			
+	                                   			
+	                                   			<c:if test="${result.orProcess eq 0}"><td>절단공정대기중</td></c:if>
+	                                   			<c:if test="${result.orProcess eq 1 and (result.cpsState eq 2 or result.cpsState eq 0)}"><td>절단공정중</td></c:if>
+	                                   			<c:if test="${result.cpsState eq 1 and result.orProcess eq 1}"><td>절단일시정지</td></c:if>
+	                                   			<c:if test="${result.cpsState eq 1 and result.orProcess eq 1}"><td><a href="#" class="btn btn-primary btn-icon-split" onclick="fn_re_cut_go('${result.orId}','${result.cpsIdx}')">
+				                                        <span class="text">재개</span>
+				                                    </a></td></c:if>
+				                                <c:if test="${result.orProcess eq 0}"><td><a href="#" class="btn btn-warning btn-icon-split" onclick="fn_goProcess('${result.orId}')">
+				                                        <span class="text">진행</span>
+				                                    </a></td>
+				                                    </c:if>
+				                                    <c:if test="${result.orProcess eq 1 and (result.cpsState eq 2 or result.cpsState eq 0)}"><td><a href="#" class="btn btn-danger btn-icon-split" onclick="fn_stop_cut('${result.orId}')">
+				                                        <span class="text">중단</span>
+				                                    </a></td>
+				                                    </c:if> 
+				                                    
+	                                   			
+	                                   			<td>
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_go_mf('${result.orId}')">
+				                                        <span class="text">가공</span>
+				                                    </a></td>
+	                                            <td>
+	                                            	
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_go_finish('${result.orId}')">
+				                                        <span class="text">작업완료</span>
+				                                    </a>
+	                                            </td>
+	                                            
+	                                             <td style="padding: 5px 0px;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_go_cut('${result.orId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cut('${result.cpIdx}', '${result.poLotno}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_go_cut('${result.orId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
+	                                            
+	                                             <td>
+	                                            <select class="form-control" id="cplManager_${status.index}" onChange="addManger(${status.index})">
+	                                          			    <option value="">선택</option>
+														<c:forEach var="list" items="${cmList}" varStatus="status">
+															<option value="${list.miName}" <c:if test="${result.cplManager eq list.miName}">selected="selected"</c:if>>${list.miName}</option>
+														</c:forEach>
+													</select></td>
+												
+	                                          
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty cutList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty cutList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -168,38 +203,77 @@
 	
 	function fn_searchAll_cut(){
 		listForm.searchKeyword.value = "";
-		listForm.searchStDate.value = "";
-		listForm.searchEdDate.value = "";
 		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	
-	function fn_regist_cut(){
+	function fn_re_cut_go(orId,cpsIdx){
+		listForm.orId.value = orId;
+		listForm.cpsIdx.value = cpsIdx;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/reCut.do";
+		listForm.submit();
+	}
+	
+	function fn_goProcess(orId){
+		if($('#cplManage').val() == ''){
+			alert("작업자를 확인 바랍니다.");
+			return;
+		}
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/goCut.do";
+		listForm.submit();
+	}
+	
+	
+	function fn_stop_cut(orId){
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/stopCut.do";
+		listForm.submit();
+	}
+	
+	function fn_go_mf(orId){
+		if(confirm('가공 공정으로 넘어가시겠습니까?')) {
+			listForm.orId.value = orId; 
+			listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/goMfCut.do";
+			listForm.submit();
+		}
+	}
+	
+	function fn_go_finish(orId){
+		if(confirm('작업을 완료하시겠습니까?')) {
+			listForm.orId.value = orId; 
+			listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/finishCut.do";
+			listForm.submit();
+		}
+	}
+	
+	function fn_regist_cutProcess(){
 		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/registCut.do";
 		listForm.submit();
 	}
 	
-	function fn_modify_cut_go(cpIdx){
-		listForm.cpIdx.value = cpIdx;
+	function fn_modify_go_cut(orId){
+		listForm.orId.value = orId;
 		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/modifyCut.do";
 		listForm.submit();
 	}
 	
-	
-	function fn_detail_cut(cpIdx){
-		listForm.cpIdx.value = cpIdx;
-		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/detailCut.do";
+	function fn_delete_go_cut(orId){
+		
+		
+		if(confirm('수주를 삭제하시겠습니까?')){
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/deleteCut.do";
 		listForm.submit();
-	}
-	
-	function fn_delete_cut(cpIdx, poLotno){
-		if(confirm('해당 내역을 삭제하시겠습니까?')) {
-			listForm.cpIdx.value = cpIdx; 
-			listForm.poLotno.value = poLotno; 
-			listForm.action = "${pageContext.request.contextPath}/sl/process/cutProcess/deleteCut.do";
-			listForm.submit();
 		}
 	}
+	
+	function addManger(index){
+		var str = '#cplManager_'+index;
+		console.log($(str).val());
+		$('#cplManage').val($(str).val());
+	}
+	
 	
 
 	$(function() {
@@ -207,19 +281,12 @@
 		$('#process').addClass("show");
 		$('#cutList').addClass("active");
 		
-		let msg = '${msg}';
-		if(msg) {
-			alert(msg);
-		}
+		let msg = '${msg}';	
+		if (msg) {
+				alert(msg);
+			}
 		
-		$('#searchStDate').change(function(){
-			listForm.submit();
 		});
-		
-		$('#searchEdDate').change(function(){
-			listForm.submit();
-		});
-	});
 	</script>
 </body>
 

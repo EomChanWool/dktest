@@ -43,4 +43,9 @@ public class UserServieImpl implements UserService {
 	public void deleteUser(Map<String, Object> map) {
 		userMapper.deleteUser(map);
 	}
+
+	@Override
+	public int checkId(Map<String, Object> map) {
+		return userMapper.checkId(map);
+	}
 }

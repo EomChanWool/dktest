@@ -49,34 +49,86 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/prPerformance/modifyPrPerformanceOk.do" name="modifyForm" method="post">
-                            		
+                            		<input type="hidden" name="relIdx" value="${prPerVo.relIdx}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
 												<th>로트번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="poLotno" id="poLotno" readonly value="${prPerVo.poLotno}"/></td>
-												<th>지시일<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="poLotDate" id="poLotDate" value="<fmt:formatDate value='${prPerVo.poLotDate}' pattern='yyyy-MM-dd' />"/></td>
+												<td><input type="text" class="form-control" name="poLotno" id="poLotno" value="${prPerVo.poLotno}"/></td>
+												<th>일자<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="relDate" id="relDate" value="${prPerVo.relDate}"/></td>
 											</tr>
 											<tr>
-												<th>발주처<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="poClient" id="poClient" value="${prPerVo.poClient}"/></td>
-												<th>발주번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="poOrderNo" id="poOrderNo" value="${prPerVo.poOrderNo}"/></td>
+												<th>거래처<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relCompony" id="relCompony" value="${prPerVo.relCompony}"/></td>
+												<th>수량<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relQty" id="relQty" value="${prPerVo.relQty}"/></td>
 											</tr>
 											<tr>
-												<th>제품ID</th>
-												<td><input type="text" class="form-control" name="piId" id="piId" value="${prPerVo.piId}"/></td>
-												<th>지시수량</th>
-												<td><input type="text" class="form-control" name="poOrderQty" id="poOrderQty" value="${prPerVo.poOrderQty}"/></td>
+												<th>협가</th>
+												<td><input type="text" class="form-control" name="relNego" id="relNego" value="${prPerVo.relNego}"/></td>
+												<th>%</th>
+												<td><input type="text" class="form-control" name="relPercent" id="relPercent" value="${prPerVo.relPercent}"/></td>
 											</tr>
 											<tr>
-											<th>작업상태</th>
-											<c:if test="${prPerVo.poState eq 0}"><td><input type="text" class="form-control" value="대기" readonly/></td></c:if>
-											<c:if test="${prPerVo.poState eq 1}"><td><input type="text" class="form-control" value="진행중" readonly/></td></c:if>
-											<c:if test="${prPerVo.poState eq 2}"><td><input type="text" class="form-control" value="완료" readonly/></td></c:if>
+												<th>판매단가(원)</th>
+												<td><input type="text" class="form-control" name="relUnit" id="relUnit" value="${prPerVo.relUnit}"/></td>
+												<th>금액(원)<span class="req">*</span></th>
+												<td><input type="text" class="form-control relPrice" name="relPrice" id="relPrice" value="${prPerVo.relPrice}"/></td>
 											</tr>
-										
+											<tr>
+												<th>부가세(원)<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relTax" id="relTax" value="${prPerVo.relTax}"/></td>
+												<th>합계(원)<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relTotalPrice" id="relTotalPrice" value="${prPerVo.relTotalPrice}"/></td>
+											</tr>
+											<tr>
+												<th>납품처</th>
+												<td><input type="text" class="form-control" name="relDel" id="relDel" value="${prPerVo.relDel}"/></td>
+												<th>주문번호<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relEsno" id="relEsno" value="${prPerVo.relEsno}"/></td>
+											</tr>
+											<tr>
+												<th>공정번호<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relPrno" id="relPrno" value="${prPerVo.relPrno}"/></td>
+												<th>히트번호</th>
+												<td><input type="text" class="form-control" name="relHeatno" id="relHeatno" value="${prPerVo.relHeatno}"/></td>
+											</tr>
+											<tr>
+												<th>과목</th>
+												<td><input type="text" class="form-control" name="relSub" id="relSub" value="${prPerVo.relSub}"/></td>
+												<th>수주구분<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relOrType" id="relOrType" value="${prPerVo.relOrType}"/></td>
+											</tr>
+											<tr>
+												<th>수주번호<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${prPerVo.orId}"/></td>
+												<th>성적서 재질</th>
+												<td><input type="text" class="form-control" name="relReport" id="relReport" value="${prPerVo.relReport}"/></td>
+											</tr>
+											<tr>
+												<th>계산서<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relBill" id="relBill" value="${prPerVo.relBill}"/></td>
+												<th>품명<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relProd" id="relProd" value="${prPerVo.relProd}"/></td>
+											</tr>
+											<tr>
+												<th>재질<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relTexture" id="relTexture" value="${prPerVo.relTexture}"/></td>
+												<th>두께<span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="relThickness" id="relThickness" value="${prPerVo.relThickness}"/></td>
+											</tr>
+											<tr>
+												<th>규격</th>
+												<td><input type="text" class="form-control" name="relStandard" id="relStandard" value="${prPerVo.relStandard}"/></td>
+												<th>상태</th>
+												<td><input type="text" class="form-control" name="relState" id="relState" value="${prPerVo.relState}"/></td>
+											</tr>
+											<tr>
+												<th>비고</th>
+												<td colspan="3"><textArea name="relNote" id="relNote" >${prPerVo.relNote}</textArea></td>
+											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>
@@ -119,39 +171,100 @@
 
 	<script>
 	function fn_modify_prPerfomance(){
+		var num =  /^[0-9.]+$/;
+		
 		if($('#poLotno').val() == ""){
 			alert("로트번호를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#poLotDate').val() == ""){
-			alert("지시일을 확인 바랍니다.");
+		if($('#relDate').val() == ""){
+			alert("출고일을 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#poClient').val() == "" ){
-			alert("발주처를 입력해주세요.");
+		if($('#relCompony').val() == "" ){
+			alert("거래처를 입력해주세요.");
 			return;
 		}
-		if($('#poOrderNo').val() == "" ){
-			alert("발주번호를 입력해주세요.");
+		if($('#relQty').val() == "" ){
+			alert("수량을 입력해주세요.");
 			return;
 		}
-		if($('#piId').val() == "" ){
-			alert("제품ID를 입력해주세요.");
+		if(!num.test($('#relQty').val())){
+ 			alert("수량은 숫자만 입력가능합니다.");
+			return;
+ 		}
+		if($('#relPrice').val() == "" ){
+			alert("금액을 입력해주세요.");
 			return;
 		}
-		if($('#poOrderQty').val() == "" ){
-			alert("지시수량을 입력해주세요.");
+		if(!num.test($('#relPrice').val())){
+ 			alert("금액은 숫자만 입력가능합니다.");
+			return;
+ 		}
+		if($('#relTax').val() == "" ){
+			alert("부가세를 입력해주세요.");
+			return;
+		}
+		if(!num.test($('#relTax').val())){
+ 			alert("부가세는 숫자만 입력가능합니다.");
+			return;
+ 		}
+		if($('#relTotalPrice').val() == "" ){
+			alert("합계를 입력해주세요.");
+			return;
+		}
+		if(!num.test($('#relTotalPrice').val())){
+ 			alert("합계는 숫자만 입력가능합니다.");
+			return;
+ 		}
+		if($('#relEsno').val() == "" ){
+			alert("주문번호를 입력해주세요.");
+			return;
+		}
+		if($('#relPrno').val() == "" ){
+			alert("공정번호를 입력해주세요.");
+			return;
+		}
+		if($('#relOrType').val() == "" ){
+			alert("수주구분을 입력해주세요.");
+			return;
+		}
+		if($('#orId').val() == "" ){
+			alert("수주번호를 입력해주세요.");
 			return;
 		}
 		
+		if($('#relBill').val() == "" ){
+			alert("계산서를 입력해주세요.");
+			return;
+		}
+		if($('#relProd').val() == "" ){
+			alert("품명을 입력해주세요.");
+			return;
+		}
+		if($('#relTexture').val() == "" ){
+			alert("재질을 입력해주세요.");
+			return;
+		}
+		if($('#relThickness').val() == "" ){
+			alert("품명을 입력해주세요.");
+			return;
+		}
 		
 		
 		modifyForm.submit();
 	}
 	
-	
+	function cal(){
+		var price =  parseFloat(document.getElementsByClassName('relPrice')[0].value);
+		var tax = price * 0.1;
+		var total = price + tax;
+		
+		$('#relTax').val(tax);
+		$('#relTotalPrice').val(total);
+	}
 	
 	$(function() {
 		$('#basicInfoMenu').addClass("active");
@@ -162,6 +275,9 @@
 		if(msg) {
 			alert(msg);
 		}
+		$('.relPrice').focusout(function(){
+			cal();
+		});
 	});
 	</script>
 </body>

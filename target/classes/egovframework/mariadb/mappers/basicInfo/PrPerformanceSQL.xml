@@ -4,35 +4,35 @@
 	namespace="apc.sl.basicInfo.prPerformance.service.impl.PrPerformanceMapper">
 
 	<select id="selectPrPerformanceToCnt" resultType="int">
-		select count(*) from sm_product_order
+		select count(*) from sm_release_info 
 		where 1=1
 		<if test="searchKeyword != ''">
 			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 		<if test="searchStDate != ''">
-			AND po_reg_date >= #{searchStDate}
+			AND rel_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND po_reg_date <![CDATA[<=]]>
+			AND rel_date <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 	</select>
 
 	<select id="selectPrPerformanceList" resultType="egovMap">
-		SELECT po_lotno, po_lot_date, po_client, po_order_no, pi_id,
-		po_order_qty,po_state FROM sm_product_order
+		SELECT rel_idx,po_lotno, rel_date, rel_compony, rel_sub, rel_prod,
+		rel_qty,rel_bill FROM sm_release_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 		<if test="searchStDate != ''">
-			AND po_reg_date >= #{searchStDate}
+			AND rel_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND po_reg_date <![CDATA[<=]]>
+			AND rel_date <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
-		ORDER BY po_lotno DESC
+		ORDER BY rel_idx DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH NEXT #{recordCountPerPage} ROWS ONLY
 
@@ -44,51 +44,107 @@
 	</select>
 	
 	<select id="selectPrPerDetail" resultType="egovMap">
-	SELECT po_lotno, po_lot_date, po_client, po_order_no, pi_id,
-		po_order_qty,po_state FROM sm_product_order
-		WHERE po_lotno = #{poLotno}
+	SELECT * FROM sm_release_info
+		WHERE rel_idx = #{relIdx}
 	</select>
 
 
 	<insert id="registPrPerformance">
-		INSERT INTO sm_product_order (
+		insert into sm_release_info
+		(
 		po_lotno,
-		po_lot_date,
-		po_client,
-		po_order_no,
-		pi_id,
-		po_order_qty,
-		po_reg_date,
-		po_reg_id,
-		po_state
-		) VALUES
+		rel_date,
+		rel_compony,
+		rel_qty,
+		rel_nego,
+		rel_percent,
+		rel_unit,
+		rel_price,
+		rel_tax,
+		rel_total_price,
+		rel_note,
+		rel_del,
+		rel_esno,
+		rel_prno,
+		rel_heatno,
+		rel_sub,
+		rel_or_type,
+		or_id,
+		rel_report,
+		rel_bill,
+		rel_prod,
+		rel_texture,
+		rel_thickness,
+		rel_standard,
+		rel_state,
+		rel_reg_id,
+		rel_reg_date
+		) values
 		(
 		#{poLotno},
-		#{poLotDate},
-		#{poClient},
-		#{poOrderNo},
-		#{piId},
-		#{poOrderQty},
-		GETDATE(),
+		#{relDate},
+		#{relCompony},
+		#{relQty},
+		#{relNego},
+		#{relPercent},
+		#{relUnit},
+		#{relPrice},
+		#{relTax},
+		#{relTotalPrice},
+		#{relNote},
+		#{relDel},
+		#{relEsno},
+		#{relPrno},
+		#{relHeatno},
+		#{relSub},
+		#{relOrType},
+		#{orId},
+		#{relReport},
+		#{relBill},
+		#{relProd},
+		#{relTexture},
+		#{relThickness},
+		#{relStandard},
+		#{relState},
 		#{userId},
-		#{poState}
+		GETDATE()
 		)
 	</insert>
 	
 	<update id="modifyPrPerformance">
-	UPDATE sm_product_order SET
-po_lot_date = #{poLotDate},
-po_client = #{poClient},
-po_order_no = #{poOrderNo},
-pi_id = #{piId},
-po_order_qty = #{poOrderQty},
-po_edt_id = #{userId},
-po_edt_date = GETDATE()
-WHERE po_lotno = #{poLotno}
+	UPDATE sm_release_info SET
+po_lotno = #{poLotno},
+rel_date = #{relDate},
+rel_compony = #{relCompony},
+rel_qty = #{relQty},
+rel_nego = #{relNego},
+rel_percent = #{relPercent},
+rel_unit = #{relUnit},
+rel_price = #{relPrice},
+rel_tax = #{relTax},
+rel_total_price = #{relTotalPrice},
+rel_del = #{relDel},
+rel_esno = #{relEsno},
+rel_prno = #{relPrno},
+rel_heatno = #{relHeatno},
+rel_sub = #{relSub},
+rel_or_type = #{relOrType},
+or_id = #{orId},
+rel_report = #{relReport},
+rel_bill = #{relBill},
+rel_prod = #{relProd},
+rel_texture = #{relTexture},
+rel_thickness = #{relThickness},
+rel_standard = #{relStandard},
+rel_state = #{relState},
+rel_note = #{relNote},
+rel_edt_id = #{userId},
+rel_edt_date = GETDATE()
+WHERE rel_idx = #{relIdx}
 	</update>
 	
 	<delete id="deletePrPerfomance">
-	delete from sm_product_order where po_lotno = #{poLotno}
+	delete from sm_release_info where rel_idx = #{relIdx}
 	</delete>
 
 </mapper>

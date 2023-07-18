@@ -16,16 +16,24 @@ public interface CutMapper {
 	List<?> selectEQList();
 	
 	List<?> selectLotnoList();
+	
+	List<?> selectCutManager();
 
 	void registAnalysisData(Map<String, Object> map);
 
 	Map<String, Object> selectCutAjax(Map<String, Object> map);
 
-	int selctExistsEq(Map<String, Object> map);
+	int selctExistsOn(Map<String, Object> map);
 
 	int selectExistsLot(Map<String, Object> map);
 
+	int selectCheckStop(Map<String,Object> map);
+	
 	void registCut(Map<String, Object> map);
+	
+	void registCPLLog(Map<String, Object> map);
+	
+	void registCStopLog(Map<String, Object> map);
 
 	int selectExistsProdResult(Map<String, Object> map);
 
@@ -36,6 +44,8 @@ public interface CutMapper {
 	void modifyAnalysisData(Map<String, Object> map);
 
 	void modifyCut(Map<String, Object> map);
+	
+	void modifyCutManger(Map<String,Object> map);
 
 	void deleteCut(Map<String, Object> map);
 
@@ -49,6 +59,16 @@ public interface CutMapper {
 	
 	void updateProcess2(Map<String, Object> map);
 	
+	void updateOrProcess3(Map<String, Object> map);
+	
+	void updateProcess3(Map<String, Object> map);
+	
+	void updateLogEdtime(Map<String,Object> map);
+	
 	void deleteProdResult(Map<String, Object> map);
+	
+	void updateOrState(Map<String, Object> map);
+	
+	void updateCSStopLog2(Map<String, Object> map);
 
 }

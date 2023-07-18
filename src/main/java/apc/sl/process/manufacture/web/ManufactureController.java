@@ -28,7 +28,11 @@ public class ManufactureController {
 	
 	@RequestMapping("/sl/process/manufacture/manufactureList.do")
 	public String ManufactureList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
-		
+		if(model.get("sear") != null) {
+			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
+			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	
+		}
+		System.out.println("확인");
 		int totCnt = manufactureService.selectManufactureListToCnt(searchVO);
 		/** pageing setting */
 		searchVO.setPageSize(10);
@@ -41,8 +45,9 @@ public class ManufactureController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		
 		List<?> manufactureList = manufactureService.selectManufactureList(searchVO);
+		List<?> mfmList = manufactureService.selectMfManager();
+		model.put("mfmList", mfmList);
 		model.put("manufactureList", manufactureList);
 		model.put("paginationInfo", paginationInfo);
 	
@@ -50,62 +55,108 @@ public class ManufactureController {
 		return "sl/process/manufacture/manufactureList";
 	}
 	
+	@RequestMapping(value="/sl/process/manufacture/goManufacture.do",method=RequestMethod.POST)
+	public String goManufacture(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		manufactureService.registMfLog(map);
+		manufactureService.updateOrState(map);
+		
+		return "redirect:/sl/process/manufacture/manufactureList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/manufacture/reManufacture.do",method=RequestMethod.POST)
+	public String reManufacture(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		manufactureService.updateMfStopLog2(map);
+		
+		return "redirect:/sl/process/manufacture/manufactureList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/manufacture/stopManufacture.do",method=RequestMethod.POST)
+	public String stopManufacture(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		
+		manufactureService.registMfStopLog(map);
+		
+		return "redirect:/sl/process/manufacture/manufactureList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/manufacture/finishManufacture.do",method=RequestMethod.POST)
+	public String finishManufacture(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		
+		int checkProd = manufactureService.selectCheckStop(map);
+		if(checkProd != 0) {
+			
+			redirectAttributes.addFlashAttribute("msg", "공정을 재개하여 주십시오.");
+			return "redirect:/sl/process/manufacture/manufactureList.do";
+			}
+		redirectAttributes.addFlashAttribute("msg", "작업이 완료되었습니다.");
+		manufactureService.updateProcess3(map);
+		manufactureService.updateLogEdtime(map);
+		
+		
+		return "redirect:/sl/process/manufacture/manufactureList.do";
+	}
+	
+	
+	
 	@RequestMapping("/sl/process/manufacture/registManufacture.do")
 	public String registManufacture(ModelMap model) {
 		
-		List<?> eqList = manufactureService.selelctEQList();
-		List<?> lotnoList = manufactureService.selectLotnoList();
-		
-		model.put("eqList", eqList);
-		model.put("lotnoList", lotnoList);
 		
 		return "sl/process/manufacture/manufactureRegist";
 	}
 	
-	@RequestMapping(value="/sl/process/manufacture/manufactureInfoAjax.do", method=RequestMethod.POST)
-	public ModelAndView manufactureInfoAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		Map<String, Object> list = manufactureService.selectInfo(map);
-		
-		mav.setViewName("jsonView");
-		mav.addObject("mf_ajax", list);
-		
-		return mav;
-	}
+//	@RequestMapping(value="/sl/process/manufacture/manufactureInfoAjax.do", method=RequestMethod.POST)
+//	public ModelAndView manufactureInfoAjax(@RequestParam Map<String, Object> map) {
+//		ModelAndView mav = new ModelAndView();
+//		Map<String, Object> list = manufactureService.selectInfo(map);
+//		
+//		mav.setViewName("jsonView");
+//		mav.addObject("mf_ajax", list);
+//		
+//		return mav;
+//	}
 	
 	
 	@RequestMapping("/sl/process/manufacture/registManufactureOk.do")
 	public String registManufactureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
-		//mssql형식의 맞게 변환
-				String time1 = map.get("mpStarttime")+"";
-				String[] time11 = time1.split("T");
-				
-				String time111 = time11[0]+" "+time11[1]+":00";
-				String time2 = map.get("mpEndtime")+"";
-				
-				String[] time22 = time2.split("T");
-				
-				String time222 = time22[0] + " " + time22[1]+ ":00";
-				map.replace("mpStarttime",time111);
-				map.replace("mpEndtime", time222);
-				
-		int exists = manufactureService.selctExistsEq(map);
+//		//mssql형식의 맞게 변환
+//				String time1 = map.get("mpStarttime")+"";
+//				String[] time11 = time1.split("T");
+//				
+//				String time111 = time11[0]+" "+time11[1]+":00";
+//				String time2 = map.get("mpEndtime")+"";
+//				
+//				String[] time22 = time2.split("T");
+//				
+//				String time222 = time22[0] + " " + time22[1]+ ":00";
+//				map.replace("mpStarttime",time111);
+//				map.replace("mpEndtime", time222);
+				//수주번호 중복체크
+		int exists = manufactureService.selctExistsOn(map);
 		
-		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
+		if(exists != 0) {
+			redirectAttributes.addFlashAttribute("msg", "중복되는 수주번호입니다.");
 			return "redirect:/sl/process/manufacture/registManufacture.do";
 		}
-		//로트번호 체크
-				if(!map.get("poLotno").equals("")) {
-					exists = manufactureService.selectExistsLot(map);
-					if(exists == 0) {
-						redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
-						return "redirect:/sl/process/manufacture/registManufacture.do";
-					}
-					
-					
-				}
+		
 		map.put("userId", session.getAttribute("user_id"));
 		manufactureService.registManufacture(map);
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
@@ -117,12 +168,12 @@ public class ManufactureController {
 	@RequestMapping("/sl/process/manufacture/modifyManufacture.do")
 	public String modifyManufacture(@RequestParam Map<String, Object> map, ModelMap model) { 
 		
-		List<?> eqList = manufactureService.selelctEQList();
-		List<?> lotnoList = manufactureService.selectLotnoList();
 		
-		model.put("eqList", eqList);
-		model.put("lotnoList", lotnoList);
+		
+		
 		if(!map.isEmpty()) {
+			List<?> mfmList = manufactureService.selectMfManager();
+			model.put("mfmList", mfmList);
 			Map<String, Object> detail = manufactureService.selectMfInfo(map);
 			model.put("mfVO", detail);
 		}
@@ -133,29 +184,24 @@ public class ManufactureController {
 	@RequestMapping("/sl/process/manufacture/modifyManufactureOk.do")
 	public String modifyManufactureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
-		//mssql형식의 맞게 변환
-		String time1 = map.get("mpStarttime")+"";
-		String[] time11 = time1.split("T");
-		
-		String time111 = time11[0]+" "+time11[1]+":00";
-		String time2 = map.get("mpEndtime")+"";
-		
-		String[] time22 = time2.split("T");
-		
-		String time222 = time22[0] + " " + time22[1]+ ":00";
-		map.replace("mpStarttime",time111);
-		map.replace("mpEndtime", time222);
-		
-
+//		//mssql형식의 맞게 변환
+//		String time1 = map.get("mpStarttime")+"";
+//		String[] time11 = time1.split("T");
+//		
+//		String time111 = time11[0]+" "+time11[1]+":00";
+//		String time2 = map.get("mpEndtime")+"";
+//		
+//		String[] time22 = time2.split("T");
+//		
+//		String time222 = time22[0] + " " + time22[1]+ ":00";
+//		map.replace("mpStarttime",time111);
+//		map.replace("mpEndtime", time222);
+//		
+//
 		map.put("userId", session.getAttribute("user_id"));
 		manufactureService.modifyManufacture(map);
+		manufactureService.modifyMfManager(map);
 		
-		int exists = manufactureService.selctExistsEq(map);
-		
-			if(exists == 0) {
-				redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
-				return "redirect:/sl/process/manufacture/registManufacture.do";
-				}
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다");
 		return "redirect:/sl/process/manufacture/manufactureList.do";

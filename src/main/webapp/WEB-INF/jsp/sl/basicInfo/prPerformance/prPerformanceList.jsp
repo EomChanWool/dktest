@@ -54,6 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/prPerformance/prPerformanceList.do" method="post">
+									<input type="hidden" name="relIdx">
 									<input type="hidden" name="poLotno">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -80,34 +81,36 @@
                                     <thead>
                                         <tr>
                                             <th>LOT번호</th>
-											<th>지시일</th>
-											<th>발주처</th>
-											<th>발주번호</th>
+											<th>출고일</th>
+											<th>거래처</th>
+											<th>과목</th>
 											<th>제품명</th>
-											<th>지시수량</th>
+											<th>계산서</th>
+											<th>수량</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${prPerList}" varStatus="status">
-	                                   		<tr>
+	                                   		<tr onclick="fn_detail_prPerformance('${result.relIdx}')" style="cursor: pointer;">
 	                                            <td>${result.poLotno}</td>
-	                                            <td><fmt:formatDate value="${result.poLotDate}" pattern="yyyy-MM-dd"/></td>
-	                                            <td>${result.poClient}</td>
-	                                            <td>${result.poOrderNo}</td>
-	                                            <td>${result.piId}</td>
-	                                            <td>${result.poOrderQty}</td>
-	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prPerformance_go('${result.poLotno}')">
+	                                            <td>${result.relDate}</td>
+	                                            <td>${result.relCompony}</td>
+	                                            <td>${result.relSub}</td>
+	                                            <td>${result.relProd}</td>
+	                                            <td>${result.relBill}</td>
+	                                            <td>${result.relQty}</td>
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prPerformance_go('${result.relIdx}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_prPerformance('${result.poLotno}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_prPerformance('${result.relIdx}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty prPerList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty prPerList}"><tr><td colspan='8'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -170,17 +173,23 @@
 		}
 	
 		function fn_modify_prPerformance_go(idx){
-			listForm.poLotno.value = idx;
+			listForm.relIdx.value = idx;
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prPerformance/modifyPrPerformance.do";
 			listForm.submit();
 		}
 	
 		function fn_delete_prPerformance(idx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.poLotno.value = idx;
+				listForm.relIdx.value = idx;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prPerformance/deletePrPerformance.do";
 				listForm.submit();
 			}
+		}
+		
+		function fn_detail_prPerformance(idx){
+			listForm.relIdx.value = idx;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/prPerformance/detailPrPerformance.do";
+			listForm.submit();
 		}
 	
 		$(function() {

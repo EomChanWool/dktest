@@ -75,6 +75,11 @@
 		WHERE mi_userid = #{miUserid}
 	</select>
 	
+	<select id="checkId" resultType="int">
+	SELECT COUNT(*) FROM sm_member_info
+WHERE mi_id = #{miId}
+	</select>
+	
 	<update id="modifyUser">
 		UPDATE sm_member_info SET
 		<if test="miPass != ''">mi_pass = #{miPass},</if>

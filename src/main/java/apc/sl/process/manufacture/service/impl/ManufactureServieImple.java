@@ -26,10 +26,7 @@ public class ManufactureServieImple implements ManufactureService {
 		return manufactureMapper.selectManufactureList(searchVO);
 	}
 
-	@Override
-	public List<?> selelctEQList() {
-		return manufactureMapper.selelctEQList();
-	}
+
 
 	@Override
 	public Map<String, Object> selectInfo(Map<String, Object> map) {
@@ -37,8 +34,8 @@ public class ManufactureServieImple implements ManufactureService {
 	}
 
 	@Override
-	public int selctExistsEq(Map<String, Object> map) {
-		return manufactureMapper.selctExistsEq(map);
+	public int selctExistsOn(Map<String, Object> map) {
+		return manufactureMapper.selctExistsOn(map);
 	}
 
 	@Override
@@ -65,13 +62,7 @@ public class ManufactureServieImple implements ManufactureService {
 
 	@Override
 	public Map<String, Object> selectDetailManufacture(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return manufactureMapper.selectDetailManufacture(map);
-	}
-
-	@Override
-	public List<?> selectLotnoList() {
-		return manufactureMapper.selectLotnoList();
 	}
 
 	@Override
@@ -82,6 +73,51 @@ public class ManufactureServieImple implements ManufactureService {
 	@Override
 	public Map<String, Object> selectMfInfo(Map<String, Object> map) {
 		return manufactureMapper.selectMfInfo(map);
+	}
+
+	@Override
+	public void registMfLog(Map<String, Object> map) {
+		manufactureMapper.registMfLog(map);
+	}
+
+	@Override
+	public void updateOrState(Map<String, Object> map) {
+		manufactureMapper.updateOrState(map);
+	}
+
+	@Override
+	public void registMfStopLog(Map<String, Object> map) {
+		manufactureMapper.registMfStopLog(map);
+	}
+
+	@Override
+	public void updateMfStopLog2(Map<String, Object> map) {
+		manufactureMapper.updateMfStopLog2(map);
+	}
+
+	@Override
+	public int selectCheckStop(Map<String, Object> map) {
+		return manufactureMapper.selectCheckStop(map);
+	}
+
+	@Override
+	public void updateProcess3(Map<String, Object> map) {
+		manufactureMapper.updateProcess3(map);
+	}
+
+	@Override
+	public void updateLogEdtime(Map<String, Object> map) {
+		manufactureMapper.updateLogEdtime(map);
+	}
+
+	@Override
+	public List<?> selectMfManager() {
+		return manufactureMapper.selectMfManager();
+	}
+
+	@Override
+	public void modifyMfManager(Map<String, Object> map) {
+		manufactureMapper.modifyMfManager(map);
 	}
 
 }

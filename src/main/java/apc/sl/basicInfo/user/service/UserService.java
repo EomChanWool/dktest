@@ -10,7 +10,9 @@ public interface UserService {
 	int selectUserListToCnt(SearchVO searchVO);
 	
 	List<?> selectUserList(SearchVO searchVO);
-
+	
+	int checkId(Map<String, Object> map);
+	
 	void registUser(Map<String, Object> map);
 
 	Map<String, Object> selectUserInfo(Map<String, Object> map);

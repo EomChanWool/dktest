@@ -29,8 +29,11 @@ public class CutController {
 	
 	@RequestMapping("/sl/process/cutProcess/cutList.do")
 	public String cutList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
+		if(model.get("sear") != null) {
+			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
+			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	
+		}
 		int totCnt = cutService.selectCutListToCnt(searchVO);
-		
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -43,72 +46,146 @@ public class CutController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> cutList = cutService.selectCutList(searchVO);
+		List<?> cmList = cutService.selectCutManager();
 		model.put("cutList", cutList);
+		model.put("cmList", cmList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/process/cut/cutList";
+	}
+	@RequestMapping(value="/sl/process/cutProcess/goCut.do", method=RequestMethod.POST)
+	public String goCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		cutService.registCPLLog(map);
+		cutService.updateOrState(map);
+		return "redirect:/sl/process/cutProcess/cutList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/cutProcess/stopCut.do", method=RequestMethod.POST)
+	public String stopCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		
+		cutService.registCStopLog(map);
+		
+		
+		return "redirect:/sl/process/cutProcess/cutList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/cutProcess/reCut.do", method=RequestMethod.POST)
+	public String reCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		
+		cutService.updateCSStopLog2(map);
+		
+		return "redirect:/sl/process/cutProcess/cutList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/cutProcess/goMfCut.do",method=RequestMethod.POST)
+	public String goMfCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		//작업중지일때 작업완료나 가공공정으로 이동불가
+		int checkProd = cutService.selectCheckStop(map);
+		if(checkProd != 0) {
+			
+			redirectAttributes.addFlashAttribute("msg", "공정을 재개하여 주십시오.");
+			return "redirect:/sl/process/cutProcess/cutList.do";
+		}
+		redirectAttributes.addFlashAttribute("msg", "가공공정으로 이동하였습니다.");
+		cutService.updateOrProcess3(map);
+		cutService.updateLogEdtime(map);
+		
+		return "redirect:/sl/process/cutProcess/cutList.do";
+	}
+	
+	@RequestMapping(value="/sl/process/cutProcess/finishCut.do",method=RequestMethod.POST)
+	public String finishCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		if(!map.get("searchKeyword").equals("")) {
+			redirectAttributes.addFlashAttribute("sear",map);
+		}
+		map.put("userId", session.getAttribute("user_id"));
+		System.out.println("맵3 : " + map);
+		//작업중지일때 작업완료나 가공공정으로 이동불가
+		int checkProd = cutService.selectCheckStop(map);
+		System.out.println("맵 : " + map);
+		if(checkProd != 0) {
+			
+			redirectAttributes.addFlashAttribute("msg", "공정을 재개하여 주십시오.");
+			return "redirect:/sl/process/cutProcess/cutList.do";
+		}
+		redirectAttributes.addFlashAttribute("msg", "작업이 완료되었습니다.");
+		cutService.updateProcess3(map);
+		cutService.updateLogEdtime(map);
+		return "redirect:/sl/process/cutProcess/cutList.do";
 	}
 	
 	@RequestMapping("/sl/process/cutProcess/registCut.do")
 	public String registCut(ModelMap model) {
-		List<?> eqList = cutService.selectEQList();
-		List<?> lotnoList = cutService.selectLotnoList();
-		model.put("eqList", eqList);
-		model.put("lotnoList", lotnoList);
+		
 		return "sl/process/cut/cutRegist";
 	}
 	
-	@RequestMapping(value="/sl/process/cutProcess/cutAjax.do", method=RequestMethod.POST)
-	public ModelAndView registNonOperFacilityListAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		//cutService.registAnalysisData(map);
-		Map<String, Object> list = cutService.selectCutAjax(map);
-		mav.setViewName("jsonView");
-		mav.addObject("cut_ajax", list);
-		return mav;
-	}
-	
+//	@RequestMapping(value="/sl/process/cutProcess/cutAjax.do", method=RequestMethod.POST)
+//	public ModelAndView registNonOperFacilityListAjax(@RequestParam Map<String, Object> map) {
+//		ModelAndView mav = new ModelAndView();
+//		//cutService.registAnalysisData(map);
+//		Map<String, Object> list = cutService.selectCutAjax(map);
+//		mav.setViewName("jsonView");
+//		mav.addObject("cut_ajax", list);
+//		return mav;
+//	}
+//	
 
 	
 	@RequestMapping("/sl/process/cutProcess/registCutOk.do")
 	public String registCutOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
 		
-		//mssql형식의 맞게 변환
-		String time1 = map.get("cpStarttime")+"";
-		String[] time11 = time1.split("T");
+//		//mssql형식의 맞게 변환
+//		String time1 = map.get("cpStarttime")+"";
+//		String[] time11 = time1.split("T");
+//		
+//		String time111 = time11[0]+" "+time11[1]+":00";
+//		String time2 = map.get("cpEndtime")+"";
+//		
+//		String[] time22 = time2.split("T");
+//		
+//		String time222 = time22[0] + " " + time22[1]+ ":00";
+//		map.replace("cpStarttime",time111);
+//		map.replace("cpEndtime", time222);
+		//수주번호체크
+		int exists = cutService.selctExistsOn(map);
 		
-		String time111 = time11[0]+" "+time11[1]+":00";
-		String time2 = map.get("cpEndtime")+"";
-		
-		String[] time22 = time2.split("T");
-		
-		String time222 = time22[0] + " " + time22[1]+ ":00";
-		map.replace("cpStarttime",time111);
-		map.replace("cpEndtime", time222);
-		//설비체크
-		int exists = cutService.selctExistsEq(map);
-		
-		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
+		if(exists != 0) {
+			redirectAttributes.addFlashAttribute("msg", "중복되는 수주번호입니다.");
 			return "redirect:/sl/process/cutProcess/registCut.do";
 		}
 		
 		
 		
 		
-		//로트번호 체크
-		if(!map.get("poLotno").equals("")) {
-			exists = cutService.selectExistsLot(map);
-			if(exists == 0) {
-				redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
-				return "redirect:/sl/process/cutProcess/registCut.do";
-			}
-			
-			
-		}
+//		//로트번호 체크
+//		if(!map.get("poLotno").equals("")) {
+//			exists = cutService.selectExistsLot(map);
+//			if(exists == 0) {
+//				redirectAttributes.addFlashAttribute("msg", "등록되지 않은 생산실적 입니다.");
+//				return "redirect:/sl/process/cutProcess/registCut.do";
+//			}
+//			
+//			
+//		}
 		
 		map.put("userId", session.getAttribute("user_id"));
-		cutService.updatePoState(map);
 		cutService.registCut(map);
 	
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
@@ -118,72 +195,68 @@ public class CutController {
 	@RequestMapping("/sl/process/cutProcess/modifyCut.do")
 	public String modifyCut(@RequestParam Map<String, Object> map, ModelMap model) {
 		
-		List<?> eqList = cutService.selectEQList();
-		List<?> lotnoList = cutService.selectLotnoList();
-		model.put("eqList", eqList);
-		model.put("lotnoList", lotnoList);
-		
-		if(!map.isEmpty()) {
+
+			System.out.println("맵확인 : " + map);
+			List<?> cmList = cutService.selectCutManager();
+			model.put("cmList", cmList);
 			Map<String, Object> detail = cutService.selectCutInfo(map);
 			model.put("cutVO", detail);
-		}
+		
 		return "sl/process/cut/cutModify";
 	}
 	
-	@RequestMapping(value="/sl/process/cut/modifyAnalysisDataAjax.do", method=RequestMethod.POST)
-	public ModelAndView modifyNonOperFacilityListAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		cutService.modifyAnalysisData(map);
-		mav.setViewName("jsonView");
-		mav.addObject("analysis_ajax", "");
-		return mav;
-	}
-	
+//	@RequestMapping(value="/sl/process/cut/modifyAnalysisDataAjax.do", method=RequestMethod.POST)
+//	public ModelAndView modifyNonOperFacilityListAjax(@RequestParam Map<String, Object> map) {
+//		ModelAndView mav = new ModelAndView();
+//		cutService.modifyAnalysisData(map);
+//		mav.setViewName("jsonView");
+//		mav.addObject("analysis_ajax", "");
+//		return mav;
+//	}
+//	
 	@RequestMapping("/sl/process/cutProcess/modifyCutOk.do")
 	public String modfiyCutOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
-		//mssql형식의 맞게 변환
-				String time1 = map.get("cpStarttime")+"";
-				String[] time11 = time1.split("T");
-				
-				String time111 = time11[0]+" "+time11[1]+":00";
-				String time2 = map.get("cpEndtime")+"";
-				
-				String[] time22 = time2.split("T");
-				
-				String time222 = time22[0] + " " + time22[1]+ ":00";
-				map.replace("cpStarttime",time111);
-				map.replace("cpEndtime", time222);
+//		//mssql형식의 맞게 변환
+//				String time1 = map.get("cpStarttime")+"";
+//				String[] time11 = time1.split("T");
+//				
+//				String time111 = time11[0]+" "+time11[1]+":00";
+//				String time2 = map.get("cpEndtime")+"";
+//				
+//				String[] time22 = time2.split("T");
+//				
+//				String time222 = time22[0] + " " + time22[1]+ ":00";
+//				map.replace("cpStarttime",time111);
+//				map.replace("cpEndtime", time222);
 				
 				
 		
-		int exists = cutService.selctExistsEq(map);
+	
 		
-		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 설비 입니다.");
-			return "redirect:/sl/process/cutProcess/modifyCut.do";
-		}
+		
 		
 		
 		map.put("userId", session.getAttribute("user_id"));
 		cutService.modifyCut(map);
+		cutService.modifyCutManger(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
 		return "redirect:/sl/process/cutProcess/cutList.do";
 	}
 	
-	@RequestMapping("/sl/process/cutProcess/detailCut.do")
-	public String detailCut(@RequestParam Map<String, Object> map, ModelMap model) {
-		
-		Map<String, Object> detail = cutService.detailCut(map);
-		
-		
-		model.put("cutVO", detail);
-		
-		
-		
-		return "sl/process/cut/cutDetail";
-	}
+//	@RequestMapping("/sl/process/cutProcess/detailCut.do")
+//	public String detailCut(@RequestParam Map<String, Object> map, ModelMap model) {
+//		
+//		Map<String, Object> detail = cutService.detailCut(map);
+//		
+//		
+//		model.put("cutVO", detail);
+//		
+//		
+//		
+//		return "sl/process/cut/cutDetail";
+//	}
 	
 	
 	

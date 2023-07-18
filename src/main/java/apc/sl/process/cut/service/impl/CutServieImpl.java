@@ -112,12 +112,62 @@ public class CutServieImpl implements CutService {
 	}
 
 	@Override
-	public int selctExistsEq(Map<String, Object> map) {
-		return cutMapper.selctExistsEq(map);
+	public int selctExistsOn(Map<String, Object> map) {
+		return cutMapper.selctExistsOn(map);
 	}
 
 	@Override
 	public int selectExistsLot(Map<String, Object> map) {
 		return cutMapper.selectExistsLot(map);
+	}
+
+	@Override
+	public void registCPLLog(Map<String, Object> map) {
+		cutMapper.registCPLLog(map);
+	}
+
+	@Override
+	public void updateOrState(Map<String, Object> map) {
+		cutMapper.updateOrState(map);
+	}
+
+	@Override
+	public void registCStopLog(Map<String, Object> map) {
+		cutMapper.registCStopLog(map);
+	}
+
+	@Override
+	public void updateCSStopLog2(Map<String, Object> map) {
+		cutMapper.updateCSStopLog2(map);
+	}
+
+	@Override
+	public int selectCheckStop(Map<String, Object> map) {
+		return cutMapper.selectCheckStop(map);
+	}
+
+	@Override
+	public void updateOrProcess3(Map<String, Object> map) {
+		cutMapper.updateOrProcess3(map);
+	}
+
+	@Override
+	public void updateLogEdtime(Map<String, Object> map) {
+		cutMapper.updateLogEdtime(map);
+	}
+
+	@Override
+	public void updateProcess3(Map<String, Object> map) {
+		cutMapper.updateProcess3(map);
+	}
+
+	@Override
+	public List<?> selectCutManager() {
+		return cutMapper.selectCutManager();
+	}
+
+	@Override
+	public void modifyCutManger(Map<String, Object> map) {
+		cutMapper.modifyCutManger(map);
 	}
 }

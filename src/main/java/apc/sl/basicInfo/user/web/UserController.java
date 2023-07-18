@@ -57,8 +57,18 @@ public class UserController {
 	
 	@RequestMapping("/sl/basicInfo/user/registUserOk.do")
 	public String registUserOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) throws Exception {
+		int checkId = userService.checkId(map);
+		if(checkId !=0) {
+			redirectAttributes.addFlashAttribute("msg","중복된 아이디 입니다.");
+			redirectAttributes.addFlashAttribute("userVO",map);
+			return "redirect:/sl/basicInfo/user/registUser.do";
+		}
+		
 		String miPass = sha256.encrypt(map.get("miPass").toString());
 		map.put("miPass",miPass);
+		
+		
+		
 		userService.registUser(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";

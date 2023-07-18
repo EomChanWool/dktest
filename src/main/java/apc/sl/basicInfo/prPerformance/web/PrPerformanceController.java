@@ -1,5 +1,7 @@
 package apc.sl.basicInfo.prPerformance.web;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -54,15 +56,10 @@ public class PrPerformanceController {
 	@RequestMapping("/sl/basicInfo/prPerformance/registPrPerformanceOk.do")
 	public String registPrPerformanceOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
-		map.put("poState","0");
 		
-		int exists = prPerformanceService.selectExistsPrPer(map);
-		if(exists == 0 ) {
-			redirectAttributes.addFlashAttribute("msg","없는 제품 아이디입니다.");
-			return "redirect:/sl/basicInfo/prPerformance/registPrPerformance.do";
-		}
 		prPerformanceService.registPrPerformance(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
+		CreateFile(map);
 		
 		return "redirect:/sl/basicInfo/prPerformance/prPerformanceList.do";
 	}
@@ -78,15 +75,21 @@ public class PrPerformanceController {
 	@RequestMapping("/sl/basicInfo/prPerformance/modifyPrPerformanceOk.do")
 	public String modifyPrPerfomanceOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
-		int exists = prPerformanceService.selectExistsPrPer(map);
-		if(exists == 0 ) {
-			redirectAttributes.addFlashAttribute("msg","없는 제품 아이디입니다.");
-			return "redirect:/sl/basicInfo/prPerformance/registPrPerformance.do";
-		}
 		prPerformanceService.modifyPrPerformance(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
+		ModifyFile(map);
 		return "redirect:/sl/basicInfo/prPerformance/prPerformanceList.do";
 	}
+	
+	@RequestMapping("/sl/basicInfo/prPerformance/detailPrPerformance.do")
+	public String detailPrPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
+		
+		Map<String, Object> detail = prPerformanceService.selectPrPerDetail(map);
+		model.put("prPerVo", detail);
+		
+		return "sl/basicInfo/prPerformance/prPerformanceDetail";
+	}
+	
 	@RequestMapping("/sl/basicInfo/prPerformance/deletePrPerformance.do")
 	public String deletePrPerformance(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes) {
 		
@@ -94,5 +97,46 @@ public class PrPerformanceController {
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");
 		
 		return "redirect:/sl/basicInfo/prPerformance/prPerformanceList.do";
+	}
+	
+	
+	private void CreateFile(Map<String, Object> map) {
+		String fileName = "C:\\test\\RegistReleaseTest.txt";
+		
+		
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			fw.write(map.toString()+",");
+			fw.flush();
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		
+	}
+	
+	private void ModifyFile(Map<String, Object> map) {
+		String fileName = "C:\\test\\ModifyReleaseTest.txt";
+		
+		
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			fw.write(map.toString()+",");
+			fw.flush();
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		
 	}
 }

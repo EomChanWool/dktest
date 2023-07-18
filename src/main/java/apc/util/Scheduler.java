@@ -137,6 +137,175 @@ public class Scheduler {
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
 	}
+	@Scheduled(cron = "20 55 8 * * *")
+	public void orderUpdate() throws Exception  {
+		String fileName = "C:\\test\\orders.xls";
+		
+		FileInputStream fis = new FileInputStream(fileName);
+
+		@SuppressWarnings("resource")
+		HSSFWorkbook workbook = new HSSFWorkbook(fis);
+		int rowindex = 0;
+		int columnindex = 0;		
+		int sheetCn = workbook.getNumberOfSheets();	// 시트 수
+		
+		String[] excelCol = new String[] {
+				"orDate","orCompany","orOrType","orDueDate","orQty","orUnit","orMoney","orFinDate","orReport","orManager","orId","orProd","orTexture",
+				"orThickness","orStandard","orState"
+		};
+		for(int sheetnum=0; sheetnum<sheetCn; sheetnum++) {	// 시트 수만큼 반복
+			
+			int sheetnum2=sheetnum+1;
+			System.out.println("sheet = " + sheetnum2);
+			
+			HSSFSheet sheet = workbook.getSheetAt(sheetnum);	// 읽어올 시트 선택
+			int rows = sheet.getPhysicalNumberOfRows();    // 행의 수
+			HSSFRow row = null;
+			
+			for (rowindex = 1; rowindex < rows-1; rowindex++) {	// 행의 수만큼 반복
+
+				row = sheet.getRow(rowindex);	// rowindex 에 해당하는 행을 읽는다
+				
+
+				if (row != null) {
+					int cells = row.getPhysicalNumberOfCells();	// 셀의 수
+					cells = row.getPhysicalNumberOfCells();    // 열의 수
+					Map<String, Object> rowMap = new HashMap<String, Object>();//수주 데이터
+					for (columnindex = 0; columnindex < cells; columnindex++) {	// 열의 수만큼 반복
+						HSSFCell cell_filter = row.getCell(columnindex);	// 셀값을 읽는다
+						String value = "";
+								// 셀이 빈값일경우를 위한 널체크
+						if (cell_filter == null || cell_filter.getCellType() == cell_filter.CELL_TYPE_BLANK) {
+							value="";
+							
+						} else {
+									// 타입별로 내용 읽기
+							switch (cell_filter.getCellType()) {
+							case HSSFCell.CELL_TYPE_FORMULA:
+								value = cell_filter.getCellFormula();
+								break;
+							case HSSFCell.CELL_TYPE_NUMERIC:
+								value = cell_filter.getNumericCellValue() + "";
+								break;
+							case HSSFCell.CELL_TYPE_STRING:
+								value = cell_filter.getStringCellValue() + "";
+								break;
+							case HSSFCell.CELL_TYPE_ERROR:
+								value = cell_filter.getErrorCellValue() + "";
+								break;
+							default: value="";	
+							}
+						}
+						
+						if(columnindex == 10 && value.equals("")) {
+							rowMap.clear();
+							break;
+						}
+						
+				            rowMap.put(excelCol[columnindex],value);
+				            rowMap.put("orProcess", "0");
+				            
+				        
+					
+					} 
+					if(rowMap.size() != 0) {
+						excelReaderService.registOrder(rowMap);
+					}
+					
+				}
+			}
+		}
+		fis.close();	//파일 읽기 종료
+		//db업데이트후 파일 지우기
+		//File file = new File(fileName);
+		//EgovFileUtil.delete(file);
+	}
+	@Scheduled(cron = "20 56 8 * * *")
+	public void releaseUpdate() throws Exception{
+		
+		String fileName = "C:\\test\\release.xls";
+		
+		FileInputStream fis = new FileInputStream(fileName);
+
+		@SuppressWarnings("resource")
+		HSSFWorkbook workbook = new HSSFWorkbook(fis);
+		int rowindex = 0;
+		int columnindex = 0;		
+		int sheetCn = workbook.getNumberOfSheets();	// 시트 수
+		
+		String[] excelCol = new String[] {
+				"relDate","relCompony","relQty","relNego","relPercent","relUnit","relPrice","relTax","relTotalPrice","relNote","relDel","relEsno","relPrno","poLotno",
+				"relHeatno","relSub","relOrType","orId","relReport","relBill","relProd","relTexture","relThickness","relStandard","relState"
+		};
+		for(int sheetnum=0; sheetnum<sheetCn; sheetnum++) {	// 시트 수만큼 반복
+			
+			int sheetnum2=sheetnum+1;
+			System.out.println("sheet = " + sheetnum2);
+			
+			HSSFSheet sheet = workbook.getSheetAt(sheetnum);	// 읽어올 시트 선택
+			int rows = sheet.getPhysicalNumberOfRows();    // 행의 수
+			HSSFRow row = null;
+			
+			for (rowindex = 1; rowindex < rows-1; rowindex++) {	// 행의 수만큼 반복
+
+				row = sheet.getRow(rowindex);	// rowindex 에 해당하는 행을 읽는다
+				
+
+				if (row != null) {
+					int cells = row.getPhysicalNumberOfCells();	// 셀의 수
+					cells = row.getPhysicalNumberOfCells();    // 열의 수
+					Map<String, Object> rowMap = new HashMap<String, Object>();//수주 데이터
+					for (columnindex = 0; columnindex < cells; columnindex++) {	// 열의 수만큼 반복
+						HSSFCell cell_filter = row.getCell(columnindex);	// 셀값을 읽는다
+						String value = "";
+								// 셀이 빈값일경우를 위한 널체크
+						if (cell_filter == null || cell_filter.getCellType() == cell_filter.CELL_TYPE_BLANK) {
+							value="";
+							
+						} else {
+									// 타입별로 내용 읽기
+							switch (cell_filter.getCellType()) {
+							case HSSFCell.CELL_TYPE_FORMULA:
+								value = cell_filter.getCellFormula();
+								break;
+							case HSSFCell.CELL_TYPE_NUMERIC:
+								value = cell_filter.getNumericCellValue() + "";
+								break;
+							case HSSFCell.CELL_TYPE_STRING:
+								value = cell_filter.getStringCellValue() + "";
+								break;
+							case HSSFCell.CELL_TYPE_ERROR:
+								value = cell_filter.getErrorCellValue() + "";
+								break;
+							default: value="";	
+							}
+						}
+						
+						if(columnindex == 0 && value.equals("")) {
+							rowMap.clear();
+							break;
+						}
+							
+				            rowMap.put(excelCol[columnindex],value);
+				            rowMap.put("relRegId","admin");
+				            System.out.println("로우맵 : " + rowMap);
+				        
+					
+					} 
+					if(rowMap.size() != 0) {
+						excelReaderService.registRelease(rowMap);
+					}
+					
+				}
+			}
+		}
+		fis.close();	//파일 읽기 종료
+		//db업데이트후 파일 지우기
+		//File file = new File(fileName);
+		//EgovFileUtil.delete(file);
+		
+		
+	}
 
 	
 	public static void setUserId(String userId) {

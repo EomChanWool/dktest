@@ -82,10 +82,19 @@ public class ActualResultController {
 		if(Integer.parseInt(member.get("miLevel")+"") == 4) {
 			return "redirect:/sl/basicInfo/user/userList.do";
 		}else if(Integer.parseInt(member.get("miLevel")+"") < 4 && Integer.parseInt(member.get("miLevel")+"") > 1) {
+			
 			return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";
-		}else {
+		}
+		else {
+			if(member.get("miId").equals("pop1")) {
+				return "redirect:/sl/pop/popCut/popCutList.do";
+			}
+			if(member.get("miId").equals("pop2")) {
+				return "redirect:/sl/pop/popMf/popMfList.do";
+			}
 			return "redirect:/sl/basicInfo/materialMove/materialMoveList.do";
 		}
+		
 		
 	}
 	

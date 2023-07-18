@@ -34,4 +34,14 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		excelReaderMapper.deleteMm();
 	}
 
+	@Override
+	public void registOrder(Map<String, Object> map) {
+		excelReaderMapper.registOrder(map);
+	}
+
+	@Override
+	public void registRelease(Map<String, Object> map) {
+		excelReaderMapper.registRelease(map);
+	}
+
 }

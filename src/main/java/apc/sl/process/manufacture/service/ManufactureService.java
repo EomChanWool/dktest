@@ -11,17 +11,31 @@ public interface ManufactureService {
 	
 	List<?> selectManufactureList(SearchVO searchVO);
 	
-	List<?> selelctEQList();
+	List<?> selectMfManager();
 	
-	List<?> selectLotnoList();
+	int selectCheckStop(Map<String, Object> map);
 	
 	Map<String, Object> selectInfo(Map<String,Object> map);
 	
-	int selctExistsEq(Map<String, Object> map);
+	int selctExistsOn(Map<String, Object> map);
 	
 	int selectExistsLot(Map<String, Object> map);
 	
+	void registMfLog(Map<String, Object> map);
+	
+	void updateOrState(Map<String, Object> map);
+	
 	void registManufacture(Map<String, Object> map);
+	
+	void registMfStopLog(Map<String, Object> map);
+	
+	void updateMfStopLog2(Map<String, Object> map);
+	
+	void updateProcess3(Map<String, Object> map);
+	
+	void updateLogEdtime(Map<String, Object> map);
+	
+	void modifyMfManager(Map<String, Object> map);
 	
 	Map<String, Object> selectCheck(Map<String, Object> map);
 	

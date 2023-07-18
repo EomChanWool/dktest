@@ -49,7 +49,7 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="btn_bottom_wrap">
-                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">절단공정 등록</h1>
+                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">가공공정 등록</h1>
                     	
                     </div>
                     <!-- DataTales Example -->
@@ -60,57 +60,59 @@
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>설비 <span class="req">*</span></th>
-												<td>
-													<input type="text" class="form-control" name="eqId" id="eqId"  list="eqList" autocomplete="off">
-													<datalist id="eqList">
-														<c:forEach var="list" items="${eqList}" varStatus="status">
-															<option value="${list.eqId}">${list.eqName}</option>
-														</c:forEach>
-													</datalist>
-												</td>
-												<th>가공공정번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno" ></td>
+												<th>수주번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orId" id="orId"></td>
+												<th>거래처 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orCompany" id="orCompany" ></td>
 											</tr>
 											<tr>
-											<th>로트번호</th>
-											<td><input type="text" class="form-control" name="poLotno" id="poLotno"  list="lotList" autocomplete="off">
-											<datalist id="lotList">
-												<c:forEach var="list" items="${lotnoList}" varStatus="status">
-													<option value="${list.poLotno}">${list.poLotno}</option>
-												</c:forEach>
-											</datalist>
-											</td>
-											<th>타입</th>
-											<td><input type="text" class="form-control" name="piItemType" id="piItemType" readonly></td>
+											<th>품명</th>
+											<td><input type="text" class="form-control" name="orProd" id="orProd"></td>
+											<th>일자</th>
+											<td><input type="date" class="form-control" name="orDate" id="orDate" ></td>
 											</tr>
 											<tr>
-											<th>시작일시</th>
-											<td><input type="datetime-local" class="form-control" name="mpStarttime" id="mpStarttime" ></td>
-											<th>종료일시</th>
-											<td><input type="datetime-local" class="form-control" name="mpEndtime" id="mpEndtime" ></td>
+											<th>납기일자</th>
+											<td><input type="date" class="form-control" name="orDueDate" id="orDueDate" ></td>
+											<th>완료일자</th>
+											<td><input type="date" class="form-control" name="orFinDate" id="orFinDate" ></td>
 											</tr>
 											<tr>
-											<th>가공수량</th>
-											<td><input type="text" class="form-control" name="mpMfQty" id="mpMfQty"></td>
-											<th>불량수량</th>
-											<td><input type="text" class="form-control" name="mpBadQty" id="mpBadQty"></td>
+											<th>수주구분</th>
+											<td><input type="text" class="form-control" name="orOrType" id="orOrType"></td>
+											<th>재질</th>
+											<td><input type="text" class="form-control" name="orTexture" id="orTexture"></td>
 											</tr>
 											<tr>
-												<th>공정상태</th>
-													<td>
-													<select class="form-control" name="poState" id="poState">
-														<option value="">선택</option>
-														<option value="1">진행중</option>
-														<option value="2">작업완료</option>
-													</select>
-													</td>
+											<th>두께</th>
+											<td><input type="text" class="form-control" name="orThickness" id="orThickness"></td>
+											<th>규격</th>
+											<td><input type="text" class="form-control" name="orStandard" id="orStandard"></td>
 											</tr>
+											<tr>
+											<th>상태</th>
+											<td><input type="text" class="form-control" name="orState" id="orState"></td>
+											<th>담당자</th>
+											<td><input type="text" class="form-control" name="orManager" id="orManager"></td>
+											</tr>
+											<tr>
+											<th>성적서의뢰</th>
+											<td><input type="text" class="form-control" name="orReport" id="orReport"></td>
+											<th>단가</th>
+											<td><input type="text" class="form-control" name="orUnit" id="orUnit"></td>
+											</tr>
+											<tr>
+											<th>금액</th>
+											<td><input type="text" class="form-control" name="orMoney" id="orMoney"></td>
+											<th>수량</th>
+											<td><input type="text" class="form-control" name="orQty" id="orQty"></td>
+											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_regist_manufacture()" style="border:none;">확인</button>
+									<button type="submit" class="btn_ok" onclick="fn_regist_mf()" style="border:none;">확인</button>
 									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do'">취소</span>
 								</div>
                             </div>
@@ -148,38 +150,96 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_regist_manufacture(){
-		if($('#eqId').val() == ''){
-			alert("설비를 확인 바랍니다.");
+	function fn_regist_mf(){
+		
+		var regex = /^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])-([0-9A-Za-z]{4})-([0-9A-Za-z]{4})$/;
+		var num =  /^[0-9.]+$/;
+
+		
+		 if(!regex.test($('#orId').val())){
+	 			alert("수주번호형식을 확인해주세요.");
+				return;
+	 		}
+		 
+		if($('#orId').val() == ''){
+			alert("수주번호를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#mpMfno').val() == ''){
-			alert("공정번호를 확인 바랍니다.");
+		if($('#orCompany').val() == ''){
+			alert("거래처를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#poLotno').val() == ''){
-			alert("로트번호를 확인 바랍니다.");
+		if($('#orProd').val() == ''){
+			alert("품명을 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#mpStarttime').val() == ''){
-			alert("시작일을 확인 바랍니다.");
-			return;
-		}
-		
-		
-		if($('#mpEndtime').val() == ''){
-			alert("종료일을 확인 바랍니다.");
-			return;
-		}
-		if($('#mpMfQty').val() == ''){
-			alert("가공수량을 확인 바랍니다.");
+		if($('#orDate').val() == ''){
+			alert("일자를 확인 바랍니다.");
 			return;
 		}
 		
 		
+		if($('#orDueDate').val() == ''){
+			alert("납기일을 확인 바랍니다.");
+			return;
+		}
+		if($('#orFinDate').val() == ''){
+			alert("완료일을 확인 바랍니다.");
+			return;
+		}
+		if($('#orOrType').val() == ''){
+			alert("수주구분을 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#orTexture').val() == ''){
+			alert("재질을 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#orThickness').val() == ''){
+			alert("두께를 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#orStandard').val() == ''){
+			alert("규격을 확인 바랍니다.");
+			return;
+		}
+		
+		
+		
+		if($('#orManager').val() == ''){
+			alert("담당자를 확인 바랍니다.");
+			return;
+		}
+		
+		if($('#orUnit').val() !=''){
+		
+		if(!num.test($('#orUnit').val())){
+ 			alert("단가는 숫자만 입력가능합니다.");
+			return;
+ 		}
+		}
+		
+		if($('#orMoney').val()){
+		
+		if(!num.test($('#orMoney').val())){
+ 			alert("금액은 숫자만 입력가능합니다.");
+			return;
+ 		}}
+		
+		if($('#orQty').val() == ''){
+			alert("수량을 확인 바랍니다.");
+			return;
+		}
+		if(!num.test($('#orQty').val())){
+ 			alert("수량은 숫자만 입력가능합니다.");
+			return;
+ 		}
 		
 		registForm.submit();
 	}
@@ -198,34 +258,11 @@
 		
 		
 		
-		$('#poLotno').change(function(){
-			manufactureAjax();
-		});
+		
 		
 	});
 	
-	
-	function manufactureAjax(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/manufacture/manufactureInfoAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'poLotno': $('#poLotno').val(),
-				  
-			  },
-			  success:function(result){
-				  registForm.piItemType.value = result.mf_ajax.piItemType;
-				  registForm.mpMfQty.value = result.mf_ajax.poOrderQty;
-				  if(result.mf_ajax.poState == 0 || result.mf_ajax.poState == 1){
-					  $('#poState').val("1");
-				  }
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
+
 	
 	
 	</script>

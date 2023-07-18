@@ -14,6 +14,8 @@ public interface UserMapper {
 	List<?> selectUserList(SearchVO searchVO);
 
 	void registUser(Map<String, Object> map);
+	
+	int checkId(Map<String, Object> map);
 
 	Map<String, Object> selectUserInfo(Map<String, Object> map);
 

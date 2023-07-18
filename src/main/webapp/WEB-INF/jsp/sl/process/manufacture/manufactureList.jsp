@@ -2,9 +2,12 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
+<style>
+	#graph {
+		width: 100%;
+	}
+</style>
 <%@ include file="../../header.jsp" %>
-
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -35,7 +38,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav manufacture - User Information -->
+                        <!-- Nav cut - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
 
                     </ul>
@@ -47,31 +50,35 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">가공공정관리</h1>
+                    <div class="btn_bottom_wrap">
+                    	<h1 class="h3 mb-2 text-gray-800" style="display: inline-block;">가공공정관리</h1>
+                    	
+                    </div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do" method="post">
-									<input type="hidden" name="mpIdx">
+									<input type="hidden" name="orId">
+									<input type="hidden" name="mfsIdx">
+									<input type="hidden" name="mflManager" id="mflManage">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
+									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" id="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="수주번호를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin: 0 0.3rem 0 0;">
-						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
-									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
+									
 						    	</form>
-						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_manufacture()" style="margin-left: 0.3rem;">
+						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_mf()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
 	                            </a>
-						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_manufacture()">
+						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_mf()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_manufacture()" style="float: right;">
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_cutProcess()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
+	                            
 							</div>
                         </div>
                         <div class="card-body">
@@ -79,36 +86,64 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                        	<th>가공공정번호</th>
-                                        	<th>설비</th>
-                                            <th>LOT번호</th>
-                                            <th>제품타입</th>
-                                            <th>가공수량</th>
-                                            <th>불량수량</th>
+                                        	<th>수주번호</th>
+                                            <th>품목</th>
+                                            <th>수주량</th>
+                                            <th>현재공정</th>
+                                            <th>진행/중단/재개</th>
+											<th>작업완료</th>
 											<th>수정/삭제</th>
+											<th>작업자</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${manufactureList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_manufacture('${result.mpIdx}')" style="cursor: pointer;">
-	                                   			<td>${result.mpMfno }</td>
-												<td>${result.eqId}</td>
-												<td>${result.poLotno}</td>
-												<td>${result.piItemType}</td>
-												<td>${result.mpMfQty}</td>
-												<td>${result.mpBadQty}</td>
-											
-	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_manufacture_go('${result.mpIdx}')">
+	                                   		<tr>
+	                                   			<td>${result.orId}</td>
+	                                   			<td>${result.orProd}</td>
+	                                   			<td>${result.orQty}</td>
+	                                   			<c:if test="${result.orProcess eq 2}"><td>가공공정대기중</td></c:if>
+	                                   			<c:if test="${result.orProcess eq 3 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td>가공공정중</td></c:if>
+	                                   			<c:if test="${result.mfsState eq 1 and result.orProcess eq 3}"><td>일시정지</td></c:if>
+	                                   			<c:if test="${result.mfsState eq 1 and result.orProcess eq 3}"><td><a href="#" class="btn btn-primary btn-icon-split" onclick="fn_re_mf_go('${result.orId}','${result.mfsIdx}')">
+				                                        <span class="text">재개</span>
+				                                    </a></td></c:if>
+				                                <c:if test="${result.orProcess eq 2}"><td><a href="#" class="btn btn-warning btn-icon-split" onclick="fn_goProcess('${result.orId}')">
+				                                        <span class="text">진행</span>
+				                                    </a></td>
+				                                    </c:if>
+				                                    <c:if test="${result.orProcess eq 3 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td><a href="#" class="btn btn-danger btn-icon-split" onclick="fn_stop_mf('${result.orId}')">
+				                                        <span class="text">중단</span>
+				                                    </a></td>
+				                                    </c:if> 
+				                                    
+	                                   			
+	                                   			
+	                                            <td>
+	                                            	
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_go_finish('${result.orId}','${result.orProcess}')">
+				                                        <span class="text">작업완료</span>
+				                                    </a>
+	                                            </td>
+	                                            
+	                                             <td style="padding: 5px 0px;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_go_cut('${result.orId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_manufacture('${result.mpIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_go_cut('${result.orId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
+	                                             <td>
+	                                            <select class="form-control" id="mflManager_${status.index}" onChange="addManger(${status.index})">
+	                                          			    <option value="">선택</option>
+														<c:forEach var="list" items="${mfmList}" varStatus="status">
+															<option value="${list.miName}" <c:if test="${result.mflManager eq list.miName}">selected="selected"</c:if>>${list.miName}</option>
+														</c:forEach>
+													</select></td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty manufactureList}"><tr><td colspan='7'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty manufactureList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -148,55 +183,92 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-		function fn_pageview(pageNo) {
-			listForm.pageIndex.value = pageNo;
-		   	listForm.submit();
-		}
+	function fn_pageview(pageNo) {
+		listForm.pageIndex.value = pageNo;
+	   	listForm.submit();
+	}
 	
-		function fn_search_manufacture(){
-			listForm.submit();
-		}
+	function fn_search_mf(){
+		listForm.submit();
+	}
 	
-		function fn_searchAll_manufacture(){
-			listForm.searchKeyword.value = "";
-			listForm.searchStDate.value = "";
-			listForm.searchEdDate.value = "";
-			listForm.pageIndex.value = 1;
-			listForm.submit();
-		}
+	function fn_searchAll_mf(){
+		listForm.searchKeyword.value = "";
+		listForm.pageIndex.value = 1;
+		listForm.submit();
+	}
 	
-		function fn_regist_manufacture(){
-			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/registManufacture.do";
-			listForm.submit();
-		}
+	function fn_re_mf_go(orId,mfsIdx){
+		listForm.orId.value = orId;
+		listForm.mfsIdx.value = mfsIdx;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/reManufacture.do";
+		listForm.submit();
+	}
 	
-		function fn_modify_manufacture_go(mpIdx){
-			listForm.mpIdx.value = mpIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/modifyManufacture.do";
-			listForm.submit();
+	function fn_goProcess(orId){
+		if($('#mflManage').val() == ''){
+			alert("작업자를 확인 바랍니다.");
+			return;
+		}
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/goManufacture.do";
+		listForm.submit();
+	}
+	
+	
+	function fn_stop_mf(orId){
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/stopManufacture.do";
+		listForm.submit();
+	}
+	
+	
+	
+	function fn_go_finish(orId,orProcess){
+		if(orProcess == 2){
+			alert("공정을 진행하여 주세요.");
+			return;
 		}
 		
-		function fn_detail_manufacture(mpIdx){
-			listForm.mpIdx.value = mpIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/detailManufacture.do";
+		if(confirm('작업을 완료하시겠습니까?')) {
+			listForm.orId.value = orId; 
+			listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/finishManufacture.do";
 			listForm.submit();
 		}
+	}
 	
-		function fn_delete_manufacture(mpIdx){
-			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.mpIdx.value = mpIdx;
-				listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/deleteManufacture.do";
-				listForm.submit();
-			}
+	function fn_regist_cutProcess(){
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/registManufacture.do";
+		listForm.submit();
+	}
+	
+	function fn_modify_go_cut(orId){
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/modifyManufacture.do";
+		listForm.submit();
+	}
+	
+	function fn_delete_go_cut(orId){
+		if(confirm('수주를 삭제하시겠습니까?')){
+		listForm.orId.value = orId;
+		listForm.action = "${pageContext.request.contextPath}/sl/process/manufacture/deleteManufacture.do";
+		listForm.submit();
 		}
+	}
 	
-		$(function() {
-			$('#processMenu').addClass("active");
-			$('#process').addClass("show");
-			$('#manufactureList').addClass("active");
-			
-			let msg = '${msg}';
-			if(msg) {
+	function addManger(index){
+		var str = '#mflManager_'+index;
+		console.log($(str).val());
+		$('#mflManage').val($(str).val());
+	}
+
+	$(function() {
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#manufactureList').addClass("active");
+		
+		let msg = '${msg}';	
+		if (msg) {
 				alert(msg);
 			}
 		});

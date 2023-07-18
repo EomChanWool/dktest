@@ -4,60 +4,60 @@
 	namespace="apc.sl.process.manufacture.service.impl.ManufactureMapper">
 
 	<select id="selectManufactureListToCnt" resultType="int">
-		SELECT COUNT(*)
-		FROM sm_mf_proc
+		SELECT COUNT(DISTINCT a.or_id) FROM sm_orders a
+		LEFT JOIN
+		sm_mf_process_stop b ON a.OR_ID = b.OR_ID
+		WHERE 1=1
+		AND or_process in (2,3)
+
 		<if test="searchKeyword != ''">
-			AND po_lotno LIKE CONCAT('%', #{searchKeyword}, '%')
+			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
-		<if test="searchStDate != ''">
-			AND mp_reg_date >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND mp_reg_date <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
+
 
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		select
-		mp_idx, 
-		mp_mfno,
-		eq_id,
-		po_lotno,
-		pi_item_type,
-		mp_mf_qty,
-		mp_bad_qty
-		from sm_mf_proc
+		SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty,
+		MAX(a.or_process) AS or_process,
+		ISNULL(
+		(
+		SELECT TOP 1 mfs_state
+		FROM
+		sm_mf_process_stop
+		WHERE OR_ID = a.OR_ID
+		ORDER BY mfs_idx DESC
+		),
+		0
+		) AS
+		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager
+		FROM sm_orders a
+		LEFT JOIN
+		sm_mf_process_stop b
+		ON a.OR_ID =
+		b.OR_ID
+		LEFT JOIN
+		sm_mf_proc_log c
+		ON a.or_id = c.or_id
 		WHERE 1=1
+		AND or_process in (2,3)
 		<if test="searchKeyword != ''">
-			AND po_lotno LIKE CONCAT('%', #{searchKeyword}, '%')
+			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
-		<if test="searchStDate != ''">
-			AND mp_reg_date >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND mp_reg_date <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
-
-		ORDER BY mp_mfno DESC
+		GROUP BY a.or_id
+		ORDER BY a.or_id DESC
 		OFFSET #{firstIndex} ROWS
-		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
 
 	</select>
 
-
-	<select id="selelctEQList" resultType="egovMap">
-	SELECT eq_id,eq_name FROM
-		sm_equipment
+	<select id="selectMfManager" resultType="egovMap">
+	select mi_name from sm_member_info
+	where mi_department = '가공부'
 	</select>
 	
-	<select id="selectLotnoList" resultType="egovMap">
-		SELECT po_lotno FROM
-		sm_product_order
-		where po_state IN (0,1)
-	</select>
 	
 	<select id="selectExistsLot" resultType="int">
 	SELECT COUNT(*)
@@ -74,31 +74,15 @@
 	</select>
 	
 	<select id="selectMfInfo" resultType="egovMap">
-	SELECT
-		a.mp_idx,
-		a.eq_id,
-		a.po_lotno,
-		a.pi_item_type,
-		a.mp_mfno,
-		a.mp_mf_qty,
-		a.mp_bad_qty,
-		b.eq_name,
-		c.po_state,
-		a.mp_starttime,
-		a.mp_endtime
-		FROM
-		sm_mf_proc a
-		join
-		sm_equipment b on a.eq_id = b.eq_id
-		JOIN sm_product_order c ON
-		a.po_lotno = c.po_lotno
-		WHERE 1=1
-		AND mp_idx = #{mpIdx}
+	SELECT * FROM sm_orders a
+		left JOIN sm_mf_proc_log b
+		ON a.OR_ID = b.OR_ID
+		WHERE a.or_id = #{orId}
 	</select>
 
-	<select id="selctExistsEq" resultType="int">
+	<select id="selctExistsOn" resultType="int">
 		SELECT COUNT(*) FROM
-		sm_equipment WHERE eq_id = #{eqId}
+		sm_orders WHERE or_id = #{orId}
 	</select>
 
 	<select id="selectCheck" resultType="egovMap">
@@ -124,52 +108,151 @@
 		sm_item e ON d.ITEM_CD = e.ITEM_CD
 		WHERE a.CH_IDX = #{chIdx}
 	</select>
-
-
-	<insert id="registManufacture">
-		insert into sm_mf_proc (
-		mp_mfno,
-		eq_id,
-		po_lotno,
-		pi_item_type,
-		mp_starttime,
-		mp_endtime,
-		mp_mf_qty,
-		mp_bad_qty,
-		mp_reg_id,
-		mp_reg_date
-		) values(
-		#{mpMfno},
-		#{eqId},
-		#{poLotno},
-		#{piItemType},
-		#{mpStarttime},
-		#{mpEndtime},
-		#{mpMfQty},
-		#{mpBadQty},
+	
+	<select id="selectCheckStop" resultType="int">
+	SELECT COUNT(*) FROM
+		sm_mf_process_stop
+		WHERE or_id = #{orId}
+		AND mfs_state = 1
+	</select>
+	
+	<insert id="registMfLog">
+	INSERT INTO sm_mf_proc_log (
+		or_id,
+		mfl_manager,
+		mfl_st_date,
+		mfl_reg_id,
+		mfl_reg_date
+		) VALUES
+		(
+		#{orId},
+		#{mflManager},
+		GETDATE(),
 		#{userId},
 		GETDATE()
 		)
 	</insert>
 
+
+	<insert id="registManufacture">
+		INSERT INTO sm_orders (
+		or_id,
+		or_company,
+		or_prod,
+		or_date,
+		or_due_date,
+		or_fin_date,
+		or_or_type,
+		or_texture,
+		or_thickness,
+		or_standard,
+		or_state,
+		or_manager,
+		or_report,
+		or_unit,
+		or_money,
+		or_qty,
+		or_process
+		) VALUES
+		(
+		#{orId},
+		#{orCompany},
+		#{orProd},
+		#{orDate},
+		#{orDueDate},
+		#{orFinDate},
+		#{orOrType},
+		#{orTexture},
+		#{orThickness},
+		#{orStandard},
+		#{orState},
+		#{orManager},
+		#{orReport},
+		#{orUnit},
+		#{orMoney},
+		#{orQty},
+		2
+		)
+	</insert>
+	
+	<insert id="registMfStopLog">
+	INSERT INTO sm_mf_process_stop (
+		or_id,
+		mfs_state,
+		mfs_stop_time
+		) VALUES
+		(
+		#{orId},
+		1,
+		GETDATE()
+		)
+	</insert>
+	
+	<update id="updateMfStopLog2">
+	UPDATE sm_mf_process_stop SET
+		mfs_state = 2,
+		mfs_re_time = GETDATE(),
+		MFS_REST_TIME = DATEDIFF(MINUTE,
+		MFS_STOP_TIME, GETDATE())
+		where mfs_idx
+		= #{mfsIdx}
+	</update>
+	
+	<update id="updateProcess3">
+	UPDATE sm_orders SET
+		or_process = 4
+		WHERE or_id
+		=#{orId}
+	</update>
+	
+	<update id="updateOrState">
+	UPDATE sm_orders SET
+		or_process = 3
+		WHERE or_id =
+		#{orId}
+	</update>
+
 	<update id="modifyManufacture">
-		UPDATE sm_mf_proc
-		SET eq_id = #{eqId},
-		mp_mfno = #{mpMfno},
-		mp_starttime = #{mpStarttime},
-		mp_endtime = #{mpEndtime},
-		mp_mf_qty = #{mpMfQty},
-		mp_bad_qty = #{mpBadQty},
-		mp_edt_date = GETDATE(),
-		mp_edt_id = #{userId}
-		WHERE mp_idx = #{mpIdx}
-		
-		UPDATE sm_product_order
-		SET po_state = #{poState}
-		WHERE po_lotno = (
-    	SELECT po_lotno
-    	FROM sm_mf_proc
-    	WHERE mp_idx = #{mpIdx}
+		UPDATE sm_orders SET
+		or_company = #{orCompany},
+		or_prod = #{orProd},
+		or_date = #{orDate},
+		or_due_date = #{orDueDate},
+		or_fin_date = #{orFinDate},
+		or_or_type = #{orOrType},
+		or_texture = #{orTexture},
+		or_thickness = #{orThickness},
+		or_standard = #{orStandard},
+		or_state = #{orState},
+		or_manager = #{orManager},
+		or_report = #{orReport},
+		or_unit = #{orUnit},
+		or_money = #{orMoney},
+		or_qty = #{orQty}
+		WHERE or_id = #{orId}
+	</update>
+	
+	<update id="updateLogEdtime">
+	UPDATE sm_mf_proc_log SET
+		mfl_ed_date = GETDATE(),
+		mfl_work_time = DATEDIFF(MINUTE,mfl_st_date,getdate())
+		WHERE or_id = #{orId}
+		AND mfl_idx = (
+		SELECT TOP 1 mfl_idx
+		FROM
+		sm_mf_proc_log
+		WHERE or_id = #{orId}
+		ORDER BY mfl_idx DESC
+		)
+	</update>
+	
+	<update id="modifyMfManager">
+	UPDATE sm_mf_proc_log SET
+		mfl_manager = #{mflManager}
+		WHERE or_id = #{orId} AND mfl_idx = (
+		SELECT MAX(mfl_idx)
+		FROM sm_mf_proc_log
+		WHERE or_id = #{orId}
 		)
 	</update>
 
