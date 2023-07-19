@@ -114,10 +114,8 @@ public class CutController {
 			redirectAttributes.addFlashAttribute("sear",map);
 		}
 		map.put("userId", session.getAttribute("user_id"));
-		System.out.println("맵3 : " + map);
 		//작업중지일때 작업완료나 가공공정으로 이동불가
 		int checkProd = cutService.selectCheckStop(map);
-		System.out.println("맵 : " + map);
 		if(checkProd != 0) {
 			
 			redirectAttributes.addFlashAttribute("msg", "공정을 재개하여 주십시오.");

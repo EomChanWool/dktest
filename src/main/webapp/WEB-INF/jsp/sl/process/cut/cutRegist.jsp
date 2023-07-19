@@ -152,7 +152,9 @@
 	<script>
 	function fn_regist_cut(){
 		
-		var regex = /^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])-([0-9A-Za-z]{4})-([0-9A-Za-z]{4})$/;
+		var regex = /^\d{16}$/;
+
+
 		var num =  /^[0-9.]+$/;
 
 		

@@ -200,6 +200,10 @@
 	}
 	
 	function fn_goProcess(orId){
+		if($('#cplManage').val() == ''){
+			alert("작업자를 확인 바랍니다.");
+			return;
+		}
 		listForm.orId.value = orId;
 		listForm.action = "${pageContext.request.contextPath}/sl/pop/popCut/goCut.do";
 		listForm.submit();

@@ -53,10 +53,36 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
+							<div class="search">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/monitoring/ordersOutput/ordersOutput.do" method="post">
+									<input type="hidden" name="orId">
+									<input type="hidden" name="relIdx">
+									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+									
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+										<option value="">선택</option>
+							    		<c:forEach begin="${date.begin}" end="${date.end}" varStatus="status">
+							    			<option value="${status.begin+status.count}" <c:if test="${searchVO.searchCondition eq status.begin+status.count}">selected="selected"</c:if>>${status.begin+status.count}</option>
+							    		</c:forEach>
+						    		</select>
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
+							    		<option value="">선택</option>
+							    		<c:forEach begin="1" end="12" varStatus="status">
+							    			<option value="${status.count}" <c:if test="${searchVO.searchCondition2 eq status.count}">selected="selected"</c:if>>${status.count}월</option>
+							    		</c:forEach>
+						    		</select>
+						    	</form>
+						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_orderOutPut()" style="margin-left: 0.3rem;">
+	                                <span class="text">검색</span>
+	                            </a>
+						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_orderOutPut()">
+	                                <span class="text">전체목록</span>
+	                            </a>
+							</div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-								<div id="graph" style="width: 100%; height:500px;"></div>
+                            	<div id="graph" style="width: 100%; height:500px;"></div>
                             </div>
                         </div>
                     </div>
@@ -91,6 +117,17 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
+	
+	function fn_search_orderOutPut(){
+		listForm.submit();
+	}
+	
+	function fn_searchAll_orderOutPut(){
+		listForm.searchCondition.value = "";
+		listForm.searchCondition2.value = "";
+		listForm.submit();
+	}
+	
 	$(function() {
 		$('#monitoringMenu').addClass("active");
 		$('#monitoring').addClass("show");
@@ -99,184 +136,205 @@
 		window.onresize = function() {
 			location.reload();
 		}
+		
 	});
 	
+	//그래프
 	var chartDom = document.getElementById('graph');
 	var myChart = echarts.init(chartDom);
 	var option;
-	
 	let date = [];
+	let year = [];
 	
-	let orderCnt = [];
-	let sales = [];
+	let OutputData = [];
 	
-	let item_760N = [];
-	let item_760O = [];
-	let item_760W = [];
-	let item_560 = [];
-	let prodCnt = [];
-	
-	const cntMin = 0;
-	const cntMax = 5000;
-	const cntInterval = 1000;
-	const salesMin = 0;
-	const salesMax = 50000;
-	const salesInterval = 10000;
+	let viewData = [];
 
 	var num = 0;
-	var year = 0;
+	var years = 0;
 	var maxMon = 0;
-	<c:forEach items="${prodCntList}" var="list">
-		year = ${list.years};
-		maxMon = ${list.month};
-	</c:forEach>
-	for(var i=1;i<=maxMon;i++){
-		date.push(year+"년 "+i+"월");
-		orderCnt.push(0);
-		item_760N.push(0);
-		item_760O.push(0);
-		item_760W.push(0);
-		item_560.push(0);
-		sales.push(0);
+	var maxDate2= 0;
+	if($('#searchCondition2').val() == ""){
+		<c:forEach items="${orderCntList}" var="list">
+		years = ${list.years};
+		maxMon = ${list.months};
+		</c:forEach>
+		for(var i=1;i<=maxMon;i++){
+			date.push(years+"년 "+i+"월");
+			OutputData.push(0);
+			viewData.push(0);
+		}
+		<c:forEach items="${prodCntList}" var="list">
+			viewData[${list.months-1}] = ${list.prodCnt};
+		</c:forEach>
+		<c:forEach items="${orderCntList}" var="list">
+			OutputData[${list.months-1}] = ${list.orderCnt};
+		</c:forEach>
+	}
+	else if($('#searchCondition2').val() != ""){
+		 
+		for(var i=1;i<=31;i++){
+			date.push(i+"일");
+			OutputData.push(0);
+			viewData.push(0);
+		}
+		
+		<c:forEach items="${orderCntList}" var="list">
+		OutputData[${list.days-1}] = ${list.orderCnt};
+		</c:forEach> 
+		<c:forEach items="${prodCntList}" var="list">
+		viewData[${list.relDay-1}] = ${list.prodCnt};
+		</c:forEach>
+		
+		console.log(viewData);
 	}
 	
-	<c:forEach items="${orderCntList}" var="list">
-		orderCnt[${list.month}-1] = ${list.orderCnt};
-	</c:forEach>
+	if($('#searchCondition2').val() == ""){
+		option = {
+				  tooltip: {
+				    trigger: 'axis',
+				    axisPointer: {
+				    	type: 'cross',
+				    	axis: "auto",
+				    	crossStyle: {
+				        	color: '#999'
+				    	}
+				    }
+				  },
+				  toolbox: {
+				    feature: {
+				      dataView: { show: false, readOnly: false },
+				      magicType: { show: false, type: ['line', 'bar'] },
+				      restore: { show: false },
+				      saveAsImage: { show: true }
+				    }
+				  },
+				  legend: {
+				    data: ['수주량', '생산량']
+				  },
+				  xAxis: [
+				    {
+				      type: 'category',
+				      data: date,
+				      axisPointer: {
+				        type: 'shadow'
+				      }
+				    }
+				  ],
+				  yAxis: [
+				    {
+				      type: 'value',
+				      
+				      axisLabel: {
+				        formatter: '{value} EA'
+				      }
+				    },
+				    {
+		    		  type: 'value',
+			      	  name: '생산량',
+			      	  axisLabel: {
+			            formatter: '{value} EA'
+					  }
+				    }
+				  ],
+				  series: [
+				    {
+				      name: '수주량',
+				      type: 'bar',
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' EA';
+				        }
+				      },
+				      data: OutputData
+				    },
+				    {
+			    	name: '생산량',
+				    type: 'bar',
+				    tooltip: {
+				      valueFormatter: function (value) {
+				        return value + ' EA';
+				      }
+				    },
+				    data: viewData
+				    }
+				  ]
+				};
+	}else if($('#searchCondition2').val() != ""){
+		option = {
+				  tooltip: {
+				    trigger: 'axis',
+				    axisPointer: {
+				    	type: 'cross',
+				    	axis: "auto",
+				    	crossStyle: {
+				        	color: '#999'
+				    	}
+				    }
+				  },
+				  toolbox: {
+				    feature: {
+				      dataView: { show: false, readOnly: false },
+				      magicType: { show: false, type: ['line', 'bar'] },
+				      restore: { show: false },
+				      saveAsImage: { show: true }
+				    }
+				  },
+				  legend: {
+				    data: ['수주량', '생산량']
+				  },
+				  xAxis: [
+				    {
+				      type: 'category',
+				      data: date,
+				      axisPointer: {
+				        type: 'shadow'
+				      }
+				    }
+				  ],
+				  yAxis: [
+				    {
+				      type: 'value',
+				      
+				      axisLabel: {
+				        formatter: '{value} EA'
+				      }
+				    },
+				    {
+		    		  type: 'value',
+			      	  name: '생산량',
+			      	  axisLabel: {
+			            formatter: '{value} EA'
+					  }
+				    }
+				  ],
+				  series: [
+				    {
+				      name: '수주량',
+				      type: 'line',
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' EA';
+				        }
+				      },
+				      data: OutputData
+				    },
+				    {
+			    	name: '생산량',
+				    type: 'line',
+				    tooltip: {
+				      valueFormatter: function (value) {
+				        return value + ' EA';
+				      }
+				    },
+				    data: viewData
+				    }
+				  ]
+				};
+	}
 	
-	<c:forEach items="${prodCntList}" var="list">
-		if('${list.itemName}' == '760N'){
-			item_760N[${list.month}-1] = ${list.prodCnt}; 
-		}else if('${list.itemName}' == '760O'){
-			item_760O[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '760W'){
-			item_760W[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '560'){
-			item_560[${list.month}-1] = ${list.prodCnt};
-		}
-	</c:forEach>
-	
-	<c:forEach items="${salesList}" var="list">
-		sales[${list.month}-1] = ${list.money};
-	</c:forEach>
-
-	option = {
-			  tooltip: {
-			    trigger: 'axis',
-			    axisPointer: {
-			      type: 'cross',
-			      crossStyle: {
-			        color: '#999'
-			      }
-			    }
-			  },
-			  toolbox: {
-			    feature: {
-			      dataView: { show: false, readOnly: false },
-			      magicType: { show: false, type: ['line', 'bar'] },
-			      restore: { show: false },
-			      saveAsImage: { show: false }
-			    }
-			  },
-			  legend: {
-			    data: ['수주량', '760N', '760O', '760W', '560', '매출액']
-			  },
-			  xAxis: [
-			    {
-			      type: 'category',
-			      data: date,
-			      axisPointer: {
-			        type: 'shadow'
-			      }
-			    }
-			  ],
-			  yAxis: [
-			    {
-			      type: 'value',
-			      name: '개수',
-			      min: cntMin,
-			      max: cntMax,
-			      interval: cntInterval,
-			      axisLabel: {
-			        formatter: '{value} EA'
-			      }
-			    },
-			    {
-			      type: 'value',
-			      name: '금액',
-			      min: salesMin,
-			      max: salesMax,
-			      interval: salesInterval,
-			      axisLabel: {
-			        formatter: '{value} 만원'
-			      }
-			    }
-			  ],
-			  series: [
-			    {
-			      name: '수주량',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: orderCnt
-			    },
-			    {
-			      name: '760N',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760N
-			    },
-			    {
-			      name: '760O',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760O
-			    },
-			    {
-			      name: '760W',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760W
-			    },
-			    {
-			      name: '560',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_560
-			    },
-			    {
-			      name: '매출액',
-			      type: 'line',
-			      yAxisIndex: 1,
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' 만원';
-			        }
-			      },
-			      data: sales
-			    }
-			  ]
-			};
 	option && myChart.setOption(option);
+	
 	</script>
 </body>
 

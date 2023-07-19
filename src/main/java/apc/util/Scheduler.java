@@ -201,7 +201,10 @@ public class Scheduler {
 							rowMap.clear();
 							break;
 						}
-						
+						if(columnindex == 10) {
+							
+							value = value.replaceAll("[-]", "");
+						}
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("orProcess", "0");
 				            

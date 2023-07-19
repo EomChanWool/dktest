@@ -173,12 +173,8 @@
 		
 		let viewData = [];
 	
-		const outputMin = 0;
-		const outputMax = 2000;
-		const outputInterval = 400;
-		const salesMin = 0;
-		const salesMax = 20000;
-		const salesInterval = 5000;
+		
+		
 			
 		<c:forEach items="${kpiGraphList}" var="list">
 			date.push('${list.kiYear}년 ' + '${list.kiMonth}월');
