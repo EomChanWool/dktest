@@ -4,6 +4,7 @@ package apc.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock.Catch;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -228,8 +230,9 @@ public class Scheduler {
 		
 		String fileName = "C:\\test\\release.xls";
 		
+		try {
 		FileInputStream fis = new FileInputStream(fileName);
-
+		
 		@SuppressWarnings("resource")
 		HSSFWorkbook workbook = new HSSFWorkbook(fis);
 		int rowindex = 0;
@@ -291,13 +294,12 @@ public class Scheduler {
 							
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("relRegId","admin");
-				            System.out.println("로우맵 : " + rowMap);
 				        
 					
 					} 
-					if(rowMap.size() != 0) {
-						excelReaderService.registRelease(rowMap);
-					}
+//					if(rowMap.size() != 0) {
+//						excelReaderService.registRelease(rowMap);
+//					}
 					
 				}
 			}
@@ -308,7 +310,10 @@ public class Scheduler {
 		//EgovFileUtil.delete(file);
 		
 		
-	}
+		}catch (FileNotFoundException e) {
+		System.out.println("파일없음");	}
+		}
+	
 
 	
 	public static void setUserId(String userId) {

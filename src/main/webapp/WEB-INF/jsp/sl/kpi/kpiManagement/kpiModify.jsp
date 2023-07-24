@@ -66,18 +66,16 @@
 												<td><input type="text" class="form-control" value="${kpiVO.kiMonth}월" disabled></td>
 											</tr>
 											<tr>
-												<th>KPI 공정구분</th>
-												<td><c:if test="${kpiVO.kiType eq 1}"><input type="text" class="form-control" value="절단공정" disabled></c:if>
-													<c:if test="${kpiVO.kiType eq 2}"><input type="text" class="form-control" value="가공공정" disabled></c:if>
-													</td>
 												<th>목표생산량  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="kiQty" id="kiQty" value="${kpiVO.kiQty}"></td>
-											</tr>
-											<tr>
-												<th>목표생산률  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="kiGoodQty" id="kiGoodQty" value="${kpiVO.kiGoodQty}"></td>
 												<th>목표불량률  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="kiBadQty" id="kiBadQty" value="${kpiVO.kiBadQty}"></td>
+											</tr>
+											<tr>
+												<th>목표공수  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="kiManhour" id="kiManhour" value="${kpiVO.kiManhour}"></td>
+												<th>목표리드타임  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="kiLeadtime" id="kiLeadtime" value="${kpiVO.kiLeadtime}"></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -122,11 +120,31 @@
 	<script>
 	function fn_modify_kpi(){
 		
+		var num =  /^[0-9.]+$/;
 		
-		if($('#kiQty').val() == ''){
-			alert("목표 생산량을 확인 바랍니다.");
+		if(!num.test($('#kiQty').val())){
+ 			alert("목표 생산량을 확인 바랍니다.");
 			return;
-		}
+ 		}
+ 		
+ 		
+ 		
+ 		if(!num.test($('#kiBadQty').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
+		
+
+ 		if(!num.test($('#kiManhour').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
+ 		
+
+ 		if(!num.test($('#kiLeadtime').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
 		
 		modifyForm.submit();
 	}

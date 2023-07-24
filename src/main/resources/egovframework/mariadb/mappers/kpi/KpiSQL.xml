@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="apc.sl.kpi.kpiManagement.service.impl.KpiMapper">
+<mapper
+	namespace="apc.sl.kpi.kpiManagement.service.impl.KpiMapper">
 	<select id="selectKpiListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_kpi_info
 		WHERE 1=1
@@ -10,162 +11,250 @@
 		<if test="searchCondition2 != ''">
 			AND ki_month = #{searchCondition2}
 		</if>
-		<if test="searchCondition3 != ''">
-			AND ki_type = #{searchCondition3}
-		</if>
+
 	</select>
-	
+
 	<select id="selectKpiList" resultType="egovMap">
 		SELECT
-			ki_id,
-			ki_year,
-			ki_month,
-			ki_type,
-			ki_qty,
-			ki_bad_qty,
-			ki_good_qty
+		ki_id,
+		ki_year,
+		ki_month,
+		ki_qty,
+		ki_bad_qty,
+		ki_manhour,
+		ki_leadtime
 		FROM sm_kpi_info
 		WHERE 1=1
 		<if test="searchCondition != ''">
-			AND ki_type = #{searchCondition}
+			AND ki_year = #{searchCondition}
 		</if>
 		<if test="searchCondition2 != ''">
-			AND ki_year = #{searchCondition2}
+			AND ki_month = #{searchCondition2}
 		</if>
-		<if test="searchCondition3 != ''">
-			AND ki_month = #{searchCondition3}
-		</if>
-		
-		ORDER BY ki_year DESC ,  ki_month DESC 
+
+
+		ORDER BY ki_year DESC , ki_month DESC
 		OFFSET #{firstIndex} ROWS
-		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+		FETCH
+		NEXT #{recordCountPerPage} ROWS ONLY
 	</select>
-	
+
 	<select id="selectKpiGraphList" resultType="egovMap">
 		SELECT
-			ki_id,
-			ki_year,
-			ki_month,
-			ki_qty
+		ki_id,
+		ki_year,
+		ki_month,
+		ki_qty,
+		ki_bad_qty,
+		ki_manhour,
+		ki_leadtime
 		FROM sm_kpi_info
 		WHERE 1=1
 		<if test="searchCondition != ''">
-			AND ki_type = #{searchCondition}
+			AND ki_year = #{searchCondition}
 		</if>
-		<if test="searchCondition2 != ''">
-			AND ki_year = #{searchCondition2}
-		</if>
-		<if test="searchCondition3 != ''">
-			AND ki_month = #{searchCondition3}
-		</if>
-		ORDER BY ki_year asc ,  ki_month asc 
+
+		ORDER BY ki_year asc , ki_month asc
 	</select>
-	
+
 	<select id="selectErrorOutput" resultType="egovMap">
-		SELECT 
-			DATE_FORMAT(pr_re_reg_dte, '%Y-%m') monthly,
-			DATE_FORMAT(pr_re_reg_dte, '%Y') years,
-			DATE_FORMAT(pr_re_reg_dte, '%m') MONTH,
-			SUM(pr_re_cnt) cnt,
-			SUM(pr_re_faulty_cnt) faulty,
-			(SUM(pr_re_cnt)-SUM(pr_re_faulty_cnt)) prodCnt,
-			ROUND((SUM(pr_re_faulty_cnt)/SUM(pr_re_cnt)*100),2) percent,
-			0 money
+		SELECT
+		DATE_FORMAT(pr_re_reg_dte, '%Y-%m') monthly,
+		DATE_FORMAT(pr_re_reg_dte, '%Y') years,
+		DATE_FORMAT(pr_re_reg_dte,
+		'%m') MONTH,
+		SUM(pr_re_cnt) cnt,
+		SUM(pr_re_faulty_cnt) faulty,
+		(SUM(pr_re_cnt)-SUM(pr_re_faulty_cnt)) prodCnt,
+		ROUND((SUM(pr_re_faulty_cnt)/SUM(pr_re_cnt)*100),2) percent,
+		0 money
 		FROM sm_prod_result
 		WHERE 1=1
 		<if test="searchCondition2 != ''">
 			AND DATE_FORMAT(pr_re_reg_dte, '%Y') = #{searchCondition2}
 		</if>
 		<if test="searchCondition3 != ''">
-			AND FORMAT(DATE_FORMAT(pr_re_reg_dte, '%m'),0) = #{searchCondition3}
+			AND FORMAT(DATE_FORMAT(pr_re_reg_dte, '%m'),0) =
+			#{searchCondition3}
 		</if>
 		AND pr_list_nm = (SELECT pr_list_nm FROM sm_process_list
-									WHERE pr_list_seq = (SELECT MAX(pr_list_seq) FROM sm_process_list))
-		GROUP BY monthly
+		WHERE
+		pr_list_seq = (SELECT MAX(pr_list_seq) FROM sm_process_list))
+		GROUP BY
+		monthly
 	</select>
-	
+
 	<select id="selectSales" resultType="egovMap">
 		SELECT
-			DATE_FORMAT(or_dte, '%Y-%m') monthly,
-			DATE_FORMAT(or_dte, '%Y') years,
-			DATE_FORMAT(or_dte, '%m') MONTH,
-			ROUND(SUM(or_money/10000),1) money,
-			0 prodCnt,
-			0 percent
+		DATE_FORMAT(or_dte, '%Y-%m') monthly,
+		DATE_FORMAT(or_dte, '%Y')
+		years,
+		DATE_FORMAT(or_dte, '%m') MONTH,
+		ROUND(SUM(or_money/10000),1)
+		money,
+		0 prodCnt,
+		0 percent
 		FROM sm_orders
 		WHERE 1=1
 		<if test="searchCondition2 != ''">
 			AND DATE_FORMAT(or_dte, '%Y') = #{searchCondition2}
 		</if>
 		<if test="searchCondition3 != ''">
-			AND FORMAT(DATE_FORMAT(or_dte, '%m'),0) = #{searchCondition3}
+			AND FORMAT(DATE_FORMAT(or_dte, '%m'),0) =
+			#{searchCondition3}
 		</if>
 		GROUP BY monthly
 	</select>
-	
+
 	<select id="selectExistsKpi" resultType="int">
-		SELECT COUNT(*) FROM sm_kpi_info WHERE ki_year = #{kiYear} AND ki_month = #{kiMonth} AND ki_type = #{kiType}
+		SELECT COUNT(*) FROM
+		sm_kpi_info WHERE ki_year = #{kiYear} AND ki_month = #{kiMonth}
 	</select>
-	
+
 	<select id="selectProdPerPriceInfo" resultType="egovMap">
-		SELECT item_per_price FROM sm_item WHERE item_cd IN ('PD01','PD02','PD03','PD04')
+		SELECT
+		item_per_price FROM sm_item WHERE item_cd IN
+		('PD01','PD02','PD03','PD04')
 	</select>
-	
+
+	<select id="selectWorktime" resultType="egovMap">
+		SELECT
+		years,
+		months,
+		SUM(total_real_time) AS total_real_time,
+		SUM(total_mfl_person) AS
+		total_mfl_person
+		FROM
+		(
+		SELECT
+		YEAR(mfl_ed_date) AS years,
+		MONTH(mfl_ed_date) AS months,
+		SUM(mfl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		SUM(mfl_person) AS
+		total_mfl_person
+		FROM
+		sm_mf_proc_log a
+		LEFT JOIN (
+		SELECT
+		or_id,
+		SUM(mfs_rest_time) AS total_rest_time
+		FROM
+		sm_mf_process_stop
+		WHERE
+		YEAR(mfs_stop_time) = #{searchCondition}
+		GROUP BY
+		or_id
+		) b ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(mfl_ed_date) = #{searchCondition}
+		GROUP BY
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		) AS aa
+		GROUP BY
+		years, months
+		ORDER BY
+		years, months
+
+	</select>
+
+	<select id="selectWorkCnt" resultType="egovMap">
+		SELECT YEAR(rel_date) AS years, MONTH(rel_date) AS months,
+		ISNULL(SUM(rel_qty), 0)AS prod_cnt
+		FROM sm_release_info
+		WHERE
+		YEAR(rel_date) =
+		#{searchCondition}
+		GROUP BY YEAR(rel_date),
+		MONTH(rel_date)
+		ORDER BY months
+	</select>
+
+	<select id="selectProdCnt" resultType="egovMap">
+		SELECT YEAR(rel_date) AS
+		years, MONTH(rel_date) AS months,
+		ISNULL(SUM(rel_qty), 0)AS prod_cnt
+		FROM sm_release_info a
+		JOIN sm_orders
+		b ON a.OR_ID = b.OR_ID
+		WHERE YEAR(rel_date) = #{searchCondition}
+		GROUP
+		BY YEAR(rel_date), MONTH(rel_date)
+		ORDER BY months
+	</select>
+
+	<select id="selectLeadtime" resultType="egovMap">
+		SELECT YEAR(a.or_date) AS years, MONTH(a.or_date) AS months,
+		max(DATEDIFF(DAY, a.or_date, b.rel_date)) AS lead_max
+		, MIN(DATEDIFF(DAY, a.or_date, b.rel_date)) AS lead_min
+		FROM sm_orders a
+		JOIN sm_release_info b ON a.OR_ID = b.OR_ID
+		WHERE YEAR(a.or_date) = #{searchCondition}
+		GROUP BY YEAR(a.or_date), MONTH(a.or_date)
+		ORDER BY months
+
+	</select>
+
 	<insert id="registKpi">
-	
+
 		DECLARE @str NVARCHAR(50) = 'KI'
 		DECLARE @seq INT
-		DECLARE @padding INT = 5;
-	
+		DECLARE @padding INT = 5
+
 		SET @seq = NEXT VALUE FOR ki_seq
-	
-		INSERT INTO sm_kpi_info
-			(
-			ki_id,
-			ki_year,
-			ki_month,
-			ki_type,
-			ki_qty,
-			ki_good_qty,			
-			ki_bad_qty,
-			ki_reg_id,
-			ki_reg_date
-			)
+
+		INSERT INTO
+		sm_kpi_info
+		(
+		ki_id,
+		ki_year,
+		ki_month,
+		ki_qty,
+		ki_bad_qty,
+		ki_manhour,
+		ki_leadtime,
+		ki_reg_id,
+		ki_reg_date
+		)
 		VALUES
-			(
-			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
-			#{kiYear},
-			#{kiMonth},
-			#{kiType},
-			#{kiQty},
-			#{kiGoodQty},
-			#{kiBadQty},
-			#{userId},
-			GETDATE()
-			)
+		(
+		@str + RIGHT('00000' +
+		CAST(@seq AS VARCHAR(10)), @padding),
+		#{kiYear},
+		#{kiMonth},
+		#{kiQty},
+		#{kiBadQty},
+		#{kiManhour},
+		#{kiLeadtime},
+		#{userId},
+		GETDATE()
+		)
 	</insert>
-	
+
 	<select id="selectKpiInfo" resultType="egovMap">
 		SELECT
-			ki_id,
-			ki_year,
-			ki_month,
-			ki_type,
-			ki_qty,
-			ki_bad_qty,
-			ki_good_qty
+		ki_id,
+		ki_year,
+		ki_month,
+		ki_qty,
+		ki_bad_qty,
+		ki_manhour,
+		ki_leadtime
 		FROM sm_kpi_info
 		WHERE ki_id = #{kiId}
 	</select>
-	
+
 	<update id="modifyKpi">
 		UPDATE sm_kpi_info SET
-			ki_qty = #{kiQty},
-			ki_good_qty = #{kiGoodQty},
-			ki_bad_qty = #{kiBadQty}
+		ki_qty = #{kiQty},
+		ki_bad_qty =
+		#{kiBadQty},
+		ki_manhour = #{kiManhour},
+		ki_Leadtime = #{kiLeadtime}
 		WHERE ki_id = #{kiId}
 	</update>
-	
+
 	<delete id="deleteKpi">
 		DELETE FROM sm_kpi_info WHERE ki_id = #{kiId}
 	</delete>

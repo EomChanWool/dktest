@@ -50,7 +50,6 @@ public class ManufactureController {
 		model.put("mfmList", mfmList);
 		model.put("manufactureList", manufactureList);
 		model.put("paginationInfo", paginationInfo);
-	
 		
 		return "sl/process/manufacture/manufactureList";
 	}

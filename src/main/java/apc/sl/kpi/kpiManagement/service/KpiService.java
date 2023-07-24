@@ -28,5 +28,12 @@ public interface KpiService {
 	void modifyKpi(Map<String, Object> map);
 
 	void deleteKpi(Map<String, Object> map);
-
+	
+	List<?> selectProdCnt(SearchVO searchVO);
+	
+	List<Map<String, Object>> selectWorktime(SearchVO searchVO);
+	
+	List<Map<String, Object>> selectWorkCnt(SearchVO searchVO);
+	
+	List<?> selectLeadtime(SearchVO searchVO);
 }

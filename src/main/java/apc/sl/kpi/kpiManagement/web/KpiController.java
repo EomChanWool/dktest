@@ -48,20 +48,31 @@ public class KpiController {
 	public String graphKpi(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
 		  if(searchVO.getSearchCondition().equals("")) {
-		  searchVO.setSearchCondition("1");
-		  searchVO.setSearchCondition2(getYears().get("kiYear")+""); }
+		  searchVO.setSearchCondition(getYears().get("kiYear")+"");
+		  searchVO.setSearchCondition2("1"); }
 		  List<?> kpiList = kpiService.selectKpiList(searchVO); 
 		  model.put("kpiList", kpiList);
 		  model.put("date", getYears());
 		  List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
-		  
 		  model.put("kpiGraphList", kpiGraphList);
-//		  if(searchVO.getSearchCondition().equals("절단공정")) { //총생산량
-//			  List<?> dataList = kpiService.selectKpiList(searchVO);
-//			  model.put("dataList", dataList); }
-//		  else if(searchVO.getSearchCondition().equals("가공공정")) { //매출액
-//			  List<?> dataList = kpiService.selectSales(searchVO);
-//			  model.put("dataList", dataList); }
+		  
+		  //생산량
+		  List<?> totalProdCnt = kpiService.selectProdCnt(searchVO);
+		  model.put("totalProdCnt", totalProdCnt);
+		  //작업공수
+		  List<Map<String, Object>> workTimeList = kpiService.selectWorktime(searchVO);
+		  List<Map<String, Object>> workCntList = kpiService.selectWorkCnt(searchVO);
+		  for(int i=0; i<workCntList.size(); i++) {
+			  workTimeList.get(i).put("prodCnt",workCntList.get(i).get("prodCnt"));
+			  if(workCntList.size() < workTimeList.size()) {
+				  workTimeList.get(i+1).put("prodCnt", "0");
+			  }
+		  }
+		  model.put("wTList" , workTimeList);
+		  
+		  //리드타임
+		  List<?> leadTime = kpiService.selectLeadtime(searchVO);
+		  model.put("leadTimeList", leadTime);
 		 
 		return "sl/kpi/kpiState/kpiGraph";
 	}
@@ -85,7 +96,7 @@ public class KpiController {
 	@RequestMapping("/sl/kpi/kpimanagement/registKpiOk.do")
 	public String registKpiOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
-		System.out.println("map 확인 : "+map);
+		
 		int exists = kpiService.selectExistsKpi(map);
 		if(exists != 0) {
 			redirectAttributes.addFlashAttribute("msg", "이미 등록된 내역입니다.");
@@ -94,6 +105,7 @@ public class KpiController {
 		}
 		
 		kpiService.registKpi(map);
+		System.out.println("map 확인 : "+map);
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
 		return "redirect:/sl/kpi/kpimanagement/kpiList.do";
 	}

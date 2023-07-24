@@ -69,4 +69,24 @@ public class KpiServieImpl implements KpiService {
 		kpiMapper.deleteKpi(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectWorktime(SearchVO searchVO) {
+		return kpiMapper.selectWorktime(searchVO);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWorkCnt(SearchVO searchVO) {
+		return kpiMapper.selectWorkCnt(searchVO);
+	}
+
+	@Override
+	public List<?> selectProdCnt(SearchVO searchVO) {
+		return kpiMapper.selectProdCnt(searchVO);
+	}
+
+	@Override
+	public List<?> selectLeadtime(SearchVO searchVO) {
+		return kpiMapper.selectLeadtime(searchVO);
+	}
+
 }

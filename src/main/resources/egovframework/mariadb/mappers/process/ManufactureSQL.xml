@@ -30,7 +30,7 @@
 		),
 		0
 		) AS
-		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager
+		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager, MAX(c.mfl_person) AS mfl_person
 		FROM sm_orders a
 		LEFT JOIN
 		sm_mf_process_stop b
@@ -122,14 +122,16 @@
 		mfl_manager,
 		mfl_st_date,
 		mfl_reg_id,
-		mfl_reg_date
+		mfl_reg_date,
+		mfl_person
 		) VALUES
 		(
 		#{orId},
 		#{mflManager},
 		GETDATE(),
 		#{userId},
-		GETDATE()
+		GETDATE(),
+		#{mflPerson}
 		)
 	</insert>
 
@@ -248,7 +250,8 @@
 	
 	<update id="modifyMfManager">
 	UPDATE sm_mf_proc_log SET
-		mfl_manager = #{mflManager}
+		mfl_manager = #{mflManager},
+		mfl_person = #{mflPerson}
 		WHERE or_id = #{orId} AND mfl_idx = (
 		SELECT MAX(mfl_idx)
 		FROM sm_mf_proc_log

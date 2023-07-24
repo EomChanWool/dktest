@@ -57,29 +57,22 @@
 									<input type="hidden" name="kiId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-						    			<option value="1" <c:if test="${searchVO.searchCondition eq '1'}">selected="selected"</c:if>>절단공정</option>
-						    			<option value="2" <c:if test="${searchVO.searchCondition eq '2'}">selected="selected"</c:if>>가공공정</option>
-						    		</select>
-									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
+						    		
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
 										<option value="">선택</option>
 							    		<c:forEach begin="${date.begin}" end="${date.end}" varStatus="status">
-							    			<option value="${status.begin+status.count}" <c:if test="${searchVO.searchCondition2 eq status.begin+status.count}">selected="selected"</c:if>>${status.begin+status.count}</option>
+							    			<option value="${status.begin+status.count}" <c:if test="${searchVO.searchCondition eq status.begin+status.count}">selected="selected"</c:if>>${status.begin+status.count}</option>
 							    		</c:forEach>
 						    		</select>
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition3" id="searchCondition3">
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
 							    		<option value="">선택</option>
-							    		<c:forEach begin="1" end="12" varStatus="status">
-							    			<option value="${status.count}" <c:if test="${searchVO.searchCondition3 eq status.count}">selected="selected"</c:if>>${status.count}월</option>
-							    		</c:forEach>
+							    		<option value="1" <c:if test="${searchVO.searchCondition2 eq 1}">selected="selected"</c:if>>생산량</option>
+							    		<option value="2" <c:if test="${searchVO.searchCondition2 eq 2}">selected="selected"</c:if>>불량률</option>
+							    		<option value="3" <c:if test="${searchVO.searchCondition2 eq 3}">selected="selected"</c:if>>작업공수</option>
+							    		<option value="4" <c:if test="${searchVO.searchCondition2 eq 4}">selected="selected"</c:if>>리드타임</option>
 						    		</select>
 						    	</form>
-						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_kpi()" style="margin-left: 0.3rem;">
-	                                <span class="text">검색</span>
-	                            </a>
-						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_kpi()">
-	                                <span class="text">전체목록</span>
-	                            </a>
+						    	
 							</div>
                         </div>
                         <div class="card-body">
@@ -152,9 +145,7 @@
 			$('#searchCondition2').change(function(){
 				listForm.submit();
 			});
-			$('#searchCondition3').change(function(){
-				listForm.submit();
-			});
+			
 			
 			window.onresize = function() {
 				location.reload();
@@ -174,37 +165,113 @@
 		let viewData = [];
 	
 		
-		
+		var years = 0;
+		var maxMon = 0;
 			
-		<c:forEach items="${kpiGraphList}" var="list">
+		
+		
+		
+		if($('#searchCondition2').val() == "1"){
+			<c:forEach items="${kpiGraphList}" var="list">
+			years2 = ${list.kiYear};
+			maxMon2 = ${list.kiMonth};
+		</c:forEach>
+			for(var i=1;i<=maxMon2;i++){
+			date.push(years2+"년 "+i+"월");
+			kpiOutputData.push(0);
+			viewData.push(0);
+			}
+			<c:forEach items="${kpiGraphList}" var="list">
+			kpiOutputData[${list.kiMonth-1}] = ${list.kiQty};
+			</c:forEach>
+			<c:forEach items="${totalProdCnt}" var="list">
+			viewData[${list.months-1}] = ${list.prodCnt};
+			</c:forEach>
+			
+		}else if($('#searchCondition2').val() == "2"){
+			
+			<c:forEach items="${kpiGraphList}" var="list">
 			date.push('${list.kiYear}년 ' + '${list.kiMonth}월');
-			kpiOutputData.push('${list.kiQty}');
+			kpiOutputData.push('${list.kiBadQty}');
 			/* kpiSalesData.push('${list.exTrgSales}'); */
 			viewData.push('0');
 		</c:forEach>
-		
-		
-		if($('#searchCondition').val() == "1"){
-			<c:forEach items="${dataList}" var="list">
-				var index2 = ${list.kiMonth};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.totalCnt};
-				}else{
-					viewData[index2-1] = ${list.totalCnt};
-				}
-			</c:forEach>
-		}else if($('#searchCondition').val() == "2"){
-			<c:forEach items="${dataList}" var="list">
+		/* 	<c:forEach items="${dataList}" var="list">
 				var index3 = ${list.kiMonth};
 				if($('#searchCondition3').val() != ''){
 					viewData[0] = ${list.money};	
 				}else{
 					viewData[index3-1] = ${list.money};	
 				}
+			</c:forEach> */
+		}else if($('#searchCondition2').val() == "3"){
+			
+			<c:forEach items="${kpiGraphList}" var="list">
+			years = ${list.kiYear};
+			maxMon = ${list.kiMonth};
 			</c:forEach>
+			for(var i=1;i<=maxMon;i++){
+				date.push(years+"년 "+i+"월");
+				kpiOutputData.push(0);
+				viewData.push(0);
+			}
+			<c:forEach items="${kpiGraphList}" var="list">
+			kpiOutputData[${list.kiMonth-1}] = ${list.kiManhour};
+			
+		</c:forEach>
+		
+		<c:forEach items="${wTList}" var="list">
+		var a1 = ${list.totalRealTime};
+		var b1 = ${list.totalMflPerson};
+		
+		var c1 = ${list.prodCnt};
+		
+		
+		var manHour = Math.round(a1*b1*60/c1);
+		if(manHour == Infinity){
+			manHour = 0;
 		}
 		
-		if($('#searchCondition').val() == "1"){
+		viewData[${list.months-1}] = manHour;
+		
+		</c:forEach>
+			
+			
+			
+		/* 	<c:forEach items="${dataList}" var="list">
+				var index3 = ${list.kiMonth};
+				if($('#searchCondition3').val() != ''){
+					viewData[0] = ${list.money};	
+				}else{
+					viewData[index3-1] = ${list.money};	
+				}
+			</c:forEach> */
+		}else if($('#searchCondition2').val() == "4"){
+			<c:forEach items="${kpiGraphList}" var="list">
+			years2 = ${list.kiYear};
+			maxMon2 = ${list.kiMonth};
+		</c:forEach>
+			for(var i=1;i<=maxMon2;i++){
+			date.push(years2+"년 "+i+"월");
+			kpiOutputData.push(0);
+			viewData.push(0);
+			}
+			<c:forEach items="${kpiGraphList}" var="list">
+			kpiOutputData[${list.kiMonth-1}] = ${list.kiLeadtime};
+			</c:forEach>
+			
+			<c:forEach items="${leadTimeList}" var="list">
+			var aa1 = ${list.leadMax};
+			var bb1 = ${list.leadMin};
+			var cc1 = (aa1+bb1)/2;
+			viewData[${list.months-1}] = cc1;
+			</c:forEach>
+			
+			
+		}
+		
+		
+		if($('#searchCondition2').val() == "1"){
 			option = {
 					  tooltip: {
 					    trigger: 'axis',
@@ -241,14 +308,14 @@
 					      type: 'value',
 					      name: '절단',
 					      axisLabel: {
-					        formatter: '{value} kg'
+					        formatter: '{value} EA'
 					      }
 					    },
 					    {
 			    		  type: 'value',
 				      	  name: '생산량',
 				      	  axisLabel: {
-				            formatter: '{value} kg'
+				            formatter: '{value} EA'
 						  }
 					    }
 					  ],
@@ -258,7 +325,7 @@
 					      type: 'bar',
 					      tooltip: {
 					        valueFormatter: function (value) {
-					          return value + ' kg';
+					          return value + ' EA';
 					        }
 					      },
 					      data: kpiOutputData
@@ -268,14 +335,14 @@
 					    type: 'bar',
 					    tooltip: {
 					      valueFormatter: function (value) {
-					        return value + ' kg';
+					        return value + ' EA';
 					      }
 					    },
 					    data: viewData
 					    }
 					  ]
 					};
-		}else if($('#searchCondition').val() == "2"){
+		}else if($('#searchCondition2').val() == "2"){
 			option = {
 					  tooltip: {
 					    trigger: 'axis',
@@ -312,14 +379,14 @@
 					      type: 'value',
 					      name: '가공',
 					      axisLabel: {
-					        formatter: '{value} kg'
+					        formatter: '{value} %'
 					      }
 					    },
 					    {
 			    		  type: 'value',
 				      	  name: '생산량',
 				      	  axisLabel: {
-				            formatter: '{value} kg'
+				            formatter: '{value} %'
 						  }
 					    }
 					  ],
@@ -329,7 +396,7 @@
 					      type: 'bar',
 					      tooltip: {
 					        valueFormatter: function (value) {
-					          return value + ' kg';
+					          return value + ' %';
 					        }
 					      },
 					      data: kpiOutputData
@@ -339,7 +406,149 @@
 					    type: 'bar',
 					    tooltip: {
 					      valueFormatter: function (value) {
-					        return value + ' kg';
+					        return value + ' %';
+					      }
+					    },
+					    data: viewData
+					    }
+					  ]
+					};
+		}else if($('#searchCondition2').val() == "3"){
+			option = {
+					  tooltip: {
+					    trigger: 'axis',
+					    axisPointer: {
+					    	type: 'cross',
+					    	axis: "auto",
+					    	crossStyle: {
+					        	color: '#999'
+					    	}
+					    }
+					  },
+					  toolbox: {
+					    feature: {
+					      dataView: { show: false, readOnly: false },
+					      magicType: { show: false, type: ['line', 'bar'] },
+					      restore: { show: false },
+					      saveAsImage: { show: true }
+					    }
+					  },
+					  legend: {
+					    data: ['목표치', '공수']
+					  },
+					  xAxis: [
+					    {
+					      type: 'category',
+					      data: date,
+					      axisPointer: {
+					        type: 'shadow'
+					      }
+					    }
+					  ],
+					  yAxis: [
+					    {
+					      type: 'value',
+					      name: '가공',
+					      axisLabel: {
+					        formatter: '{value} mh'
+					      }
+					    },
+					    {
+			    		  type: 'value',
+				      	  name: '공수',
+				      	  axisLabel: {
+				            formatter: '{value} mh'
+						  }
+					    }
+					  ],
+					  series: [
+					    {
+					      name: '목표치',
+					      type: 'bar',
+					      tooltip: {
+					        valueFormatter: function (value) {
+					          return value + ' mh';
+					        }
+					      },
+					      data: kpiOutputData
+					    },
+					    {
+				    	name: '공수',
+					    type: 'bar',
+					    tooltip: {
+					      valueFormatter: function (value) {
+					        return value + ' mh';
+					      }
+					    },
+					    data: viewData
+					    }
+					  ]
+					};
+		}else if($('#searchCondition2').val() == "4"){
+			option = {
+					  tooltip: {
+					    trigger: 'axis',
+					    axisPointer: {
+					    	type: 'cross',
+					    	axis: "auto",
+					    	crossStyle: {
+					        	color: '#999'
+					    	}
+					    }
+					  },
+					  toolbox: {
+					    feature: {
+					      dataView: { show: false, readOnly: false },
+					      magicType: { show: false, type: ['line', 'bar'] },
+					      restore: { show: false },
+					      saveAsImage: { show: true }
+					    }
+					  },
+					  legend: {
+					    data: ['목표치', '리드타임']
+					  },
+					  xAxis: [
+					    {
+					      type: 'category',
+					      data: date,
+					      axisPointer: {
+					        type: 'shadow'
+					      }
+					    }
+					  ],
+					  yAxis: [
+					    {
+					      type: 'value',
+					      name: '리드타임',
+					      axisLabel: {
+					        formatter: '{value} 일'
+					      }
+					    },
+					    {
+			    		  type: 'value',
+				      	  name: '공수',
+				      	  axisLabel: {
+				            formatter: '{value} 일'
+						  }
+					    }
+					  ],
+					  series: [
+					    {
+					      name: '목표치',
+					      type: 'bar',
+					      tooltip: {
+					        valueFormatter: function (value) {
+					          return value + ' 일';
+					        }
+					      },
+					      data: kpiOutputData
+					    },
+					    {
+				    	name: '리드타임',
+					    type: 'bar',
+					    tooltip: {
+					      valueFormatter: function (value) {
+					        return value + ' 일';
 					      }
 					    },
 					    data: viewData

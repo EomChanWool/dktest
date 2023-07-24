@@ -75,22 +75,16 @@
 												</td>
 											</tr>
 											<tr>
-												<th>KPI 구분</th>
-												<td>
-													<select class="form-control" name="kiType" id="kiType">
-														<option value="">선택</option>
-														<option value="1">절단공정</option>
-														<option value="2">가공공정</option>
-													</select>
-												</td>
 												<th>목표생산량  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="kiQty" id="kiQty" value="${kpiVO.kiQty}"></td>
-											</tr>
-											<tr>
-												<th>목표생산률  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="kiGoodQty" id="kiGoodQty" value="${kpiVO.kiGoodQty}"></td>
 												<th>목표불량률  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="kiBadQty" id="kiBadQty" value="${kpiVO.kiBadQty}"></td>
+											</tr>
+											<tr>
+												<th>목표공수  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="kiManhour" id="kiManhour" value="${kpiVO.kiManhour}"></td>
+												<th>목표리드타임  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="kiLeadtime" id="kiLeadtime" value="${kpiVO.kiLeadtime}"></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -147,26 +141,34 @@
  			return;
  		}
  		
- 		if($('#kiType').val() == ''){
- 			alert("구분을 확인 바랍니다.");
- 			return;
- 		}
+ 		
 		
  		if(!num.test($('#kiQty').val())){
  			alert("목표 생산량을 확인 바랍니다.");
 			return;
  		}
  		
- 		if(!num.test($('#kiGoodQty').val())){
- 			alert("목표 생산률을 확인 바랍니다.");
-			return;
- 		}
+ 		
  		
  		if(!num.test($('#kiBadQty').val())){
  			alert("목표 불량률을 확인 바랍니다.");
 			return;
  		}
 		
+
+ 		if(!num.test($('#kiManhour').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
+ 		
+
+ 		if(!num.test($('#kiLeadtime').val())){
+ 			alert("목표 불량률을 확인 바랍니다.");
+			return;
+ 		}
+		
+		
+ 		
 // 		if($('#exTrgSales').text() == ''){
 // 			alert("목표 생산량을 확인 바랍니다.");
 // 			return;

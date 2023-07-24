@@ -73,11 +73,7 @@
 							    		</c:forEach>
 						    		</select>
 						    		
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
-						    			<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>전체</option>
-						    			<option value="1" <c:if test="${searchVO.searchCondition eq 1}">selected="selected"</c:if>>절단공정</option>
-						    			<option value="2" <c:if test="${searchVO.searchCondition eq 2}">selected="selected"</c:if>>가공공정</option>
-						    		</select>
+						    		
 						    		
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_kpi()" style="margin-left: 0.3rem;">
@@ -98,10 +94,10 @@
                                         <tr>
                                             <th>년도</th>
                                             <th>월</th>
-                                            <th>공정타입</th>
-											<th>목표생산량</th>
-											<th>목표생산률</th>
+                                            <th>목표생산량</th>
 											<th>목표불량률</th>
+											<th>목표공수</th>
+											<th>목표리드타임</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -110,12 +106,10 @@
 	                                   		<tr>
 	                                            <td>${result.kiYear}년</td>
 												<td>${result.kiMonth}월</td>
-												<td><c:if test="${result.kiType eq 1}">절단공정</c:if>
-													<c:if test="${result.kiType eq 2}">가공공정</c:if>
-												</td>
-												<td>${result.kiQty}kg</td>
-												<td>${result.kiGoodQty}%</td>
+												<td>${result.kiQty}EA</td>
 												<td>${result.kiBadQty}%</td>
+												<td>${result.kiManhour}</td>
+												<td>${result.kiLeadtime}일</td>
 	                                            <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.kiId}')">
 				                                        <span class="text">수정</span>
