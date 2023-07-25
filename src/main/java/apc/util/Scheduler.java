@@ -126,10 +126,10 @@ public class Scheduler {
 				        }
 					} 
 					if(rowMap.size() != 0) {
-						excelReaderService.registdb(rowMap);
+						//excelReaderService.registdb(rowMap);
 					}
 					if(map.size() !=0 && boolcnt != 2) {
-						excelReaderService.registMm(map);
+						//excelReaderService.registMm(map);
 					}
 				}
 			}
@@ -139,7 +139,7 @@ public class Scheduler {
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
 	}
-	@Scheduled(cron = "20 55 8 * * *")
+	@Scheduled(cron = "20 56 8 * * *")
 	public void orderUpdate() throws Exception  {
 		String fileName = "C:\\test\\orders.xls";
 		
@@ -214,7 +214,7 @@ public class Scheduler {
 					
 					} 
 					if(rowMap.size() != 0) {
-						excelReaderService.registOrder(rowMap);
+						//excelReaderService.registOrder(rowMap);
 					}
 					
 				}
@@ -225,7 +225,7 @@ public class Scheduler {
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
 	}
-	@Scheduled(cron = "20 56 8 * * *")
+	@Scheduled(cron = "20 57 8 * * *")
 	public void releaseUpdate() throws Exception{
 		
 		String fileName = "C:\\test\\release.xls";
@@ -294,12 +294,11 @@ public class Scheduler {
 							
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("relRegId","admin");
-				        
 					
 					} 
-//					if(rowMap.size() != 0) {
-//						excelReaderService.registRelease(rowMap);
-//					}
+					if(rowMap.size() != 0) {
+						//excelReaderService.registRelease(rowMap);
+					}
 					
 				}
 			}

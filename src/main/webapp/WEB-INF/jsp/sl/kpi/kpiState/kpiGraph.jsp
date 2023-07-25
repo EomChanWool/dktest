@@ -227,7 +227,7 @@
 		var c1 = ${list.prodCnt};
 		
 		
-		var manHour = Math.round(a1*b1*60/c1);
+		var manHour = Math.round((a1*b1)/c1);
 		if(manHour == Infinity){
 			manHour = 0;
 		}

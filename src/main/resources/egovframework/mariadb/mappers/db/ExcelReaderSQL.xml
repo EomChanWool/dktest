@@ -67,7 +67,7 @@
 		CONVERT(INT,CONVERT(float,#{orQty})),
 		#{orUnit},
 		#{orMoney},
-		CONVERT(varchar ,CONVERT(DATE, #{orFinDate})),
+		CASE WHEN TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE, #{orFinDate})) END ,
 		#{orReport},
 		#{orManager},
 		#{orId},

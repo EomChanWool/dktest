@@ -160,14 +160,17 @@
 	</select>
 
 	<select id="selectWorkCnt" resultType="egovMap">
-		SELECT YEAR(rel_date) AS years, MONTH(rel_date) AS months,
-		ISNULL(SUM(rel_qty), 0)AS prod_cnt
-		FROM sm_release_info
+		SELECT YEAR(or_date) AS years, MONTH(or_date) AS months,
+		ISNULL(SUM(or_qty), 0)AS prod_cnt
+		FROM sm_orders a
+		JOIN sm_mf_proc_log b
+		ON a.OR_ID = b.OR_ID
 		WHERE
-		YEAR(rel_date) =
+		YEAR(or_date) =
 		#{searchCondition}
-		GROUP BY YEAR(rel_date),
-		MONTH(rel_date)
+		and or_process = 4
+		GROUP BY YEAR(or_date),
+		MONTH(or_date)
 		ORDER BY months
 	</select>
 
