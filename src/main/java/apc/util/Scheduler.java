@@ -5,16 +5,19 @@ package apc.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock.Catch;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -43,6 +46,38 @@ public class Scheduler {
 		excelReaderService.deletedb();
 		excelReaderService.deleteMm();
 	}
+	
+	//ini 파일 읽어들이기 예제
+	@Scheduled(cron = "10 55 8 * * *")
+	public void sampleIni() throws Exception{
+		String fileName = "C:\\test\\sample.ini";
+		File fileToParse = new File(fileName);
+		
+		INIConfiguration iniConfiguration = new INIConfiguration();
+		try (FileReader fileReader = new FileReader(fileToParse)) {
+		    iniConfiguration.read(fileReader);
+		}
+		
+		Map<String, Map<String,String>> map =  new HashMap<>();
+		for (String section : iniConfiguration.getSections()) {
+			Map<String,String> subMap = new HashMap<>();
+			SubnodeConfiguration confSection = iniConfiguration.getSection(section);
+			Iterator<String> keyIlerator = confSection.getKeys();
+			while(keyIlerator.hasNext()) {
+				String key = keyIlerator.next();
+				String value = confSection.getProperty(key)+"";
+				subMap.put(key,value);
+			}
+			map.put(section, subMap);
+		}
+		Map<String, String> rowMap = map.get("main");
+		Map<String, String> rowMap2 = map.get("branch1");
+		
+		System.out.println("ini맵 : " + rowMap);
+		System.out.println("ini맵2 : " + rowMap2);
+	}
+	
+
 	
 	@Scheduled(cron = "20 55 8 * * *")
 	public void autoUpdate1() throws Exception {
