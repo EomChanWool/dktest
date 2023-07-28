@@ -154,8 +154,13 @@
 	var years = 0;
 	var maxMon = 0;
 	
+	
+	
+	
+	
 	if($('#searchCondition2').val() == ""){
 		<c:forEach items="${orderCntList}" var="list">
+		
 		years = ${list.years};
 		maxMon = ${list.months};
 		</c:forEach>

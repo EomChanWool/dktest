@@ -32,7 +32,7 @@ public class DashBoardController {
 		List<?> orderCntList = ordersOutputService.selectOrdersCnt(searchVO);
 		model.put("orderCntList", orderCntList);
 		//생산량(제품별 생산량)
-		List<?> prodCntList = actualOutputService.selectProdCnt();
+		List<?> prodCntList = actualOutputService.selectProdCnt(searchVO);
 		model.put("prodCntList", prodCntList);
 		//매출액
 		List<?> salesList = ordersOutputService.selectSales(searchVO);

@@ -139,26 +139,22 @@
 	var option;
 
 
-	var date = [];
-	var year = [];
+	let date = [];
+	let year = [];
 	
-	var totalRealTime = [];
+	let totalRealTime = [];
 	
-	var totalMflPerson = [];
+	let totalMflPerson = [];
 	
-	var avgRealTime = [];
+	let avgRealTime = [];
 	
 	var num = 0;
 	var years = 0;
 	var maxMon = 0;
-	
-	
-	
 	<c:forEach items="${prodCntList}" var="list">
 		year = ${list.years};
 		maxMon = ${list.months};
 	</c:forEach>
-	
 	for(var i=1;i<=maxMon;i++){
 		date.push(year+"년 "+i+"월");
 		totalRealTime.push(0);

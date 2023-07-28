@@ -115,13 +115,7 @@
 															<option value="${list.miName}" <c:if test="${mfVO.mflManager eq list.miName}">selected="selected"</c:if>>${list.miName}</option>
 														</c:forEach>
 													</select></td>
-											<th>작업인원</th>
-											<td><select class="form-control" name="mflPerson" id="mflPerson">
-	                                          			    <option value="">선택</option>
-														<c:forEach begin="1" end="10" varStatus="status3">
-							    			<option value="${status3.count}" <c:if test="${mfVO.mflPerson eq status3.count}">selected="selected"</c:if>>${status3.count}명</option>
-							    		</c:forEach>
-													</select></td>
+											
 											</tr>
 										</tbody>
 	                                </table>

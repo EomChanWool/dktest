@@ -28,6 +28,13 @@ public class ManufactureController {
 	
 	@RequestMapping("/sl/process/manufacture/manufactureList.do")
 	public String ManufactureList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
+		
+		
+		if(searchVO.getSearchKeyword().length() > 17) {
+			String searSpilt = searchVO.getSearchKeyword().substring(0,16);
+			searchVO.setSearchKeyword(searSpilt);
+		}
+		System.out.println("서치 : " + searchVO.getSearchKeyword());
 		if(model.get("sear") != null) {
 			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
 			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	

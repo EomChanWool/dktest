@@ -23,37 +23,29 @@ public class ActualOutputController {
 	private ActualOutputService actualOutputService;
 	
 	@RequestMapping("/sl/monitoring/actualOutput/actualOutput.do")
-	public String actualOutput(ModelMap model, HttpSession session) {
+	public String actualOutput(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
-		List<?> prodCntList = actualOutputService.selectProdCnt();
+		if(searchVO.getSearchCondition().equals("")) {
+			  searchVO.setSearchCondition(getYears().get("kiYear")+""); }
+		model.put("date", getYears());
+		
+		
+		List<?> prodCntList = actualOutputService.selectProdCnt(searchVO);
+		System.out.println("프로드씨엔티리스트 : " + prodCntList);
 		model.put("prodCntList",prodCntList);
-		//일일 프레스/벤딩 생산 실적
-//		model.put("pressBendingData", pressBending());
-		//일일 PLC데이터
-//		model.put("plcData", plcData());
-		
-		
-		
+
 		return "sl/monitoring/actualOutput/actualOutput";
 	}
 //	
-//	public Map<String, Object> pressBending() {
-//		Map<String, Object> map = new HashMap<>();
-//		map.put("processNm", "프레스성형/벤딩");
-//		Map<String, Object> pressBendingData = actualOutputService.selectPressBendingCnt(map);
-//		if(pressBendingData == null) {
-//			pressBendingData = new HashMap<>();
-//			pressBendingData.put("prReCnt", 0);
-//		}
-//		return pressBendingData;
-//	}
-//	
-//	public Map<String, Object> plcData(){
-//		Map<String, Object> plc = actualOutputService.selectPlcCnt();
-//		if(plc == null) {
-//			plc = new HashMap<>();
-//			plc.put("plCnt", 0);
-//		}
-//		return plc;
-//	}
+	private Map<String, Object> getYears(){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy");
+		Date now = new Date();
+		int begin = Integer.parseInt(format.format(now))-3;
+		int end = begin+5;
+		Map<String, Object> map = new HashMap<>();
+		map.put("begin", begin);
+		map.put("end", end);
+		map.put("kiYear", format.format(now));
+		return map;
+	}
 }

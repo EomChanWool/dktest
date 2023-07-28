@@ -21,7 +21,8 @@ public class LineRunningController {
 	
 	@RequestMapping("/sl/monitoring/lineRunning/lineRunning.do")
 	public String lineRunningList1(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
-		int totCnt = lineRunningService.selectLineRunningListToCnt(searchVO);
+	//	int totCnt = lineRunningService.selectLineRunningListToCnt(searchVO);
+		int totCnt = 1;
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -33,8 +34,8 @@ public class LineRunningController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		List<?> lineRunningList = lineRunningService.selectLineRunningList(searchVO);
-		model.put("lineRunningList", lineRunningList);
+		//List<?> lineRunningList = lineRunningService.selectLineRunningList(searchVO);
+		//model.put("lineRunningList", lineRunningList);
 		model.put("paginationInfo", paginationInfo);
 		
 		return "sl/monitoring/lineRunning/lineRunning";

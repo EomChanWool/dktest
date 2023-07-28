@@ -131,7 +131,7 @@
 		GETDATE(),
 		#{userId},
 		GETDATE(),
-		#{mflPerson}
+		1
 		)
 	</insert>
 

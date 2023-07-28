@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import apc.sl.monitoring.actualOutput.service.ActualOutputService;
+import apc.util.SearchVO;
 @Service
 public class ActualOutputServieImpl implements ActualOutputService {
 	@Resource
@@ -24,8 +25,8 @@ public class ActualOutputServieImpl implements ActualOutputService {
 	}
 
 	@Override
-	public List<?> selectProdCnt() {
-		return actualOutputMapper.selectProdCnt();
+	public List<?> selectProdCnt(SearchVO searchVO) {
+		return actualOutputMapper.selectProdCnt(searchVO);
 	}
 
 }

@@ -28,22 +28,31 @@
 	
 	<select id="selectProdCnt" resultType="egovMap">
 		SELECT
-			DATE_FORMAT(a.pr_re_reg_dte, '%Y-%m') AS monthly,
-			DATE_FORMAT(a.pr_re_reg_dte, '%Y') AS years,
-			DATE_FORMAT(a.pr_re_reg_dte, '%m') AS MONTH,
-			c.item_name,
-			SUM(a.pr_re_cnt) AS prodCnt
-		FROM sm_prod_result a
-		JOIN sm_work_order b
-		ON a.wo_idx = b.wo_idx
-		JOIN sm_item c
-		ON b.item_cd = c.item_cd
-		WHERE 1=1
-		AND DATE_FORMAT(NOW(), '%Y') = DATE_FORMAT(pr_re_reg_dte, '%Y')
-		AND pr_list_nm = (SELECT 
-			pr_list_nm 
-		FROM sm_process_list 
-		WHERE pr_list_seq = (SELECT MAX(pr_list_seq) FROM sm_process_list))
-		GROUP BY monthly, item_name
+		YEAR(mfl_ed_date) AS years,
+		MONTH(mfl_ed_date) AS months,
+		SUM(mfl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		SUM(mfl_person) AS
+		total_mfl_person,
+		AVG(mfl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
+		FROM
+		sm_mf_proc_log a
+		LEFT JOIN (
+		SELECT
+		or_id,
+		SUM(mfs_rest_time) AS total_rest_time
+		FROM
+		sm_mf_process_stop
+		WHERE
+		YEAR(mfs_stop_time) = #{searchCondition}
+		GROUP BY
+		or_id
+		) b ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(mfl_ed_date) = #{searchCondition}
+		GROUP BY
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		ORDER BY months
 	</select>
 </mapper>

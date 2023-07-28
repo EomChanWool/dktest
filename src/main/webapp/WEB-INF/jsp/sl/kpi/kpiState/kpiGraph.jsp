@@ -234,6 +234,7 @@
 		
 		viewData[${list.months-1}] = manHour;
 		
+		
 		</c:forEach>
 			
 			

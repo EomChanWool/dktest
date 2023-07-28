@@ -69,6 +69,7 @@ public class KpiController {
 			  }
 		  }
 		  model.put("wTList" , workTimeList);
+		  System.out.println("작업공수 : " + workTimeList);
 		  
 		  //리드타임
 		  List<?> leadTime = kpiService.selectLeadtime(searchVO);

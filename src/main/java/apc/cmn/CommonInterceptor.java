@@ -26,6 +26,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		String str1 = request.getRequestURL().toString();
 		String[] str2 = str1.split("/");
+		System.out.println("str5 : " + str2[5]);
 		int accessLevel = userAuthorityService.selectAccess(str2[5]);
 		int menuState = userAuthorityService.menuState(str2[5]);
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");

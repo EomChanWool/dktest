@@ -63,10 +63,9 @@
 									<input type="hidden" name="orId">
 									<input type="hidden" name="mfsIdx">
 									<input type="hidden" name="mflManager" id="mflManage">
-									<input type="hidden" name="mflPerson" id="mflPerso">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" id="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="수주번호를 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="수주번호를 입력해 주세요" oninput="fn_search_mf()"
 						    									style="background-color:#eaecf4; width: 25%; float: left; margin: 0 0.3rem 0 0;">
 									
 						    	</form>
@@ -92,7 +91,6 @@
                                             
 											<th>작업완료</th>
 											<th>작업자</th>
-											<th>작업인원</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -129,13 +127,7 @@
 															<option value="${list.miName}" <c:if test="${result.mflManager eq list.miName}">selected="selected"</c:if>>${list.miName}</option>
 														</c:forEach>
 													</select></td>
-													
-													<td><select class="form-control" id="mflPerson_${status.index}" onchange="addPerson(${status.index})">
-							    		<option value="">선택</option>
-							    		<c:forEach begin="1" end="10" varStatus="status3">
-							    			<option value="${status3.count}" <c:if test="${result.mflPerson eq status3.count}">selected="selected"</c:if>>${status3.count}명</option>
-							    		</c:forEach>
-						    			</select></td>
+												
 	                                        </tr>
                                     	</c:forEach>
                                     	<c:if test="${empty ordList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
@@ -184,7 +176,10 @@
 	}
 	
 	function fn_search_mf(){
-		listForm.submit();
+		var inputVal = $('#searchKeyword').val();
+		var length = inputVal.length;
+		if(length >= 16){
+		listForm.submit();}
 	}
 	
 	function fn_searchAll_mf(){
@@ -205,10 +200,8 @@
 			alert("작업자를 확인 바랍니다.");
 			return;
 		}
-		if($('#mflPerso').val() == ''){
-			alert("작업인원을 확인 바랍니다.");
-			return;
-		}
+		
+		
 		listForm.orId.value = orId;
 		listForm.action = "${pageContext.request.contextPath}/sl/pop/popMf/goMf.do";
 		listForm.submit();
@@ -240,10 +233,7 @@
 		console.log($(str).val());
 		$('#mflManage').val($(str).val());
 	}
-	function addPerson(index){
-		var str2 = '#mflPerson_'+index;
-		$('#mflPerso').val($(str2).val());
-	}
+	
 
 	$(function() {
 		$('#processMenu').addClass("active");

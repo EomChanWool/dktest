@@ -58,8 +58,10 @@
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="품명을 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="설비를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
+						    									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="2023-07-26" type="date">
+									
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_lineRunning()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -74,20 +76,35 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>품명</th>
-											<th>규격</th>
-											<th>재고(EA)</th>
+                                            <th>날짜</th>
+											<th>설비</th>
+											<th>카운팅</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${lineRunningList}" varStatus="status">
+                                    	
 	                                   		<tr>
-	                                            <td>${result.itemName}</td>
-												<td>${result.itemStd}</td>
-												<td>${result.itemCnt}</td>
+	                                            <td>2023-07-26</td>
+												<td>가공1</td>
+												<td>12</td>
 	                                        </tr>
-                                    	</c:forEach>
-                                    	<c:if test="${empty lineRunningList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if>
+	                                        <tr>
+	                                            <td>2023-07-26</td>
+												<td>가공2</td>
+												<td>11</td>
+	                                        </tr>
+	                                        <tr>
+	                                            <td>2023-07-26</td>
+												<td>가공3</td>
+												<td>16</td>
+	                                        </tr>
+	                                        <tr>
+	                                            <td>2023-07-26</td>
+												<td>절단</td>
+												<td>7</td>
+	                                        </tr>
+                                    	
+                                    	<%-- <c:if test="${empty lineRunningList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if> --%>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
