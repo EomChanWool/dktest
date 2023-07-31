@@ -245,7 +245,7 @@
 			      
 			      label: {
 			          show: true,
-			          position: 'top',
+			          position: 'left',
 			          formatter: '{c}명'
 			          
 			        },
@@ -274,6 +274,7 @@
 			    }
 			  ]
 			};
+	
 	option && myChart.setOption(option);
 	</script>
 </body>

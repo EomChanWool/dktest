@@ -193,17 +193,9 @@
 			<c:forEach items="${kpiGraphList}" var="list">
 			date.push('${list.kiYear}년 ' + '${list.kiMonth}월');
 			kpiOutputData.push('${list.kiBadQty}');
-			/* kpiSalesData.push('${list.exTrgSales}'); */
 			viewData.push('0');
 		</c:forEach>
-		/* 	<c:forEach items="${dataList}" var="list">
-				var index3 = ${list.kiMonth};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.money};	
-				}else{
-					viewData[index3-1] = ${list.money};	
-				}
-			</c:forEach> */
+		
 		}else if($('#searchCondition2').val() == "3"){
 			
 			<c:forEach items="${kpiGraphList}" var="list">
@@ -237,16 +229,6 @@
 		
 		</c:forEach>
 			
-			
-			
-		/* 	<c:forEach items="${dataList}" var="list">
-				var index3 = ${list.kiMonth};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.money};	
-				}else{
-					viewData[index3-1] = ${list.money};	
-				}
-			</c:forEach> */
 		}else if($('#searchCondition2').val() == "4"){
 			<c:forEach items="${kpiGraphList}" var="list">
 			years2 = ${list.kiYear};

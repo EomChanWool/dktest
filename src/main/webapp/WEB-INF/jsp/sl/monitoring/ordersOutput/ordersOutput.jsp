@@ -246,6 +246,12 @@
 				    {
 				      name: '수주량',
 				      type: 'bar',
+				      label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c} EA'
+				          
+				        },
 				      tooltip: {
 				        valueFormatter: function (value) {
 				          return value + ' EA';
@@ -256,6 +262,12 @@
 				    {
 			    	name: '생산량',
 				    type: 'bar',
+				    label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c} EA'
+				          
+				        },
 				    tooltip: {
 				      valueFormatter: function (value) {
 				        return value + ' EA';
