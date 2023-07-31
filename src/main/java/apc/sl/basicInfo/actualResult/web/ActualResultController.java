@@ -60,7 +60,6 @@ public class ActualResultController {
 		session.setAttribute("user_id", member.get("miId"));
 		
 		
-		Scheduler.setUserId(member.get("miId")+"");
 		
 		session.setMaxInactiveInterval(0);
 		//시스템로그 기록

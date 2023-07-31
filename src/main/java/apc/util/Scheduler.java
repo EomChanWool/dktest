@@ -5,7 +5,12 @@ package apc.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,10 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,13 +36,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import apc.sl.db.service.ExcelReaderService;
 import egovframework.rte.fdl.filehandling.EgovFileUtil;
 
 @Component
 public class Scheduler {
-	static String user_id = "";
+	//static String user_id = "";
+	FTPClient ftp = null;
 	
 	@Autowired
 	private ExcelReaderService excelReaderService;
@@ -43,8 +53,8 @@ public class Scheduler {
 	
 	@Scheduled(cron = "10 55 8 * * *")
 	public void delete1() throws Exception{
-		excelReaderService.deletedb();
-		excelReaderService.deleteMm();
+		//excelReaderService.deletedb();
+		//excelReaderService.deleteMm();
 	}
 	
 	//ini 파일 읽어들이기 예제
@@ -124,7 +134,6 @@ public class Scheduler {
 								// 셀이 빈값일경우를 위한 널체크
 						if (cell_filter == null || cell_filter.getCellType() == cell_filter.CELL_TYPE_BLANK) {
 							value="";
-							
 						} else {
 									// 타입별로 내용 읽기
 							switch (cell_filter.getCellType()) {
@@ -150,7 +159,6 @@ public class Scheduler {
 						if (selectedIndexes.contains(columnindex)) {
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("miRegId", "admin");
-				            
 				        }
 						if(selectedIndexes2.contains(columnindex)) {
 				        	if((columnindex == 7 || columnindex == 8) && value == "") {
@@ -251,7 +259,6 @@ public class Scheduler {
 					if(rowMap.size() != 0) {
 						//excelReaderService.registOrder(rowMap);
 					}
-					
 				}
 			}
 		}
@@ -343,15 +350,76 @@ public class Scheduler {
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
 		
-		
 		}catch (FileNotFoundException e) {
 		System.out.println("파일없음");	}
 		}
 	
+	//@Scheduled(cron = "20 * * * * *")
+	public void open() {
+		
+	    ftp = new FTPClient();
+	    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+	    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+	    ftp.setControlEncoding("UTF-8");
+	    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+	    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+
+	    try {
+	        //ftp 서버 연결
+	        ftp.connect("dkbend.iptime.org", 30431);
+
+	        //ftp 서버에 정상적으로 연결되었는지 확인
+	        int reply = ftp.getReplyCode();
+	        if (!FTPReply.isPositiveCompletion(reply)) {
+	            ftp.disconnect();
+	            System.out.println("에러");
+	        }
+
+	        //socketTimeout 값 설정
+	        ftp.setSoTimeout(1000);
+	        //ftp 서버 로그인
+	        ftp.login("signlab", "dk304316@");
+	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+	            
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("에러");
+	    }
+	    File get_file = new File("C:\\test\\testDown.txt");
+	 
+	    try {
+	    	FileOutputStream outputstream = new FileOutputStream(get_file);
+	    	boolean result = ftp.retrieveFile("/textTest/testDown2.txt", outputstream);
+	    	System.out.println("스트링 :" +ftp.getReplyString());
+
+	    	System.out.println(ftp.getReplyCode());
+	    	if(result) {
+	    		System.out.println("파일다운성공");
+	    	}else {
+	    		System.out.println("실패");
+	    	}
+	    	
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("에러");
+	    } finally {
+	    	try {
+		        ftp.logout();
+		        ftp.disconnect();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        System.out.println("에러");
+		    }
+	    }
+	    
+	    
+	}
+	
 
 	
-	public static void setUserId(String userId) {
-		user_id = userId;
-	}
+//	public static void setUserId(String userId) {
+//		user_id = userId;
+//	}
 	
 }
