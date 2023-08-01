@@ -12,5 +12,9 @@ public interface LineRunningMapper {
 	int selectLineRunningListToCnt(SearchVO searchVO);
 
 	List<?> selectLineRunningList(SearchVO searchVO);
+	
+	List<?> selectDaqName();
+	
+	List<?> selectLineYear(SearchVO searchVO);
 
 }

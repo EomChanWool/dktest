@@ -160,7 +160,7 @@
 	</select>
 
 	<select id="selectWorkCnt" resultType="egovMap">
-		SELECT YEAR(or_date) AS years, MONTH(or_date) AS months,
+		SELECT YEAR(mfl_ed_date) AS years, MONTH(mfl_ed_date) AS months,
 		ISNULL(SUM(or_qty), 0)AS prod_cnt
 		FROM sm_orders a
 		JOIN sm_mf_proc_log b
@@ -169,8 +169,8 @@
 		YEAR(or_date) =
 		#{searchCondition}
 		and or_process = 4
-		GROUP BY YEAR(or_date),
-		MONTH(or_date)
+		GROUP BY YEAR(mfl_ed_date),
+		MONTH(mfl_ed_date)
 		ORDER BY months
 	</select>
 

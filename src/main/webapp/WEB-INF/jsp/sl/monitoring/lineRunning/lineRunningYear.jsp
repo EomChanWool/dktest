@@ -48,62 +48,49 @@
                 <div class="container-fluid">
 					
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">라인가동현황(일별)</h1>
+                    <h1 class="h3 mb-2 text-gray-800">라인가동현황(월별)</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunning.do" method="post">
-									<input type="hidden" name="inIdx">
-									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunningYear.do" method="post">
 						    		
-						    		<%-- <input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="설비를 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;"> --%>
-						    									<%-- <input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" id="searchStDate" value="${searchVO.searchStDate}" type="date">
-						    									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span> --%>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+						    			<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>전체</option>
+						    			<option value="2023" <c:if test="${searchVO.searchCondition eq '2023'}">selected="selected"</c:if>>2023년</option>
+						    			<option value="2024" <c:if test="${searchVO.searchCondition eq '2024'}">selected="selected"</c:if>>2024년</option>
+						    			<option value="2025" <c:if test="${searchVO.searchCondition eq '2025'}">selected="selected"</c:if>>2025년</option>
+						    			<option value="2026" <c:if test="${searchVO.searchCondition eq '2026'}">selected="selected"</c:if>>2026년</option>
+						    		</select>
+						    		
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
+						    		<option value="" <c:if test="${searchVO.searchCondition2 eq ''}">selected="selected"</c:if>>전체</option>
+						    		<c:forEach var="list" items="${eqName}" varStatus="status">
+						    		<option value="${list.eqSensorid}" <c:if test="${searchVO.searchCondition2 eq list.eqSensorid}">selected="selected"</c:if>>${list.eqSensorid}</option>
+						    		</c:forEach>
+						    		
+						    		</select>
 									
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_lineRunning()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_lineRunning()">
-	                                <span class="text">하루전날짜로</span>
+	                                <span class="text">올해</span>
 	                            </a>
-	                             <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_go_years()" style="float: right; margin-left: 0.5rem;">
-	                                <span class="text">월별데이터로 이동</span>
+	                            
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_go_line()" style="float: right; margin-left: 0.5rem;">
+	                                <span class="text">일별데이터로 이동</span>
 	                            </a>
+	                             
 							</div>
                         </div>
-                        <div id="graph" style="width: 100%; height:300px;"></div>
+                       
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable"  >
-                                    <thead>
-                                        <tr>
-                                            <th>날짜</th>
-											<th>설비</th>
-											<th>카운팅</th>
-											<th>작동시간</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    	<c:forEach var="result" items="${lineRunningList}" varStatus="status">
-	                                   		<tr>
-	                                   		<td>${result.daqEdDate}</td>
-	                                   		<td>${result.daqName}</td>
-	                                   		<td>${result.counting}</td>
-	                                   		<td>${result.workTime}분</td>
-	                                   		</tr>
-                                    	</c:forEach>
-                                    	<c:if test="${empty lineRunningList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if>
-                                    </tbody>
-                                </table>
-                                <div class="btn_page">
-									<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_pageview"/>
-							    </div>
+                                 <div id="graph" style="width: 100%; height:500px;"></div>
+                                
                             </div>
                         </div>
                     </div>
@@ -143,6 +130,11 @@
 	   	listForm.submit();
 	}
 	
+	function fn_go_line(){
+		listForm.action = "${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunning.do";
+		listForm.submit();
+	}
+	
 	function fn_search_lineRunning(){
 		
 		/* 
@@ -166,15 +158,12 @@
 	}
 	
 	function fn_searchAll_lineRunning(){
-		listForm.searchEdDate.value = "";
-		listForm.pageIndex.value = 1;
+		listForm.searchCondition.value = "";
+		listForm.searchCondition2.value = "";
 		listForm.submit();
 	}
 	
-	function fn_go_years(){
-		listForm.action = "${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunningYear.do";
-		listForm.submit();
-	}
+
 	
 	$(function() {
 		$('#monitoringMenu').addClass("active");
@@ -186,7 +175,10 @@
 			alert(msg);
 		}
 		
-		$('#searchEdDate').change(function(){
+		$('#searchCondition').change(function(){
+			listForm.submit();
+		});
+		$('#searchCondition2').change(function(){
 			listForm.submit();
 		});
 	});
@@ -196,16 +188,16 @@
 	var option;
 	
 	
-	let lineName = [];
+	let date = [];
 	
 	let lineCount = [];
 	
-	let lineWorkTime = [];
+	let workTime=[];
 	
-	<c:forEach items="${lineRunningList}" var="list">
-	lineName.push('${list.daqName}');
+	<c:forEach items="${eqList}" var="list">
+	date.push('${list.months}월');
 	lineCount.push('${list.counting}');
-	lineWorkTime.push('${list.workTime}');
+	workTime.push('${list.workTime}');
 	</c:forEach>
 	
 	
@@ -234,7 +226,7 @@
 			  xAxis: [
 			    {
 			      type: 'category',
-			      data: lineName,
+			      data: date,
 			      axisPointer: {
 			        type: 'shadow'
 			      }
@@ -243,7 +235,7 @@
 			  yAxis: [
 			    {
 			      type: 'value',
-			      name: '카운트',
+			      name: 'Count',
 			      axisLabel: {
 			        formatter: '{value} Count'
 			      }
@@ -251,10 +243,9 @@
 			    {
 	    		  type: 'value',
 		      	  name: '작동시간',
-		      	position: 'right',
+		      	  position: 'right',
 		      	  axisLabel: {
-		            formatter: '{value} MIN',
-		            
+		            formatter: '{value} min'
 				  }
 			    }
 			  ],
@@ -290,7 +281,7 @@
 				          return value + ' min';
 				        }
 				      },
-				      data: lineWorkTime
+				      data: workTime
 				    },
 			  ]
 			};

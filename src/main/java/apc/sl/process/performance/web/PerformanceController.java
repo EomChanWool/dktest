@@ -34,7 +34,7 @@ public class PerformanceController {
 	
 	private String filePath = "C:\\jnb\\report\\";
 	
-	@RequestMapping("/sl/process/performance/performanceList.do")
+	@RequestMapping("/sl/process/performances/performanceList.do")
 	public String performanceList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session, MultipartFile multipart) throws Exception{
 		int totCnt = performanceService.selectPerformanceListToCnt(searchVO);
 		/** pageing setting */
@@ -54,12 +54,12 @@ public class PerformanceController {
 		return "sl/process/performance/performanceList";
 	}
 	
-	@RequestMapping("/sl/process/performance/registPerformance.do")
+	@RequestMapping("/sl/process/performances/registPerformance.do")
 	public String registPerformance(ModelMap model) {
 		return "sl/process/performance/performanceRegist";
 	}
 	
-	@RequestMapping("/sl/process/performance/registPerformanceOk.do")
+	@RequestMapping("/sl/process/performances/registPerformanceOk.do")
 	public String registPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
 																RedirectAttributes redirectAttributes, HttpSession session) throws Exception{
 		MultipartFile uploadFile = searchVO.getUploadFile();
@@ -80,14 +80,14 @@ public class PerformanceController {
 		return "redirect:/sl/process/performance/performanceList.do";
 	}
 	
-	@RequestMapping("/sl/process/performance/modifyPerformance.do")
+	@RequestMapping("/sl/process/performances/modifyPerformance.do")
 	public String modifyPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
 		model.put("documentVO", detail);
 		return "sl/process/performance/performanceModify";
 	}
 	
-	@RequestMapping("/sl/process/performance/modifyPerformanceOk.do")
+	@RequestMapping("/sl/process/performances/modifyPerformanceOk.do")
 	public String modifyPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
 															RedirectAttributes redirectAttributes, HttpSession session) throws Exception{
 		String curFileName = map.get("doFilNm")+"";
@@ -117,14 +117,14 @@ public class PerformanceController {
 		return "redirect:/sl/process/performance/performanceList.do";
 	}
 	
-	@RequestMapping("/sl/process/performance/detailPerformance.do")
+	@RequestMapping("/sl/process/performances/detailPerformance.do")
 	public String detailPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
 		model.put("documentVO", detail);
 		return "sl/process/performance/performanceDetail";
 	}
 	
-	@RequestMapping("/sl/process/performance/downloadPerformance.do")
+	@RequestMapping("/sl/process/performances/downloadPerformance.do")
 	public void downloadPerformance(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String filename = request.getParameter("fileName");
         String realFilename = "";
@@ -170,7 +170,7 @@ public class PerformanceController {
         }
     }
 	
-	@RequestMapping("/sl/process/performance/deletePerformance.do")
+	@RequestMapping("/sl/process/performances/deletePerformance.do")
 	public String deletePerformance(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		//기존 파일 삭제
 		File file = new File(filePath + map.get("doFilNm")+"");

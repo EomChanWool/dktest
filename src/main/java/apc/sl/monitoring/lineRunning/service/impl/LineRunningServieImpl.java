@@ -23,4 +23,14 @@ public class LineRunningServieImpl implements LineRunningService {
 		return lineRunningMapper.selectLineRunningList(searchVO);
 	}
 
+	@Override
+	public List<?> selectLineYear(SearchVO searchVO) {
+		return lineRunningMapper.selectLineYear(searchVO);
+	}
+
+	@Override
+	public List<?> selectDaqName() {
+		return lineRunningMapper.selectDaqName();
+	}
+
 }
