@@ -173,7 +173,8 @@
 		mm_cnt,
 		mm_cnt_kg,
 		mm_reg_id,
-		mm_reg_date
+		mm_reg_date,
+		pi_item_name
 		)
 		VALUES (
 		'MM' +
@@ -187,7 +188,8 @@
 		CONVERT(INT, CONVERT(FLOAT, #{piCnt})),
 		CONVERT(FLOAT, #{piItemRemain}),
 		#{mmRegId},
-		GETDATE()
+		GETDATE(),
+		#{piItemName}
 		)
 
 

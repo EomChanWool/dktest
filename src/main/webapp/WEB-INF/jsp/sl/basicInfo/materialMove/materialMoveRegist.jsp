@@ -72,6 +72,8 @@
 											<tr>
 												<th>재고중량(kg) <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="mmCntKg" id="mmCntKg"/></td>
+												<th>품명 </th>
+												<td><input type="text" class="form-control" name="piItemName" id="piItemName"/></td>
 											</tr>
 										</tbody>
 	                                </table>

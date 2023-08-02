@@ -51,8 +51,8 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>이동정보ID</th>
-											<td><span class="form-control val-area">${materialMoveVO.mmId}</span></td>
+											<th>품명</th>
+											<td><span class="form-control val-area">${materialMoveVO.piItemName}</span></td>
 											<th>바코드</th>
 											<td><span class="form-control val-area">${materialMoveVO.piId}</span></td>
 										</tr>

@@ -73,6 +73,8 @@
 											<tr>
 												<th>재고중량(kg) <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="mmCntKg" id="mmCntKg" value="${materialMoveVO.mmCntKg}"/></td>
+												<th>품명</th>
+												<td><input type="text" class="form-control" name="piItemName" id="piItemName" value="${materialMoveVO.piItemName}"/></td>
 											</tr>
 										</tbody>
 	                                </table>

@@ -71,7 +71,7 @@
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_actualOutput()">
-	                                <span class="text">전체목록</span>
+	                                <span class="text">올해</span>
 	                            </a>
 							</div>
                         </div>

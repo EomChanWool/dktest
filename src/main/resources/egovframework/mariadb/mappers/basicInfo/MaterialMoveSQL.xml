@@ -60,7 +60,8 @@
 		mm_cnt,
 		mm_cnt_kg,
 		mm_reg_id,
-		mm_reg_date
+		mm_reg_date,
+		pi_item_name
 		)
 		VALUES (
 		'MM' + SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID AS
@@ -73,7 +74,8 @@
 		CONVERT(INT, CONVERT(FLOAT, #{mmCnt})),
 		CONVERT(FLOAT, #{mmCntKg}),
 		#{userId},
-		GETDATE()
+		GETDATE(),
+		#{piItemName}
 		)
 	</insert>
 	
@@ -91,6 +93,7 @@
 			a.mm_reg_date,
 			a.mm_edt_id,
 			a.mm_edt_date,
+			a.pi_item_name,
 			b.pi_item_type,
 			b.pi_item_code01,
 			b.pi_item_code02,
@@ -117,7 +120,8 @@
 			mm_cnt = #{mmCnt},
 			mm_cnt_kg = #{mmCntKg},
 			mm_edt_id = #{userId},
-			mm_edt_date = GETDATE()
+			mm_edt_date = GETDATE(),
+			pi_item_name = #{piItemName}
 		WHERE mm_id = #{mmId}
 	</update>
 	

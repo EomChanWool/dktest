@@ -93,7 +93,7 @@ public class Scheduler {
 	public void autoUpdate1() throws Exception {
 		
 		
-		String fileName = "C:\\test\\datatest.xls";
+		String fileName = "C:\\test\\2023-07item.xls";
 		FileInputStream fis = new FileInputStream(fileName);
 
 		@SuppressWarnings("resource")
@@ -104,7 +104,7 @@ public class Scheduler {
 		
 		String[] excelCol = new String[] {
 				"piItemType","재질","규격","두께","길이","piItemMiddle","이월","mmIn","mmOut","piCnt","이월중량","mmInKg","mmOutKg","piItemRemain","piPrice","piHeat","piItemState"
-				,"piItemType2","piItemCode1","piItemCode2","piItemCode3","piItemCode4","piId"
+				,"piItemName","piItemCode1","piItemCode2","piItemCode3","piItemCode4","piId"
 		};
 		for(int sheetnum=0; sheetnum<sheetCn; sheetnum++) {	// 시트 수만큼 반복
 			
@@ -114,28 +114,27 @@ public class Scheduler {
 			HSSFSheet sheet = workbook.getSheetAt(sheetnum);	// 읽어올 시트 선택
 			int rows = sheet.getPhysicalNumberOfRows();    // 행의 수
 			HSSFRow row = null;
-			
-			for (rowindex = 1; rowindex < rows; rowindex++) {	// 행의 수만큼 반복
-
+			int cells = 0;
+			for (rowindex = 1; rowindex < rows-1; rowindex++) {	// 행의 수만큼 반복
 				row = sheet.getRow(rowindex);	// rowindex 에 해당하는 행을 읽는다
+				if(rowindex == 1) cells = row.getPhysicalNumberOfCells();	// 셀의 수
 				
-				List<Integer> selectedIndexes = Arrays.asList(0, 5, 9, 13, 14, 15, 16, 18, 19, 20, 21,22);
-				List<Integer> selectedIndexes2 = Arrays.asList(7,8,9,11,12,13,22);
-
+				List<Integer> selectedIndexes = Arrays.asList(0, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21,22);
+				List<Integer> selectedIndexes2 = Arrays.asList(7,8,9,11,12,13,17,22);
+				
 				if (row != null) {
-					int cells = row.getPhysicalNumberOfCells();	// 셀의 수
-					cells = row.getPhysicalNumberOfCells();    // 열의 수
 					Map<String, Object> rowMap = new HashMap<String, Object>();//제품정보관리 데이터
 					Map<String, Object> map = new HashMap<String, Object>();//자재이동관리 데이터
 					int boolcnt = 0;
 					for (columnindex = 0; columnindex < cells; columnindex++) {	// 열의 수만큼 반복
 						HSSFCell cell_filter = row.getCell(columnindex);	// 셀값을 읽는다
 						String value = "";
-								// 셀이 빈값일경우를 위한 널체크
+						// 셀이 빈값일경우를 위한 널체크
+						//System.out.println("sellf : " + rowindex + cell_filter + columnindex + value);
 						if (cell_filter == null || cell_filter.getCellType() == cell_filter.CELL_TYPE_BLANK) {
 							value="";
 						} else {
-									// 타입별로 내용 읽기
+							// 타입별로 내용 읽기
 							switch (cell_filter.getCellType()) {
 							case HSSFCell.CELL_TYPE_FORMULA:
 								value = cell_filter.getCellFormula();
@@ -151,7 +150,7 @@ public class Scheduler {
 								break;
 							}
 						}
-						if(columnindex == 22 && value=="") {
+						if(columnindex == 22 && value.equals("")) {
 							rowMap.clear();
 							map.clear();
 							break;
@@ -160,8 +159,9 @@ public class Scheduler {
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("miRegId", "admin");
 				        }
+						
 						if(selectedIndexes2.contains(columnindex)) {
-				        	if((columnindex == 7 || columnindex == 8) && value == "") {
+				        	if((columnindex == 7 || columnindex == 8) && value.equals("")) {
 				        		boolcnt++;
 				        	}
 				        	map.put(excelCol[columnindex], value);
@@ -246,10 +246,10 @@ public class Scheduler {
 							rowMap.clear();
 							break;
 						}
-						if(columnindex == 10) {
-							
-							value = value.replaceAll("[-]", "");
-						}
+//						if(columnindex == 10) {
+//							
+//							value = value.replaceAll("[-]", "");
+//						}
 				            rowMap.put(excelCol[columnindex],value);
 				            rowMap.put("orProcess", "0");
 				            
