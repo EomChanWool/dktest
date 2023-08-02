@@ -27,7 +27,7 @@ public class PopManufactureController {
 	@RequestMapping("/sl/pop/popMf/popMfList.do")
 	public String popManufactureList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
-		if(searchVO.getSearchKeyword().length() > 17) {
+		if(searchVO.getSearchKeyword().length() > 16) {
 			String searSpilt = searchVO.getSearchKeyword().substring(0,16);
 			searchVO.setSearchKeyword(searSpilt);
 		}
