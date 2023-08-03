@@ -58,9 +58,9 @@
 									<input type="hidden" name="inIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		
-						    		<%-- <input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="설비를 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;"> --%>
+						    		 <input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="설비명을 입력해 주세요"
+						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    									<%-- <input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" id="searchStDate" value="${searchVO.searchStDate}" type="date">
 						    									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span> --%>
 									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
@@ -70,7 +70,7 @@
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_lineRunning()">
-	                                <span class="text">오늘</span>
+	                                <span class="text">오늘 전체목록</span>
 	                            </a>
 	                             <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_go_years()" style="float: right; margin-left: 0.5rem;">
 	                                <span class="text">월별데이터로 이동</span>
@@ -166,6 +166,7 @@
 	}
 	
 	function fn_searchAll_lineRunning(){
+		listForm.searchKeyword.value = "";
 		listForm.searchEdDate.value = "";
 		listForm.pageIndex.value = 1;
 		listForm.submit();

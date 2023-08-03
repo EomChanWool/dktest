@@ -24,7 +24,7 @@
 		WHERE 1=1
 
 		AND CONVERT(DATE, DAQ_ED_DATE) = #{searchEdDate}
-
+		<if test="searchKeyword != ''">AND daq_name like concat('%', '${searchKeyword}', '%')</if>
 		GROUP BY daq_name, daq_ed_date
 		ORDER BY DAQ_NAME
 		OFFSET
