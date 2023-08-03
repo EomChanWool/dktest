@@ -31,17 +31,17 @@ public class LineRunningController {
 		
 		Date now = new Date();
 		
-		// Calendar 객체 생성 및 현재 날짜로 설정
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(now);
+//		// Calendar 객체 생성 및 현재 날짜로 설정
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.setTime(now);
+//
+//		// 하루를 뺀다
+//		calendar.add(Calendar.DATE, -1);
+//
+//		// 하루 전의 날짜를 얻음
+//		Date oneDayBefore = calendar.getTime();
 
-		// 하루를 뺀다
-		calendar.add(Calendar.DATE, -1);
-
-		// 하루 전의 날짜를 얻음
-		Date oneDayBefore = calendar.getTime();
-
-		String edDate = format.format(oneDayBefore);
+		String edDate = format.format(now);
 		
 		if(searchVO.getSearchEdDate().equals("")) {
 			searchVO.setSearchEdDate(edDate);
@@ -63,7 +63,6 @@ public class LineRunningController {
 		List<?> lineRunningList = lineRunningService.selectLineRunningList(searchVO);
 		model.put("lineRunningList", lineRunningList);
 		model.put("paginationInfo", paginationInfo);
-		System.out.println("그래프 데이터 : " + lineRunningList);
 		return "sl/monitoring/lineRunning/lineRunning";
 	}
 	

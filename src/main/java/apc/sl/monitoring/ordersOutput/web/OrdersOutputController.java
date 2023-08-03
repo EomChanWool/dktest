@@ -30,10 +30,8 @@ public class OrdersOutputController {
 		if(searchVO.getSearchCondition().equals("")) {
 			  searchVO.setSearchCondition(getYears().get("kiYear")+""); }
 		model.put("date", getYears());
-		System.out.println("서치 : " + searchVO.getSearchCondition() + "서치2 : " + searchVO.getSearchCondition2());
 		//수주량(제품 종류 상관없이 총 제품 수주량)
 		List<?> orderCntList = ordersOutputService.selectOrdersCnt(searchVO);
-		System.out.println(orderCntList);
 		model.put("orderCntList", orderCntList);
 		//생산량(제품별 생산량)
 		List<?> prodCntList = ordersOutputService.selectProdCnt(searchVO);

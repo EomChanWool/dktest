@@ -70,7 +70,7 @@
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_lineRunning()">
-	                                <span class="text">하루전날짜로</span>
+	                                <span class="text">오늘</span>
 	                            </a>
 	                             <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_go_years()" style="float: right; margin-left: 0.5rem;">
 	                                <span class="text">월별데이터로 이동</span>
@@ -98,7 +98,7 @@
 	                                   		<td>${result.workTime}분</td>
 	                                   		</tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty lineRunningList}"><tr><td colspan='3'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty lineRunningList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

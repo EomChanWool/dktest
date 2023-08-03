@@ -31,7 +31,6 @@ public class ActualOutputController {
 		
 		
 		List<?> prodCntList = actualOutputService.selectProdCnt(searchVO);
-		System.out.println("프로드씨엔티리스트 : " + prodCntList);
 		model.put("prodCntList",prodCntList);
 
 		return "sl/monitoring/actualOutput/actualOutput";
