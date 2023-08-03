@@ -65,6 +65,10 @@
 							    			<option value="${status.begin+status.count}" <c:if test="${searchVO.searchCondition eq status.begin+status.count}">selected="selected"</c:if>>${status.begin+status.count}</option>
 							    		</c:forEach>
 						    		</select>
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
+						    		<option value="1" <c:if test="${searchVO.searchCondition2 eq 1}">selected="selected"</c:if>>가공</option>
+						    		<option value="2" <c:if test="${searchVO.searchCondition2 eq 2}">selected="selected"</c:if>>절단</option>
+						    		</select>
 						    		
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_actualOutput()" style="margin-left: 0.3rem;">
@@ -152,7 +156,7 @@
 	var years = 0;
 	var maxMon = 0;
 	
-	
+	if($('#searchCondition2').val() == "1"){
 	
 	<c:forEach items="${prodCntList}" var="list">
 		year = ${list.years};
@@ -165,12 +169,34 @@
 		totalMflPerson.push(0);
 		avgRealTime.push(0);
 	}
+	
 	<c:forEach items="${prodCntList}" var="list">
 	totalRealTime[${list.months-1}] = ${list.totalRealTime};
 	totalMflPerson[${list.months-1}] = ${list.totalMflPerson};
 	avgRealTime[${list.months-1}] = ${list.avgRealTime};
 	</c:forEach>
-
+	}else if($('#searchCondition2').val() == "2"){
+		
+		<c:forEach items="${prodCntList2}" var="list">
+		year = ${list.years};
+		maxMon = ${list.months};
+	</c:forEach>
+	for(var i=1;i<=maxMon;i++){
+		date.push(year+"년 "+i+"월");
+		totalRealTime.push(0);
+		totalMflPerson.push(0);
+		avgRealTime.push(0);
+	}
+	<c:forEach items="${prodCntList2}" var="list">
+	totalRealTime[${list.months-1}] = ${list.totalRealTime};
+	totalMflPerson[${list.months-1}] = ${list.totalCplPerson};
+	avgRealTime[${list.months-1}] = ${list.avgRealTime};
+	</c:forEach>
+		
+	}
+	
+	
+	
 	option = {
 			  tooltip: {
 			    trigger: 'axis',

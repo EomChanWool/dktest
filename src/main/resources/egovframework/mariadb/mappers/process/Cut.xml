@@ -113,14 +113,16 @@
 		cpl_st_date,
 		cpl_manager,
 		cpl_reg_id,
-		cpl_reg_date
+		cpl_reg_date,
+		cpl_person
 		) VALUES
 		(
 		#{orId},
 		GETDATE(),
 		#{cplManager},
 		#{userId},
-		GETDATE()
+		GETDATE(),
+		'1'
 		)
 	</insert>
 

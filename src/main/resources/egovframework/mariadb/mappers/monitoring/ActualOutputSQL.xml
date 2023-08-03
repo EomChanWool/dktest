@@ -55,4 +55,33 @@
 		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
 		ORDER BY months
 	</select>
+	<select id="selectProdCnt2" resultType="egovMap">
+	SELECT
+		YEAR(cpl_ed_date) AS years,
+		MONTH(cpl_ed_date) AS months,
+		SUM(cpl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		SUM(cpl_person) AS
+		total_cpl_person,
+		AVG(cpl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
+		FROM
+		sm_cut_proc_log a
+		LEFT JOIN (
+		SELECT
+		or_id,
+		SUM(cps_rest_time) AS total_rest_time
+		FROM
+		sm_cut_prosess_stop
+		WHERE
+		YEAR(cps_stop_time) = #{searchCondition}
+		GROUP BY
+		or_id
+		) b ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(cpl_ed_date) = #{searchCondition}
+		GROUP BY
+		YEAR(cpl_ed_date), MONTH(cpl_ed_date)
+		ORDER BY months
+	</select>
 </mapper>

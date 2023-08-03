@@ -12,5 +12,7 @@ public interface ActualOutputService {
 	Map<String, Object> selectPlcCnt();
 
 	List<?> selectProdCnt(SearchVO searchVO);
+	
+	List<?> selectProdCnt2(SearchVO searchVO);
 
 }

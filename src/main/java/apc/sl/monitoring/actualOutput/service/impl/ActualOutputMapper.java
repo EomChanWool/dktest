@@ -14,5 +14,7 @@ public interface ActualOutputMapper {
 	Map<String, Object> selectPlcCnt();
 
 	List<?> selectProdCnt(SearchVO searchVO);
+	
+	List<?> selectProdCnt2(SearchVO searchVO);
 
 }

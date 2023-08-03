@@ -29,4 +29,9 @@ public class ActualOutputServieImpl implements ActualOutputService {
 		return actualOutputMapper.selectProdCnt(searchVO);
 	}
 
+	@Override
+	public List<?> selectProdCnt2(SearchVO searchVO) {
+		return actualOutputMapper.selectProdCnt2(searchVO);
+	}
+
 }
