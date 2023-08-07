@@ -63,7 +63,6 @@ public class KpiController {
 		  List<Map<String, Object>> workTimeList = kpiService.selectWorktime(searchVO);
 		  List<Map<String, Object>> workCntList = kpiService.selectWorkCnt(searchVO);
 		  
-		  
 		  for(int i=0; i<workCntList.size(); i++) {
 			  workTimeList.get(i).put("prodCnt",workCntList.get(i).get("prodCnt"));
 			  if(workCntList.size() < workTimeList.size()) {
