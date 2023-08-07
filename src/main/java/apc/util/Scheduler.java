@@ -51,11 +51,11 @@ public class Scheduler {
 	
 	
 	
-	@Scheduled(cron = "10 55 8 * * *")
-	public void delete1() throws Exception{
-		//excelReaderService.deletedb();
-		//excelReaderService.deleteMm();
-	}
+//	@Scheduled(cron = "10 55 8 * * *")
+//	public void delete1() throws Exception{
+//		//excelReaderService.deletedb();
+//		//excelReaderService.deleteMm();
+//	}
 	
 	//ini 파일 읽어들이기 예제
 	@Scheduled(cron = "10 55 8 * * *")
@@ -169,10 +169,10 @@ public class Scheduler {
 				        }
 					} 
 					if(rowMap.size() != 0) {
-						//excelReaderService.registdb(rowMap);
+					//	excelReaderService.registdb(rowMap);
 					}
 					if(map.size() !=0 && boolcnt != 2) {
-						//excelReaderService.registMm(map);
+					//	excelReaderService.registMm(map);
 					}
 				}
 			}
@@ -191,7 +191,7 @@ public class Scheduler {
 		@SuppressWarnings("resource")
 		HSSFWorkbook workbook = new HSSFWorkbook(fis);
 		int rowindex = 0;
-		int columnindex = 0;		
+		int columnindex = 0;	
 		int sheetCn = workbook.getNumberOfSheets();	// 시트 수
 		
 		String[] excelCol = new String[] {

@@ -149,6 +149,8 @@
 	let OutputData = [];
 	
 	let viewData = [];
+	
+	let viewData2 = [];
 
 	var num = 0;
 	var years = 0;
@@ -168,9 +170,12 @@
 			date.push(years+"년 "+i+"월");
 			OutputData.push(0);
 			viewData.push(0);
+			viewData2.push(0);
 		}
 		<c:forEach items="${prodCntList}" var="list">
+		
 			viewData[${list.months-1}] = ${list.prodCnt};
+			viewData2[${list.months-1}] = ${list.relPrice};
 		</c:forEach>
 		<c:forEach items="${orderCntList}" var="list">
 			OutputData[${list.months-1}] = ${list.orderCnt};
@@ -182,6 +187,7 @@
 			date.push(i+"일");
 			OutputData.push(0);
 			viewData.push(0);
+			viewData2.push(0);
 		}
 		
 		<c:forEach items="${orderCntList}" var="list">
@@ -189,6 +195,7 @@
 		</c:forEach> 
 		<c:forEach items="${prodCntList}" var="list">
 		viewData[${list.relDay-1}] = ${list.prodCnt};
+		viewData2[${list.relDay-1}] = ${list.relPrice};
 		</c:forEach>
 		
 		console.log(viewData);
@@ -215,7 +222,7 @@
 				    }
 				  },
 				  legend: {
-				    data: ['수주량', '생산량']
+				    data: ['수주량', '생산량','매출액']
 				  },
 				  xAxis: [
 				    {
@@ -229,16 +236,17 @@
 				  yAxis: [
 				    {
 				      type: 'value',
-				      
+				      name: 'EA',
 				      axisLabel: {
 				        formatter: '{value} EA'
 				      }
 				    },
 				    {
 		    		  type: 'value',
-			      	  name: '생산량',
+			      	  name: '매출액',
+			      	  position: 'right',
 			      	  axisLabel: {
-			            formatter: '{value} EA'
+			            formatter: '{value} 원'
 					  }
 				    }
 				  ],
@@ -249,12 +257,15 @@
 				      label: {
 				          show: true,
 				          position: 'inside',
-				          formatter: '{c} EA'
+				          formatter: function(d){
+				        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" EA";
+				          }
 				          
 				        },
 				      tooltip: {
 				        valueFormatter: function (value) {
-				          return value + ' EA';
+				        	let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');  
+					        return result + ' EA';
 				        }
 				      },
 				      data: OutputData
@@ -265,16 +276,43 @@
 				    label: {
 				          show: true,
 				          position: 'inside',
-				          formatter: '{c} EA'
+				          formatter: function(d){
+				        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" EA";
+				          }
 				          
 				        },
 				    tooltip: {
 				      valueFormatter: function (value) {
-				        return value + ' EA';
+				    	  
+				    	let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');  
+				        return result + ' EA';
 				      }
 				    },
 				    data: viewData
-				    }
+				    },
+				    {
+				    	name: '매출액',
+				    	yAxisIndex: 1,
+					    type: 'line',
+					    label: {
+					          show: true,
+					          position: 'inside',
+					          formatter: function(d){
+					        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" 원";
+					          }
+					        },
+					    tooltip: {
+					      valueFormatter: function (value) {
+					    	  if(value == undefined){
+					    		 value = 0;
+					    	  }
+					    	  let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					    	 
+					        return result + ' 원';
+					      }
+					    },
+					    data: viewData2
+					    }
 				  ]
 				};
 	}else if($('#searchCondition2').val() != ""){
@@ -298,7 +336,7 @@
 				    }
 				  },
 				  legend: {
-				    data: ['수주량', '생산량']
+				    data: ['수주량', '생산량', '매출액']
 				  },
 				  xAxis: [
 				    {
@@ -312,23 +350,24 @@
 				  yAxis: [
 				    {
 				      type: 'value',
-				      
+				      name: '생산량',
 				      axisLabel: {
 				        formatter: '{value} EA'
 				      }
 				    },
 				    {
 		    		  type: 'value',
-			      	  name: '생산량',
+			      	  name: '매출액',
+			      	  position: 'right',
 			      	  axisLabel: {
-			            formatter: '{value} EA'
+			            formatter: '{value} 원'
 					  }
 				    }
 				  ],
 				  series: [
 				    {
 				      name: '수주량',
-				      type: 'line',
+				      type: 'bar',
 				      tooltip: {
 				        valueFormatter: function (value) {
 				          return value + ' EA';
@@ -338,14 +377,26 @@
 				    },
 				    {
 			    	name: '생산량',
-				    type: 'line',
+				    type: 'bar',
 				    tooltip: {
 				      valueFormatter: function (value) {
 				        return value + ' EA';
 				      }
 				    },
 				    data: viewData
-				    }
+				    },
+				    {
+				    	name: '매출액',
+				    	yAxisIndex: 1,
+					    type: 'bar',
+					    tooltip: {
+					      valueFormatter: function (value) {
+					    	  let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					        return result + ' 원';
+					      }
+					    },
+					    data: viewData2
+					    }
 				  ]
 				};
 	}
