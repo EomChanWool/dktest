@@ -1,5 +1,8 @@
 package apc.sl.facility.equipPrev.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.facility.equipPrev.service.EquipPrevService;
@@ -87,5 +91,43 @@ public class EquipPrevController {
 		equipPrevService.deleteEquipPrev(map);
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");
 		return "redirect:/sl/facility/equipPrev/equipPrevList.do";
+	}
+	
+	@RequestMapping("/sl/facility/equipPrev/equipPrevExcelDown.do")
+	public ModelAndView equipPrevExcelDown(@ModelAttribute("searchVO") SearchVO searchVO) throws Exception {
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-h:mm");
+		Date now = new Date();
+		String edDate = format.format(now);
+		
+		ModelAndView mav = new ModelAndView("excelView");
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		int totCnt = equipPrevService.selectEquipPrevListToCnt(searchVO);
+		/** pageing setting */
+		searchVO.setPageSize(10);
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex()); // 현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(10); // 한 페이지에 게시되는 게시물 건수
+		paginationInfo.setPageSize(searchVO.getPageSize()); // 페이징 리스트의 사이즈
+		paginationInfo.setTotalRecordCount(totCnt);
+		
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		List<?> list = equipPrevService.selectEquipPrevList(searchVO);
+		String filename = "설비예방보수"+edDate;
+		
+		String[] columnArr = {"예방ID", "설비ID","예방보수구분","예방보수일자","작업자","등록일","등록ID","수정일","수정ID","예방보수내용"};
+		String[] columnVarArr = {"epmId","eqId","epmType","epmDate","epmManager","epmRegDate","epmRegId","epmEdtDate","epmEdtId","epmComment"};
+		
+		dataMap.put("columnArr", columnArr);
+		dataMap.put("columnVarArr", columnVarArr);
+		dataMap.put("sheetNm","예방보수목록");
+		dataMap.put("list",list);
+		
+		mav.addObject("dataMap",dataMap);
+		mav.addObject("filename",filename);
+		return mav;
 	}
 }

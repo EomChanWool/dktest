@@ -76,6 +76,9 @@
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_equipPrev()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_excelDown()" style="float: right; margin-right: 0.5rem;">
+	                                <span class="text">엑셀다운</span>
+	                            </a>
 							</div>
                         </div>
                         <div class="card-body">
@@ -166,6 +169,10 @@
 	
 	function fn_regist_equipPrev(){
 		listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/registEquipPrev.do";
+		listForm.submit();
+	}
+	function fn_excelDown(){
+		listForm.action = "${pageContext.request.contextPath}/sl/facility/equipPrev/equipPrevExcelDown.do";
 		listForm.submit();
 	}
 	

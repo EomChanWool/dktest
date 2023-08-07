@@ -153,6 +153,11 @@ public class ExcelView extends AbstractView {
                 
                 for(int j=0; j<columnVarArr.length; j++){
                     String data = String.valueOf(dataEgovMap.get(columnVarArr[j]));
+                    //null값이 있는경우 없음으로 바꿈
+                    if(data.equals("null")) {
+                    	data = "없음";
+                    }
+                    
                     cell = getCell(sheet, 1 + i, j);
                     setText(cell, data);
                     cell.setCellStyle(cellStyle2);

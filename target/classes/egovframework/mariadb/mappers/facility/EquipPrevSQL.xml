@@ -18,7 +18,11 @@
 			a.epm_type,
 			a.epm_date,
 			a.epm_comment,
-			a.epm_manager
+			a.epm_manager,
+			a.epm_reg_date,
+			a.epm_reg_id,
+			a.epm_edt_date,
+			a.epm_edt_id
 		FROM sm_equip_prev_maintenance a
 		JOIN sm_equipment b
 		ON a.eq_id = b.eq_id
