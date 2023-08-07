@@ -22,9 +22,11 @@
 		SELECT rel_idx,po_lotno, rel_date, rel_compony, rel_sub, rel_prod,
 		rel_qty,rel_bill FROM sm_release_info
 		WHERE 1=1
-		<if test="searchKeyword != ''">
+		<if test="searchCondition == 1 and searchKeyword != ''">and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+		<!-- <if test="searchKeyword != ''">
 			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
-		</if>
+		</if> -->
+		<if test="searchCondition == 2 and searchKeyword != ''">and or_id LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
 		<if test="searchStDate != ''">
 			AND rel_date >= #{searchStDate}
 		</if>

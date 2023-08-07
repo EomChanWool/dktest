@@ -57,9 +57,14 @@
 									<input type="hidden" name="relIdx">
 									<input type="hidden" name="poLotno">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="1" <c:if test="${searchVO.searchCondition eq '1'}">selected="selected"</c:if>>로트번호</option>
+							    		<option value="2" <c:if test="${searchVO.searchCondition eq '2'}">selected="selected"</c:if>>수주번호</option>
+						    		</select>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
+						    									<span style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0.3rem 0.5rem">출고일</span>
 						    									<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
 									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
 									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
