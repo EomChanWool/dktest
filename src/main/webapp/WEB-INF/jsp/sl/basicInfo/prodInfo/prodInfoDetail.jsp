@@ -90,7 +90,7 @@
 										</tr>
 										<tr>
 											<th>단가</th>
-											<td><span class="form-control val-area">${prodInfoVO.piPrice}</span></td>
+											<td><span class="form-control val-area" id="piPrice">${prodInfoVO.piPrice}</span></td>
 											<th>단중</th>
 											<td><span class="form-control val-area">${prodInfoVO.piItemMiddle}</span></td>
 											
@@ -153,6 +153,8 @@
 		$('#basicInfoMenu').addClass("active");
 		$('#basicInfo').addClass("show");
 		$('#prodInfoList').addClass("active");
+		let piPrice = $('#piPrice').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#piPrice').text(piPrice);
 	});
 	</script>
 </body>

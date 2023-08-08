@@ -157,8 +157,8 @@
 	}
 	
 	function fn_search_failRepair(){
-		if($('#searchCondition').val() == ''){
-			alert("검색종류를 선택해주세요");
+		if($('#searchCondition').val()==''){
+			alert("검색조건을 선택하세요.");
 			return;
 		}
 		
@@ -205,6 +205,7 @@
 		if(msg) {
 			alert(msg);
 		}
+		
 	});
 	</script>
 </body>

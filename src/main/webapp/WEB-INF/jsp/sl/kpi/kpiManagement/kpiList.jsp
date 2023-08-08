@@ -58,18 +58,18 @@
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									
 						    		
-									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
-						    			<option value="" <c:if test="${searchVO.searchCondition2 eq ''}">selected="selected"</c:if>>전체</option>
-						    			<option value="2023" <c:if test="${searchVO.searchCondition2 eq '2023'}">selected="selected"</c:if>>2023년</option>
-						    			<option value="2024" <c:if test="${searchVO.searchCondition2 eq '2024'}">selected="selected"</c:if>>2024년</option>
-						    			<option value="2025" <c:if test="${searchVO.searchCondition2 eq '2025'}">selected="selected"</c:if>>2025년</option>
-						    			<option value="2026" <c:if test="${searchVO.searchCondition2 eq '2026'}">selected="selected"</c:if>>2026년</option>
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+						    			<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>전체</option>
+						    			<option value="2023" <c:if test="${searchVO.searchCondition eq '2023'}">selected="selected"</c:if>>2023년</option>
+						    			<option value="2024" <c:if test="${searchVO.searchCondition eq '2024'}">selected="selected"</c:if>>2024년</option>
+						    			<option value="2025" <c:if test="${searchVO.searchCondition eq '2025'}">selected="selected"</c:if>>2025년</option>
+						    			<option value="2026" <c:if test="${searchVO.searchCondition eq '2026'}">selected="selected"</c:if>>2026년</option>
 						    		</select>
 						    		
-						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition3" id="searchCondition3">
+						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
 							    		<option value="">선택</option>
 							    		<c:forEach begin="1" end="12" varStatus="status">
-							    			<option value="${status.count}" <c:if test="${searchVO.searchCondition3 eq status.count}">selected="selected"</c:if>>${status.count}월</option>
+							    			<option value="${status.count}" <c:if test="${searchVO.searchCondition2 eq status.count}">selected="selected"</c:if>>${status.count}월</option>
 							    		</c:forEach>
 						    		</select>
 						    		
@@ -172,7 +172,6 @@
 		function fn_searchAll_kpi(){
 			listForm.searchCondition.value = "";
 			listForm.searchCondition2.value = "";
-			listForm.searchCondition3.value = "";
 			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}

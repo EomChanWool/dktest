@@ -156,6 +156,10 @@
 	}
 	
 	function fn_search_FailReport(){
+		if($('#searchCondition').val()==''){
+			alert("검색조건을 선택하세요.");
+			return;
+		}
 		listForm.submit();
 	}
 	

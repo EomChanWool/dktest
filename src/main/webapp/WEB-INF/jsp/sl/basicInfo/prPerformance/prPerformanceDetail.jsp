@@ -66,21 +66,21 @@
 											</tr>
 											<tr>
 												<th>협가</th>
-												<td><span class="form-control val-area">${prPerVo.relNego}원</span></td>
+												<td><span class="form-control val-area" id="relNego">${prPerVo.relNego}원</span></td>
 												<th>%</th>
 												<td><span class="form-control val-area">${prPerVo.relPercent}%</span></td>
 											</tr>
 											<tr>
 												<th>판매단가(원)</th>
-												<td><span class="form-control val-area">${prPerVo.relUnit}원</span></td>
+												<td><span class="form-control val-area" id="relUnit">${prPerVo.relUnit}원</span></td>
 												<th>금액(원)<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relPrice}원</span></td>
+												<td><span class="form-control val-area" id="relPrice">${prPerVo.relPrice}원</span></td>
 											</tr>
 											<tr>
 												<th>부가세(원)<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relTax}원</span></td>
+												<td><span class="form-control val-area" id="relTax">${prPerVo.relTax}원</span></td>
 												<th>합계(원)<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relTotalPrice}원</span></td>
+												<td><span class="form-control val-area" id="relTotalPrice">${prPerVo.relTotalPrice}원</span></td>
 											</tr>
 											<tr>
 												<th>납품처</th>
@@ -274,9 +274,16 @@
 		if(msg) {
 			alert(msg);
 		}
-		$('.relPrice').focusout(function(){
-			cal();
-		});
+		let relUnit = $('#relUnit').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#relUnit').text(relUnit);
+		let relPrice = $('#relPrice').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#relPrice').text(relPrice);
+		let relTax = $('#relTax').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#relTax').text(relTax);
+		let relTotalPrice = $('#relTotalPrice').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#relTotalPrice').text(relTotalPrice);
+		let relNego = $('#relNego').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#relNego').text(relNego);
 	});
 	</script>
 </body>

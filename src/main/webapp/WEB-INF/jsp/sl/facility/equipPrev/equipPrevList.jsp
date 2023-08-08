@@ -158,6 +158,10 @@
 	}
 	
 	function fn_search_equipPrev(){
+		if($('#searchCondition').val()==''){
+			alert("검색조건을 선택하세요.");
+			return;
+		}
 		listForm.submit();
 	}
 	
@@ -205,6 +209,7 @@
 		if(msg) {
 			alert(msg);
 		}
+		
 	});
 	</script>
 </body>

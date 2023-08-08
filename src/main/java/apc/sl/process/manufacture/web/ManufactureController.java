@@ -112,6 +112,7 @@ public class ManufactureController {
 			return "redirect:/sl/process/manufacture/manufactureList.do";
 			}
 		redirectAttributes.addFlashAttribute("msg", "작업이 완료되었습니다.");
+		System.out.println("맵확인 : " + map);
 		manufactureService.updateProcess3(map);
 		manufactureService.updateLogEdtime(map);
 		

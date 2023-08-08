@@ -42,6 +42,7 @@ public class MaterialMoveController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> materialMoveList = materialMoveService.selectMaterialMoveList(searchVO);
 		
+		
 		model.put("materialMoveList", materialMoveList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/basicInfo/materialMove/materialMoveList";
