@@ -77,7 +77,7 @@
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_lineRunning()">
-	                                <span class="text">올해</span>
+	                                <span class="text">올해전체</span>
 	                            </a>
 	                            
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_go_line()" style="float: right; margin-left: 0.5rem;">

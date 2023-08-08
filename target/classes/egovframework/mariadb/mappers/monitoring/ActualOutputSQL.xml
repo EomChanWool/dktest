@@ -71,7 +71,7 @@
 		or_id,
 		SUM(cps_rest_time) AS total_rest_time
 		FROM
-		sm_cut_prosess_stop
+		sm_cut_process_stop
 		WHERE
 		YEAR(cps_stop_time) = #{searchCondition}
 		GROUP BY
