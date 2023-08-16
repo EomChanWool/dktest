@@ -196,6 +196,19 @@
 
 
 	</insert>
+	
+	<insert id="testRegist">
+	insert into sm_test(
+	te_idx,
+	te_name,
+	te_name2
+	) values
+	(
+	#{teIdx},
+	#{teName},
+	#{teName2}
+	)
+	</insert>
 
 	<delete id="deletedb">
 		DELETE FROM sm_product_info;

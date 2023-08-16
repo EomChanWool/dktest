@@ -2,6 +2,7 @@ package apc.util;
 
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,19 +10,20 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
-
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.SubnodeConfiguration;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -30,13 +32,10 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.python.google.common.base.CharMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 import apc.sl.db.service.ExcelReaderService;
 import egovframework.rte.fdl.filehandling.EgovFileUtil;
@@ -354,7 +353,98 @@ public class Scheduler {
 		System.out.println("파일없음");	}
 		}
 	
-	//@Scheduled(cron = "20 * * * * *")
+	@Scheduled(cron = "30 * * * * *")
+	public void testRead() throws Exception {
+		
+		File note = new File("C:\\test","testDown.txt");
+		
+		
+		
+		
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(note));
+			String inputString = "";
+			String line = "";
+			while ((line= br.readLine()) !=null) {
+				
+				inputString += line;
+			}
+			System.out.println("확인 :" + inputString);
+			int num = inputString.split(";")[0].split(",").length;
+			System.out.println(num);
+			
+			inputString = inputString.replace(";", ",");
+			
+			String charsRemove = "{}";
+			
+			inputString = CharMatcher.anyOf(charsRemove).removeFrom(inputString);
+			
+			System.out.println("인풋 스트링 :" + inputString);
+			
+			//파일을 읽어들여서 배열의 길이만큼 for문 돌리기
+			
+	        //String inputString = "key1:value1;key2:value2;key3:value3;";
+
+	        List<Map<String, String>> mapList = parseKeyValuePairs(inputString, ",","=", num);
+	        
+	        Map<String,String> map = new HashMap<String, String>();
+	        
+//	        System.out.println("맵확인 : " + mapList);
+//	        System.out.println(mapList.size());
+//	        System.out.println(mapList.get(0).get("te_Idx"));
+	        
+	        for(int i=0; i<mapList.size(); i++) {
+	        	map.put("teIdx",mapList.get(i).get("te_Idx"));
+	        	map.put("teName", mapList.get(i).get("te_name"));
+	        	map.put("teName2", mapList.get(i).get("te_name2"));
+	        	//System.out.println("정제맵 : " + map);
+	        	excelReaderService.testRegist(map);
+	        }
+			br.close();
+			EgovFileUtil.delete(note);
+		} catch (Exception e) {
+		}
+		
+        
+//        for(String key : map.keySet()){
+//            System.out.println(key  + " -  " + map.get(key));
+//        }
+    }
+	
+	
+	public static List<Map<String, String>> parseKeyValuePairs(String input, String pairSeparator, String keyValueSeparator, int num) {
+        if (input == null || pairSeparator == null || keyValueSeparator == null) {
+            return null;
+        }
+        String[] pairs = input.split(pairSeparator);
+        
+        if (pairs.length == 0) {
+            throw new IllegalArgumentException("Invalid input: " + input);
+        }
+
+        List<Map<String, String>> mapList = new ArrayList<>();
+        Map<String, String> map = new HashMap<>();
+        int number = 0;
+        for (String pair : pairs) {
+            String[] keyValue = pair.split(keyValueSeparator);
+            if (keyValue.length == 2) {
+                map.put(keyValue[0], keyValue[1]);
+                number++;
+            }
+            if(number == num) {
+            	mapList.add(map);	
+            	map = new HashMap<>();
+            	number = 0;
+            }
+        }
+        return mapList;
+    }
+	
+	
+	
+	
+	@Scheduled(cron = "20 * * * * *")
 	public void open() {
 		
 	    ftp = new FTPClient();
@@ -381,30 +471,36 @@ public class Scheduler {
 	        ftp.login("signlab", "dk304316@");
 	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
 	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+	        //ftp Active모드 설정
+	        ftp.enterLocalPassiveMode(); 
 	            
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	        System.out.println("에러");
 	    }
-	    File get_file = new File("C:\\test\\testDown.txt");
-	 
+	    File get_file = new File("C:\\test","testDown.txt");
+	    
+	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+	    Date now = new Date();
+		String edDate = format.format(now);
+		
+		String fileName = "/textTest/mat"+edDate+".txt";
+		
 	    try {
 	    	FileOutputStream outputstream = new FileOutputStream(get_file);
-	    	boolean result = ftp.retrieveFile("/textTest/testDown2.txt", outputstream);
-	    	System.out.println("스트링 :" +ftp.getReplyString());
+	    	boolean result = ftp.retrieveFile(fileName, outputstream);
 
-	    	System.out.println(ftp.getReplyCode());
 	    	if(result) {
 	    		System.out.println("파일다운성공");
 	    	}else {
-	    		System.out.println("실패");
+	    		System.out.println("파일없음");
 	    	}
 	    	
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	        System.out.println("에러");
 	    } finally {
 	    	try {
+	    		ftp.deleteFile(fileName);
 		        ftp.logout();
 		        ftp.disconnect();
 		    } catch (IOException e) {

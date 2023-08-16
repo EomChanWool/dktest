@@ -16,5 +16,6 @@ public interface ExcelReaderService {
 	
 	void deleteMm();
 	
+	void testRegist(Map<String,String> map);
 	
 }

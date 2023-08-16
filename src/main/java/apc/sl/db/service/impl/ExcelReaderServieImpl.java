@@ -44,4 +44,9 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		excelReaderMapper.registRelease(map);
 	}
 
+	@Override
+	public void testRegist(Map<String,String> map) {
+		excelReaderMapper.testRegist(map);
+	}
+
 }

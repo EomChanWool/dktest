@@ -18,4 +18,6 @@ public interface ExcelReaderMapper {
 	void deleteMm();
 	
 	void deletedb();
+	
+	void testRegist(Map<String,String> map);
 }

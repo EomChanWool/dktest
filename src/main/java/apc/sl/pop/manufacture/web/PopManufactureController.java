@@ -104,7 +104,6 @@ public class PopManufactureController {
 		map.put("userId", session.getAttribute("user_id"));
 		int checkProd = popManufactureService.selectCheckStop(map);
 		if(checkProd != 0) {
-			
 			redirectAttributes.addFlashAttribute("msg", "공정을 재개하여 주십시오.");
 			return "redirect:/sl/pop/popMf/popMfList.do";
 			}
