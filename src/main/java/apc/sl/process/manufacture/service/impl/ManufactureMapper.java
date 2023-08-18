@@ -15,6 +15,8 @@ public interface ManufactureMapper {
 	
 	List<?> selectMfManager();
 	
+	int countFinish();
+	
 	int selectCheckStop(Map<String, Object> map);
 	
 	Map<String, Object> selectInfo(Map<String,Object> map);
@@ -42,6 +44,8 @@ public interface ManufactureMapper {
 	Map<String, Object> selectCheck(Map<String, Object> map);
 	
 	Map<String, Object> selectMfInfo(Map<String, Object> map);
+	
+	Map<String,Object> outData(Map<String, Object> map);
 	
 	void modifyManufacture(Map<String, Object> map);
 	

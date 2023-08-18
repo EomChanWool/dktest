@@ -353,7 +353,7 @@ public class Scheduler {
 		System.out.println("파일없음");	}
 		}
 	
-	@Scheduled(cron = "30 * * * * *")
+	//@Scheduled(cron = "30 * * * * *")
 	public void testRead() throws Exception {
 		
 		File note = new File("C:\\test","testDown.txt");
@@ -444,7 +444,7 @@ public class Scheduler {
 	
 	
 	
-	@Scheduled(cron = "20 * * * * *")
+	//@Scheduled(cron = "20 * * * * *")
 	public void open() {
 		
 	    ftp = new FTPClient();

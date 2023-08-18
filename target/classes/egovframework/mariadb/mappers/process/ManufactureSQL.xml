@@ -8,7 +8,8 @@
 		LEFT JOIN
 		sm_mf_process_stop b ON a.OR_ID = b.OR_ID
 		WHERE 1=1
-		AND or_process in (2,3)
+		AND or_process in
+		(2,3)
 
 		<if test="searchKeyword != ''">
 			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
@@ -30,7 +31,8 @@
 		),
 		0
 		) AS
-		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager, MAX(c.mfl_person) AS mfl_person
+		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS
+		mfl_manager, MAX(c.mfl_person) AS mfl_person
 		FROM sm_orders a
 		LEFT JOIN
 		sm_mf_process_stop b
@@ -38,7 +40,8 @@
 		b.OR_ID
 		LEFT JOIN
 		sm_mf_proc_log c
-		ON a.or_id = c.or_id
+		ON
+		a.or_id = c.or_id
 		WHERE 1=1
 		AND or_process in (2,3)
 		<if test="searchKeyword != ''">
@@ -54,13 +57,13 @@
 	</select>
 
 	<select id="selectMfManager" resultType="egovMap">
-	select mi_name from sm_member_info
-	where mi_department = '가공부'
+		select mi_name from sm_member_info
+		where mi_department = '가공부'
 	</select>
-	
-	
+
+
 	<select id="selectExistsLot" resultType="int">
-	SELECT COUNT(*)
+		SELECT COUNT(*)
 		FROM
 		sm_product_order WHERE po_lotno = #{poLotno}
 	</select>
@@ -72,9 +75,9 @@
 		sm_product_info b ON a.PI_ID=b.PI_ID
 		WHERE a.po_lotno = #{poLotno}
 	</select>
-	
+
 	<select id="selectMfInfo" resultType="egovMap">
-	SELECT * FROM sm_orders a
+		SELECT * FROM sm_orders a
 		left JOIN sm_mf_proc_log b
 		ON a.OR_ID = b.OR_ID
 		WHERE a.or_id = #{orId}
@@ -108,16 +111,16 @@
 		sm_item e ON d.ITEM_CD = e.ITEM_CD
 		WHERE a.CH_IDX = #{chIdx}
 	</select>
-	
+
 	<select id="selectCheckStop" resultType="int">
-	SELECT COUNT(*) FROM
+		SELECT COUNT(*) FROM
 		sm_mf_process_stop
 		WHERE or_id = #{orId}
 		AND mfs_state = 1
 	</select>
-	
+
 	<insert id="registMfLog">
-	INSERT INTO sm_mf_proc_log (
+		INSERT INTO sm_mf_proc_log (
 		or_id,
 		mfl_manager,
 		mfl_st_date,
@@ -176,9 +179,9 @@
 		2
 		)
 	</insert>
-	
+
 	<insert id="registMfStopLog">
-	INSERT INTO sm_mf_process_stop (
+		INSERT INTO sm_mf_process_stop (
 		or_id,
 		mfs_state,
 		mfs_stop_time
@@ -189,9 +192,9 @@
 		GETDATE()
 		)
 	</insert>
-	
+
 	<update id="updateMfStopLog2">
-	UPDATE sm_mf_process_stop SET
+		UPDATE sm_mf_process_stop SET
 		mfs_state = 2,
 		mfs_re_time = GETDATE(),
 		MFS_REST_TIME = DATEDIFF(MINUTE,
@@ -199,16 +202,16 @@
 		where mfs_idx
 		= #{mfsIdx}
 	</update>
-	
+
 	<update id="updateProcess3">
-	UPDATE sm_orders SET
+		UPDATE sm_orders SET
 		or_process = 4
 		WHERE or_id
 		=#{orId}
 	</update>
-	
+
 	<update id="updateOrState">
-	UPDATE sm_orders SET
+		UPDATE sm_orders SET
 		or_process = 3
 		WHERE or_id =
 		#{orId}
@@ -222,9 +225,11 @@
 		or_due_date = #{orDueDate},
 		or_fin_date = #{orFinDate},
 		or_or_type = #{orOrType},
-		or_texture = #{orTexture},
+		or_texture =
+		#{orTexture},
 		or_thickness = #{orThickness},
-		or_standard = #{orStandard},
+		or_standard =
+		#{orStandard},
 		or_state = #{orState},
 		or_manager = #{orManager},
 		or_report = #{orReport},
@@ -233,35 +238,51 @@
 		or_qty = #{orQty}
 		WHERE or_id = #{orId}
 	</update>
-	
+
 	<update id="updateLogEdtime">
-	UPDATE sm_mf_proc_log SET
+		UPDATE sm_mf_proc_log SET
 		mfl_ed_date = GETDATE(),
-		mfl_work_time = DATEDIFF(MINUTE,mfl_st_date,getdate())
+		mfl_work_time =
+		DATEDIFF(MINUTE,mfl_st_date,getdate())
 		WHERE or_id = #{orId}
-		AND mfl_idx = (
+		AND mfl_idx
+		= (
 		SELECT TOP 1 mfl_idx
 		FROM
 		sm_mf_proc_log
 		WHERE or_id = #{orId}
-		ORDER BY mfl_idx DESC
+		ORDER BY
+		mfl_idx DESC
 		)
 	</update>
-	
+
 	<update id="modifyMfManager">
-	UPDATE sm_mf_proc_log SET
+		UPDATE sm_mf_proc_log SET
 		mfl_manager = #{mflManager},
-		mfl_person = #{mflPerson}
+		mfl_person =
+		#{mflPerson}
 		WHERE or_id = #{orId} AND mfl_idx = (
 		SELECT MAX(mfl_idx)
 		FROM sm_mf_proc_log
 		WHERE or_id = #{orId}
 		)
 	</update>
+	
+	<select id="outData" resultType="egovMap">
+		SELECT a.OR_ID, a.OR_MANAGER, b.PO_LOTNO , CONVERT(VARCHAR(8), c.MFL_ED_DATE, 112) AS MFL_ED_DATE, mfl_manager from sm_orders a JOIN
+sm_release_info b ON a.OR_ID = b.OR_ID JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
+WHERE a.OR_ID = #{orId}
+	</select>
 
-<!-- 	<delete id="deleteManufacture"> -->
+	<select id="countFinish" resultType="int">
+		SELECT COUNT(*) as total FROM sm_mf_proc_log
+		WHERE CONVERT(DATE, mfl_ed_date) = CONVERT(DATE, GETDATE());
 
-<!-- 		Delete From sm_insp_change where ch_idx = #{chIdx} -->
-<!-- 	</delete> -->
+	</select>
+
+	<!-- <delete id="deleteManufacture"> -->
+
+	<!-- Delete From sm_insp_change where ch_idx = #{chIdx} -->
+	<!-- </delete> -->
 
 </mapper>

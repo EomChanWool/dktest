@@ -120,4 +120,14 @@ public class ManufactureServieImple implements ManufactureService {
 		manufactureMapper.modifyMfManager(map);
 	}
 
+	@Override
+	public int countFinish() {
+		return manufactureMapper.countFinish();
+	}
+
+	@Override
+	public Map<String, Object> outData(Map<String, Object> map) {
+		return manufactureMapper.outData(map);
+	}
+
 }

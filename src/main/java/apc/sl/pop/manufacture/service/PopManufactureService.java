@@ -15,6 +15,10 @@ public interface PopManufactureService {
 	
 	List<?> selectMfManager();
 	
+	Map<String,Object> outData(String str);
+	
+	int countFinish();
+	
 	void registMfLog(Map<String, Object> map);
 
 	void updateOrState(Map<String, Object> map);

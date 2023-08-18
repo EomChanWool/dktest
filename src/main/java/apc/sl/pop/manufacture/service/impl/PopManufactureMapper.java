@@ -17,6 +17,10 @@ public interface PopManufactureMapper {
 	
 	List<?> selectMfManager();
 	
+	int countFinish();
+	
+	Map<String,Object> outData(String str);
+	
 	void registMfLog(Map<String, Object> map);
 	
 	void updateOrState(Map<String, Object> map);

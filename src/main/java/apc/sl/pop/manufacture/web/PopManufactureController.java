@@ -1,10 +1,25 @@
 package apc.sl.pop.manufacture.web;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,10 +31,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.pop.manufacture.service.PopManufactureService;
 import apc.util.SearchVO;
+import egovframework.rte.fdl.filehandling.EgovFileUtil;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
 public class PopManufactureController {
+	
+	FTPClient ftp = null;
 	
 	@Autowired
 	private PopManufactureService popManufactureService;
@@ -111,6 +129,108 @@ public class PopManufactureController {
 		popManufactureService.updateProcess3(map);
 		popManufactureService.updateLogEdtime(map);
 		
+		int finish = popManufactureService.countFinish();
+		
+		String str = map.get("orId")+"";
+		
+		System.out.println("str : " + str);
+		//txt파일 서버에 생성
+		CreateFile(str);
+		//ftp로 서버에 생성된 파일 전송후 서버에있는 파일 지우기
+		open(finish);
+		
 		return "redirect:/sl/pop/popMf/popMfList.do";
+	}
+	
+	private void CreateFile(String str) {
+		Map<String,Object> outData = popManufactureService.outData(str);
+		
+		
+		
+		String fileName = "C:\\test\\Test2.txt";
+		System.out.println("아웃데이터 : " + outData);
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			fw.write(outData.toString()+",");
+			fw.flush();
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void open(int finish) {
+		
+	    ftp = new FTPClient();
+	    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+	    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+	    ftp.setControlEncoding("UTF-8");
+	    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+	    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+
+	    try {
+	        //ftp 서버 연결
+	        ftp.connect("dkbend.iptime.org", 30431);
+
+	        //ftp 서버에 정상적으로 연결되었는지 확인
+	        int reply = ftp.getReplyCode();
+	        if (!FTPReply.isPositiveCompletion(reply)) {
+	            ftp.disconnect();
+	            System.out.println("에러");
+	        }
+
+	        //socketTimeout 값 설정
+	        ftp.setSoTimeout(1000);
+	        //ftp 서버 로그인
+	        ftp.login("signlab", "dk304316@");
+	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+	        //ftp Active모드 설정
+	        ftp.enterLocalPassiveMode(); 
+	            
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("에러");
+	    }
+	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    Date now = new Date();
+		String edDate = format.format(now);
+	    
+	    String append_fileName = "C:\\test\\Test2.txt";
+	    
+	    File append_file = new File(append_fileName);
+	    
+	    String fileName = "/textTest/test"+edDate+"_"+finish+".txt";
+	   
+	    System.out.println("");
+		 try {
+		FileInputStream inputStream = new FileInputStream(append_file);
+		
+		boolean result = ftp.appendFile(fileName, inputStream);
+		
+		inputStream.close();
+		}
+		 catch (Exception e) {
+			e.printStackTrace();
+		}
+		 finally {
+			 try {
+				 EgovFileUtil.delete(append_file);
+			        ftp.logout();
+			        ftp.disconnect();
+			        
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			        System.out.println("에러");
+			    }
+		}
+		
+		
+	    
 	}
 }
