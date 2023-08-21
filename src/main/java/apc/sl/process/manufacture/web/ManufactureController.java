@@ -235,7 +235,7 @@ public class ManufactureController {
 	
 	@RequestMapping("/sl/process/manufacture/deleteManufacture.do")
 	public String deleteManufacture(@RequestParam Map<String, Object> map , RedirectAttributes redirectAttributes, HttpSession session) {
-		
+		System.out.println("삭제맵 : " + map);
 		manufactureService.deleteManufacture(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");

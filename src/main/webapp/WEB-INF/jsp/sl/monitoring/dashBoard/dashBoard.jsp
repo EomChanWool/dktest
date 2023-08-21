@@ -70,17 +70,17 @@
 								<input type="hidden" name="noIdx" id="noIdx">
 								<div class="cont_wrap">
 									<div class="cont">
-								      <h1>수주대실적현황</h1>
+								      <h1>수주대실적현황(${date}년)</h1>
 								      <div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
 								    </div>
 								    
 								    <div class="cont">
-								      <h1>라인가동현황</h1>
+								      <h1>라인가동현황(${date2}년)</h1>
                             		<div id="lineRunningGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	<div class="cont">
-								      <h1>생산집계현황</h1>
-                            		<div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
+								      <h1>생산집계현황(${date3}년)</h1>
+                            		<div id="actualOutputGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	<div class="cont">
 								      <h1>공정능력추이현황</h1>
@@ -182,7 +182,7 @@
 	maxMon = ${list.months};
 	</c:forEach>
 	for(var i=1;i<=maxMon;i++){
-		date.push(years+"년 "+i+"월");
+		date.push(i+"월");
 		OutputData.push(0);
 		viewData.push(0);
 		viewData2.push(0);
@@ -312,48 +312,25 @@
 	option && myChart.setOption(option);
 	</script>
 	<script>
-	//생산실적 현황
-	var chartDom = document.getElementById('actualOutputGraph');
+	//라인가동
+	var chartDom = document.getElementById('lineRunningGraph');
 	var myChart = echarts.init(chartDom);
 	var option;
 	
-	let date_2 = [];
-	let item_760N_2 = [];
-	let item_760O_2 = [];
-	let item_760W_2 = [];
-	let item_560_2 = [];
-	let prodCnt_2 = [];
 	
-	const actualOutputDataMin = 0;
-	const actualOutputDataMax = 2000;
-	const actualOutputDataInterval = 400;
+	let date2 = [];
 	
-	var num = 0;
-	var year = 0;
-	var maxMon = 0;
-	<c:forEach items="${prodCntList}" var="list">
-		year = ${list.years};
-		maxMon = ${list.month};
+	let lineCount = [];
+	
+	let workTime=[];
+	
+	<c:forEach items="${eqList}" var="list">
+	date2.push('${list.months}월');
+	lineCount.push('${list.counting}');
+	workTime.push('${list.workTime}');
 	</c:forEach>
-	for(var i=1;i<=maxMon;i++){
-		date_2.push(year+"년 "+i+"월");
-		item_760N_2.push(0);
-		item_760O_2.push(0);
-		item_760W_2.push(0);
-		item_560_2.push(0);
-	}
-	<c:forEach items="${prodCntList}" var="list">
-		if('${list.itemName}' == '760N'){
-			item_760N_2[${list.month}-1] = ${list.prodCnt}; 
-		}else if('${list.itemName}' == '760O'){
-			item_760O_2[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '760W'){
-			item_760W_2[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '560'){
-			item_560_2[${list.month}-1] = ${list.prodCnt};
-		}
-	</c:forEach>
-
+	
+	
 	option = {
 			  tooltip: {
 			    trigger: 'axis',
@@ -374,12 +351,12 @@
 			    }
 			  },
 			  legend: {
-			    data: ['760N', '760O', '760W', '560']
+			    data: ['카운트','작동시간']
 			  },
 			  xAxis: [
 			    {
 			      type: 'category',
-			      data: date_2,
+			      data: date2,
 			      axisPointer: {
 			        type: 'shadow'
 			      }
@@ -388,59 +365,205 @@
 			  yAxis: [
 			    {
 			      type: 'value',
-			      name: '개수',
-			      min: actualOutputDataMin,
-			      max: actualOutputDataMax,
-			      interval: actualOutputDataInterval,
+			      name: 'Count',
 			      axisLabel: {
-			        formatter: '{value} EA'
+			        formatter: '{value} Count'
 			      }
+			    },
+			    {
+	    		  type: 'value',
+		      	  name: '작동시간',
+		      	  position: 'right',
+		      	  axisLabel: {
+		            formatter: '{value} sec'
+				  }
 			    }
 			  ],
 			  series: [
 			    {
-			      name: '760N',
+			      name: '카운트',
 			      type: 'bar',
+			      label: {
+			          show: true,
+			          position: 'inside',
+			          formatter: '{c} Count'
+			          
+			        },
 			      tooltip: {
 			        valueFormatter: function (value) {
-			          return value + ' EA';
+			          return value + ' Count';
 			        }
 			      },
-			      data: item_760N_2
+			      data: lineCount
 			    },
 			    {
-			      name: '760O',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760O_2
-			    },
-			    {
-			      name: '760W',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760W_2
-			    },
-			    {
-			      name: '560',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_560_2
-			    }
+				      name: '작동시간',
+				      yAxisIndex: 1,
+				      type: 'bar',
+				      label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c} sec'
+				          
+				        },
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' sec';
+				        }
+				      },
+				      data: workTime
+				    },
 			  ]
 			};
 	option && myChart.setOption(option);
+	</script>
+	
+	<script>
+	
+	var chartDom3 = document.getElementById('actualOutputGraph');
+	var myChart = echarts.init(chartDom3);
+	var option;
+
+
+	var date3 = [];
+	var year3 = [];
+	
+	var totalRealTime = [];
+	
+	var totalMflPerson = [];
+	
+	var avgRealTime = [];
+	
+	var num3 = 0;
+	var years3 = 0;
+	var maxMon3 = 0;
+	
+	<c:forEach items="${prodCntListAc}" var="list">
+	year3 = ${list.years};
+	maxMon3 = ${list.months};
+	console.log(maxMon3);
+</c:forEach>
+
+for(var i=1;i<=maxMon3;i++){
+	date3.push(i+"월");
+	totalRealTime.push(0);
+	totalMflPerson.push(0);
+	avgRealTime.push(0);
+}
+
+<c:forEach items="${prodCntListAc}" var="list">
+totalRealTime[${list.months-1}] = ${list.totalRealTime};
+totalMflPerson[${list.months-1}] = ${list.totalMflPerson};
+avgRealTime[${list.months-1}] = ${list.avgRealTime};
+</c:forEach>
+
+option = {
+		  tooltip: {
+		    trigger: 'axis',
+		    axisPointer: {
+		    	type: 'cross',
+		    	axis: "auto",
+		    	crossStyle: {
+		        	color: '#999'
+		    	}
+		    }
+		  },
+		  toolbox: {
+		    feature: {
+		      dataView: { show: false, readOnly: false },
+		      magicType: { show: false, type: ['line', 'bar'] },
+		      restore: { show: false },
+		      saveAsImage: { show: true }
+		    }
+		  },
+		  legend: {
+		    data: ['총 시간', '작업인원', '평균 시간']
+		  },
+		  xAxis: [
+		    {
+		      type: 'category',
+		      data: date3,
+		      axisPointer: {
+		        type: 'shadow'
+		      }
+		    }
+		  ],
+		  yAxis: [
+		    {
+		      type: 'value',
+		      name: '총작업시간',
+		      axisLabel: {
+		        formatter: '{value} MIN'
+		      }
+		    },
+		    {
+	    		  type: 'value',
+		      	  name: '평균시간',
+		      	  position: 'right',
+		      	  axisLabel: {
+		            formatter: '{value} MIN'
+				  }
+			    }
+		    
+		  ],
+		  series: [
+		    {
+		      name: '총 시간',
+		      stack: 'one',
+		      type: 'bar',
+		      label: {
+		          show: true,
+		          position: 'inside',
+		          formatter: '{c}분'
+		          
+		        },
+		      tooltip: {
+		        valueFormatter: function (value) {
+		          return value + ' MIN';
+		        }
+		      },
+		      data: totalRealTime
+		    },
+		    {
+		      name: '작업인원',
+		      stack: 'one',
+		      type: 'bar',
+		      
+		      label: {
+		          show: true,
+		          position: 'top',
+		          formatter: '{c}명'
+		          
+		        },
+		      tooltip: {
+		        valueFormatter: function (value) {
+		          return value + ' HC';
+		        }
+		      },
+		      data: totalMflPerson
+		    },
+		    {
+		      name: '평균 시간',
+		      yAxisIndex: 1,
+		      type: 'line',
+		      /* label: {
+		          show: true,
+		          position: 'top',
+		          formatter: '{c}분'
+		        }, */
+		      tooltip: {
+		        valueFormatter: function (value) {
+		          return value + ' MIN';
+		        }
+		      },
+		      data: avgRealTime
+		    }
+		  ]
+		};
+
+option && myChart.setOption(option);
+
+	
 	</script>
 </body>
 

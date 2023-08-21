@@ -279,7 +279,12 @@ WHERE a.OR_ID = #{orId}
 		WHERE CONVERT(DATE, mfl_ed_date) = CONVERT(DATE, GETDATE());
 
 	</select>
+<update id="deleteManufacture">
+update sm_orders set
+or_process = 0
+where or_id = #{orId}
 
+</update>
 	<!-- <delete id="deleteManufacture"> -->
 
 	<!-- Delete From sm_insp_change where ch_idx = #{chIdx} -->

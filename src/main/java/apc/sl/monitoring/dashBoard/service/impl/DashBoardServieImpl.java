@@ -29,4 +29,39 @@ public class DashBoardServieImpl implements DashBoardService {
 		return dashBoardMapper.selectItemList();
 	}
 
+	@Override
+	public List<?> selectOrdersCnt(String str1) {
+		return dashBoardMapper.selectOrdersCnt(str1);
+	}
+
+	@Override
+	public List<?> selectProdCnt(String str1) {
+		return dashBoardMapper.selectProdCnt(str1);
+	}
+
+	@Override
+	public Map<String, Object> selectYear1() {
+		return dashBoardMapper.selectYear1();
+	}
+
+	@Override
+	public List<?> selectLineYear(String str2) {
+		return dashBoardMapper.selectLineYear(str2);
+	}
+
+	@Override
+	public Map<String, Object> selectYear2() {
+		return dashBoardMapper.selectYear2();
+	}
+
+	@Override
+	public List<?> selectProdCntAc(String str3) {
+		return dashBoardMapper.selectProdCntAc(str3);
+	}
+
+	@Override
+	public Map<String, Object> selectYear3() {
+		return dashBoardMapper.selectYear3();
+	}
+
 }

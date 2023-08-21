@@ -1,31 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.monitoring.dashBoard.service.impl.DashBoardMapper">
-	<select id="selectNoticeList" resultType="egovMap">
+
+<select id="selectYear1" resultType="egovMap">
+SELECT set_year FROM sm_set_monitor
+WHERE set_menu = 'ordersOutput'
+</select>
+
+<select id="selectYear2" resultType="egovMap">
+SELECT set_year FROM sm_set_monitor
+WHERE set_menu = 'lineRunning'
+</select>
+
+<select id="selectYear3" resultType="egovMap">
+SELECT set_year FROM sm_set_monitor
+WHERE set_menu = 'actualOutput'
+</select>
+
+<select id="selectOrdersCnt" resultType="egovMap">
+SELECT YEAR(or_date) AS years, MONTH(or_date) AS months,
+		ISNULL(SUM(or_qty), 0)AS order_cnt 
+		FROM sm_orders
+		WHERE YEAR(or_date) =
+		#{str1}
+		GROUP BY YEAR(or_date), MONTH(or_date)
+		ORDER BY months
+</select>
+
+<select id="selectProdCnt" resultType="egovMap">
+SELECT YEAR(rel_date) AS
+		years, MONTH(rel_date) AS months, ISNULL(SUM(rel_qty), 0)AS prod_cnt,
+		SUM(CASE WHEN CONVERT(float, rel_price) >= 0 THEN CONVERT(float, rel_price) ELSE 0 END) AS rel_price
+		FROM sm_release_info a
+		WHERE YEAR(rel_date) = #{str1}
+		GROUP BY YEAR(rel_date), MONTH(rel_date)
+		ORDER BY months
+</select>
+
+<select id="selectLineYear" resultType="egovMap">
+SELECT COUNT(*) AS counting , MONTH(daq_ed_date) AS months, SUM(DAQ_WORK_TIME) AS work_time
+		FROM sm_daq_data
+		WHERE 1=1
+		AND YEAR(DAQ_ED_DATE) = #{str2}
+		GROUP BY MONTH(daq_ed_date)
+		ORDER BY months
+</select>
+
+<select id="selectProdCntAc" resultType="egovMap">
+SELECT
+		YEAR(mfl_ed_date) AS years,
+		MONTH(mfl_ed_date) AS months,
+		SUM(mfl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		SUM(mfl_person) AS
+		total_mfl_person,
+		AVG(mfl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
+		FROM
+		sm_mf_proc_log a
+		LEFT JOIN (
 		SELECT
-			no_idx,
-			no_cont
-		FROM sm_notice
-		WHERE no_use = '공개'
-		ORDER BY no_idx DESC
-	</select>
-	
-	<select id="selectNoticeInfo" resultType="egovMap">
-		SELECT
-			no_title,
-			no_cont,
-			DATE_FORMAT(no_reg_dte, '%Y-%m-%d %H:%i:%s') AS no_reg_dte,
-			no_reg_mem
-		FROM sm_notice
-		WHERE no_idx = #{noIdx}
-	</select>
-	
-	<select id="selectItemList" resultType="egovMap">
-		SELECT
-			item_name,
-			item_cnt
-		FROM sm_item
-		WHERE item_type IN ('자재','부자재')
-	</select>
+		or_id,
+		SUM(mfs_rest_time) AS total_rest_time
+		FROM
+		sm_mf_process_stop
+		WHERE
+		YEAR(mfs_stop_time) = #{str3}
+		GROUP BY
+		or_id
+		) b ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(mfl_ed_date) = #{str3}
+		GROUP BY
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		ORDER BY months
+
+</select>
 
 </mapper>
