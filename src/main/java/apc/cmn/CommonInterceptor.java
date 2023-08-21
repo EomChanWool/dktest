@@ -27,9 +27,16 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		String str1 = request.getRequestURL().toString();
 		String[] str2 = str1.split("/");
 		System.out.println("str5 : " + str2[5]);
+		if(str2[5].equals("dashBoard.do")) {
+			
+			return true;
+		}
 		int accessLevel = userAuthorityService.selectAccess(str2[5]);
 		int menuState = userAuthorityService.menuState(str2[5]);
+		System.out.println("확인한다");
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");
+		
+		
 		
 		if(menuState == 0) {
 			ScriptAlert.alertAndMovePage(response, "등록되지않은 메뉴입니다.","/sl/basicInfo/materialMove/materialMoveList.do");

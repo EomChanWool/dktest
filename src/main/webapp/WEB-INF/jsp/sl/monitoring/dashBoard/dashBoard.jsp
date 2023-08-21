@@ -73,49 +73,20 @@
 								      <h1>수주대실적현황</h1>
 								      <div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
 								    </div>
+								    
 								    <div class="cont">
-								      <h1>생산실적현황</h1>
-								      <div id="actualOutputGraph" style="width: 100%; height:300px;"></div>
-								    </div>
-								    <div class="cont stockState scroll">
-								      <h1>재고현황</h1>
-								       <table class="table table-bordered" id="dataTable">
-										<thead>
-											<tr>
-												<th>자재명</th>
-												<th>현 재고량(EA)</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="result" items="${itemList}" varStatus="status">
-												<tr>
-													<td>${result.itemName}</td>
-													<td>${result.itemCnt}</td>
-												</tr>
-											</c:forEach>
-											<c:if test="${empty itemList}"><tr><td colspan='2'>결과가 없습니다.</td><del></del></c:if>
-										</tbody>
-								      </table>
-								    </div>
-								    <div class="cont notice scroll">
-								      <h1>공지사항</h1>
-								       <table class="table table-bordered" id="dataTable">
-										<thead>
-											<tr>
-												<th>내용</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="result" items="${noticeList}" varStatus="status">
-												<tr>
-													<td>${result.noCont}</td>
-												</tr>
-											</c:forEach>
-											<c:if test="${empty noticeList}"><tr><td colspan='1'>결과가 없습니다.</td><del></del></c:if>
-										</tbody>
-								      </table>
-								    </div>
+								      <h1>라인가동현황</h1>
+                            		<div id="lineRunningGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
+						    	<div class="cont">
+								      <h1>생산집계현황</h1>
+                            		<div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
+						    	</div>
+						    	<div class="cont">
+								      <h1>공정능력추이현황</h1>
+                            		<div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
+						    	</div>
+						    	 </div>
 					    	</form>
                             </div>
                         </div>
@@ -187,73 +158,53 @@
 	</script>
 	<script>
 	//수주대실적 현황
+	
+	
 	var chartDom = document.getElementById('ordersOutputGraph');
 	var myChart = echarts.init(chartDom);
 	var option;
+	let date = [];
+	let year = [];
 	
-let date = [];
+	let OutputData = [];
 	
-	let orderCnt = [];
-	let sales = [];
+	let viewData = [];
 	
-	let item_760N = [];
-	let item_760O = [];
-	let item_760W = [];
-	let item_560 = [];
-	let prodCnt = [];
-	
-	const cntMin = 0;
-	const cntMax = 5000;
-	const cntInterval = 1000;
-	const salesMin = 0;
-	const salesMax = 50000;
-	const salesInterval = 10000;
+	let viewData2 = [];
 
 	var num = 0;
-	var year = 0;
+	var years = 0;
 	var maxMon = 0;
-	<c:forEach items="${prodCntList}" var="list">
-		year = ${list.years};
-		maxMon = ${list.month};
-	</c:forEach>
-	for(var i=1;i<=maxMon;i++){
-		date.push(year+"년 "+i+"월");
-		orderCnt.push(0);
-		item_760N.push(0);
-		item_760O.push(0);
-		item_760W.push(0);
-		item_560.push(0);
-		sales.push(0);
-	}
 	
 	<c:forEach items="${orderCntList}" var="list">
-		orderCnt[${list.month}-1] = ${list.orderCnt};
-	</c:forEach>
 	
+	years = ${list.years};
+	maxMon = ${list.months};
+	</c:forEach>
+	for(var i=1;i<=maxMon;i++){
+		date.push(years+"년 "+i+"월");
+		OutputData.push(0);
+		viewData.push(0);
+		viewData2.push(0);
+	}
 	<c:forEach items="${prodCntList}" var="list">
-		if('${list.itemName}' == '760N'){
-			item_760N[${list.month}-1] = ${list.prodCnt}; 
-		}else if('${list.itemName}' == '760O'){
-			item_760O[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '760W'){
-			item_760W[${list.month}-1] = ${list.prodCnt};
-		}else if('${list.itemName}' == '560'){
-			item_560[${list.month}-1] = ${list.prodCnt};
-		}
+	viewData[${list.months-1}] = ${list.prodCnt};
+	viewData2[${list.months-1}] = ${list.relPrice};
+	</c:forEach>
+	<c:forEach items="${orderCntList}" var="list">
+	OutputData[${list.months-1}] = ${list.orderCnt};
 	</c:forEach>
 	
-	<c:forEach items="${salesList}" var="list">
-		sales[${list.month}-1] = ${list.money};
-	</c:forEach>
 
 	option = {
 			  tooltip: {
 			    trigger: 'axis',
 			    axisPointer: {
-			      type: 'cross',
-			      crossStyle: {
-			        color: '#999'
-			      }
+			    	type: 'cross',
+			    	axis: "auto",
+			    	crossStyle: {
+			        	color: '#999'
+			    	}
 			    }
 			  },
 			  toolbox: {
@@ -261,11 +212,11 @@ let date = [];
 			      dataView: { show: false, readOnly: false },
 			      magicType: { show: false, type: ['line', 'bar'] },
 			      restore: { show: false },
-			      saveAsImage: { show: false }
+			      saveAsImage: { show: true }
 			    }
 			  },
 			  legend: {
-			    data: ['수주량', '760N', '760O', '760W', '560', '매출액']
+			    data: ['수주량', '생산량','매출액']
 			  },
 			  xAxis: [
 			    {
@@ -279,87 +230,83 @@ let date = [];
 			  yAxis: [
 			    {
 			      type: 'value',
-			      name: '개수',
-			      min: cntMin,
-			      max: cntMax,
-			      interval: cntInterval,
+			      name: 'EA',
 			      axisLabel: {
 			        formatter: '{value} EA'
 			      }
 			    },
 			    {
-			      type: 'value',
-			      name: '금액',
-			      min: salesMin,
-			      max: salesMax,
-			      interval: salesInterval,
-			      axisLabel: {
-			        formatter: '{value} 만원'
-			      }
+	    		  type: 'value',
+		      	  name: '매출액',
+		      	  position: 'right',
+		      	  axisLabel: {
+		            formatter: '{value} 원'
+				  }
 			    }
 			  ],
 			  series: [
 			    {
 			      name: '수주량',
 			      type: 'bar',
+			      /* label: {
+			          show: true,
+			          position: 'inside',
+			          formatter: function(d){
+			        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" EA";
+			          }
+			          
+			        }, */
 			      tooltip: {
 			        valueFormatter: function (value) {
-			          return value + ' EA';
+			        	let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');  
+				        return result + ' EA';
 			        }
 			      },
-			      data: orderCnt
+			      data: OutputData
 			    },
 			    {
-			      name: '760N',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760N
+		    	name: '생산량',
+			    type: 'bar',
+			    /* label: {
+			          show: true,
+			          position: 'inside',
+			          formatter: function(d){
+			        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" EA";
+			          }
+			          
+			        }, */
+			    tooltip: {
+			      valueFormatter: function (value) {
+			    	  
+			    	let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');  
+			        return result + ' EA';
+			      }
+			    },
+			    data: viewData
 			    },
 			    {
-			      name: '760O',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760O
-			    },
-			    {
-			      name: '760W',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_760W
-			    },
-			    {
-			      name: '560',
-			      type: 'bar',
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' EA';
-			        }
-			      },
-			      data: item_560
-			    },
-			    {
-			      name: '매출액',
-			      type: 'line',
-			      yAxisIndex: 1,
-			      tooltip: {
-			        valueFormatter: function (value) {
-			          return value + ' 만원';
-			        }
-			      },
-			      data: sales
-			    }
+			    	name: '매출액',
+			    	yAxisIndex: 1,
+				    type: 'line',
+				    label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: function(d){
+				        	  return d.data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+" 원";
+				          }
+				        },
+				    tooltip: {
+				      valueFormatter: function (value) {
+				    	  if(value == undefined){
+				    		 value = 0;
+				    	  }
+				    	  let result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				    	 
+				        return result + ' 원';
+				      }
+				    },
+				    data: viewData2
+				    }
 			  ]
 			};
 	option && myChart.setOption(option);
