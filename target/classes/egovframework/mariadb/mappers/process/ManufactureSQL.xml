@@ -58,7 +58,7 @@
 
 	<select id="selectMfManager" resultType="egovMap">
 		select mi_name from sm_member_info
-		where mi_department = '가공부'
+		where mi_department = '가공팀'
 	</select>
 
 
