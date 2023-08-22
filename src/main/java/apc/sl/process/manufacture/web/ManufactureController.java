@@ -253,7 +253,6 @@ public class ManufactureController {
 	
 	private void CreateFile(Map<String,Object> outData) {
 		String fileName = "C:\\test\\Test2.txt";
-		System.out.println("아웃데이터 : " + outData);
 		
 		try {
 			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
