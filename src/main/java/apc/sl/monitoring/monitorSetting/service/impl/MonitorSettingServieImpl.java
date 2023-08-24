@@ -23,4 +23,29 @@ public class MonitorSettingServieImpl implements MonitorSettingService{
 	public void settingGo(Map<String, Object> map) {
 		monitorSettingMapper.settingGo(map);
 	}
+
+	@Override
+	public List<?> selectList() {
+		return monitorSettingMapper.selectList();
+	}
+
+	@Override
+	public void registGo(Map<String, Object> map) {
+		monitorSettingMapper.registGo(map);
+	}
+
+	@Override
+	public Map<String, Object> selectMList(Map<String, Object> map) {
+		return monitorSettingMapper.selectMList(map);
+	}
+
+	@Override
+	public void modifySet(Map<String, Object> map) {
+		monitorSettingMapper.modifySet(map);
+	}
+
+	@Override
+	public void deleteSet(Map<String, Object> map) {
+		monitorSettingMapper.deleteSet(map);
+	}
 }

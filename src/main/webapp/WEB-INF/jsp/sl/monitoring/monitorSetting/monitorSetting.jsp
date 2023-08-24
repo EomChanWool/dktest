@@ -56,7 +56,9 @@
                         <input type="hidden" name="setId">
                         <input type="hidden" name="setYear">
                         </form>
-							
+							 <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_set()" style="float: right;">
+	                                <span class="text">등록</span>
+	                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -65,7 +67,7 @@
                                         <tr>
                                             <th>메뉴</th>
 											<th>년도선택</th>
-											<th>확인</th>
+											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,16 +76,22 @@
 	                                            <c:if test="${result.setMenu eq 'ordersOutput'}"><td>수주대실적현황</td></c:if>
 	                                            <c:if test="${result.setMenu eq 'lineRunning'}"><td>라인가동현황</td></c:if>
 	                                            <c:if test="${result.setMenu eq 'actualOutput'}"><td>생산집계현황</td></c:if>
-												<td><select class="form-control"  name="setYears_${status.index}" id="setYears_${status.index}">
+												<td><%-- <select class="form-control"  name="setYears_${status.index}" id="setYears_${status.index}">
 						    			<option value="2022" <c:if test="${result.setYear eq '2022'}">selected="selected"</c:if>>2022년</option>
 						    			<option value="2023" <c:if test="${result.setYear eq '2023'}">selected="selected"</c:if>>2023년</option>
 						    			<option value="2024" <c:if test="${result.setYear eq '2024'}">selected="selected"</c:if>>2024년</option>
 						    			<option value="2025" <c:if test="${result.setYear eq '2025'}">selected="selected"</c:if>>2025년</option>
 						    			<option value="2026" <c:if test="${result.setYear eq '2026'}">selected="selected"</c:if>>2026년</option>
-						    		</select></td>
+						    		</select> --%>${result.setYear}</td>
 												 <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_setting_go('${result.setId}','${status.index}')">
+	                                            	<%-- <a href="#" class="btn btn-warning btn-icon-split" onclick="fn_setting_go('${result.setId}','${status.index}')">
 				                                        <span class="text">확인</span>
+				                                    </a> --%>
+				                                    <a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_set_go('${result.setId}')">
+				                                        <span class="text">수정</span>
+				                                    </a>
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_set('${result.setId}')">
+				                                        <span class="text">삭제</span>
 				                                    </a>
 				                                    
 	                                            </td>
@@ -139,6 +147,26 @@
 		listForm.action = "${pageContext.request.contextPath}/sl/monitoring/monitorSetting/monitorSettingGo.do";
 		listForm.submit();
 		
+	}
+	
+	
+	function fn_regist_set(){
+		listForm.action = "${pageContext.request.contextPath}/sl/monitoring/monitorSetting/monitorSettingRegist.do";
+		listForm.submit();
+	}
+	
+	function fn_modify_set_go(setId){
+		listForm.setId.value = setId;
+		listForm.action = "${pageContext.request.contextPath}/sl/monitoring/monitorSetting/monitorSettingModify.do";
+		listForm.submit();
+	}
+	
+	function fn_delete_set(setId){
+		if(confirm('해당 내역을 삭제하시겠습니까?')) {
+			listForm.setId.value = setId;
+			listForm.action = "${pageContext.request.contextPath}/sl/monitoring/monitorSetting/monitorSettingDelete.do";
+			listForm.submit();
+		}
 	}
 	
 	
