@@ -10,6 +10,8 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface CuttingMapper {
 
 	int selectCuttingListToCnt(SearchVO searchVO);
+	
+	int checkEq(Map<String, Object> map);
 
 	List<?> selectCuttingList(SearchVO searchVO);
 
@@ -17,7 +19,7 @@ public interface CuttingMapper {
 
 	List<?> selectProdList();
 
-	List<?> selectCompanyList();
+	List<?> selectEqList();
 
 	List<?> selectComapnyInfo(Map<String, Object> map);
 
@@ -25,9 +27,13 @@ public interface CuttingMapper {
 
 	void registCutting(Map<String, Object> map);
 
+	void registCutting2(Map<String, Object> map);
+	
 	Map<String, Object> selectCuttingInfo(Map<String, Object> map);
 
 	void modifyCutting(Map<String, Object> map);
+	
+	void modifyCutting2(Map<String, Object> map);
 
 	void deleteCutting(Map<String, Object> map);
 

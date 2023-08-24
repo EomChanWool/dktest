@@ -34,10 +34,6 @@ public class CuttingServieImpl implements CuttingService {
 		return cuttingMapper.selectProdList();
 	}
 
-	@Override
-	public List<?> selectCompanyList() {
-		return cuttingMapper.selectCompanyList();
-	}
 
 	@Override
 	public List<?> selectComapnyInfo(Map<String, Object> map) {
@@ -53,6 +49,11 @@ public class CuttingServieImpl implements CuttingService {
 	public void registCutting(Map<String, Object> map) {
 		cuttingMapper.registCutting(map);
 	}
+	
+	@Override
+	public void registCutting2(Map<String, Object> map) {
+		cuttingMapper.registCutting2(map);
+	}
 
 	@Override
 	public Map<String, Object> selectCuttingInfo(Map<String, Object> map) {
@@ -63,10 +64,25 @@ public class CuttingServieImpl implements CuttingService {
 	public void modifyCutting(Map<String, Object> map) {
 		cuttingMapper.modifyCutting(map);
 	}
+	
+	@Override
+	public void modifyCutting2(Map<String, Object> map) {
+		cuttingMapper.modifyCutting2(map);
+	}
 
 	@Override
 	public void deleteCutting(Map<String, Object> map) {
 		cuttingMapper.deleteCutting(map);
+	}
+
+	@Override
+	public List<?> selectEqList() {
+		return cuttingMapper.selectEqList();
+	}
+
+	@Override
+	public int checkEq(Map<String, Object> map) {
+		return cuttingMapper.checkEq(map);
 	}
 
 }

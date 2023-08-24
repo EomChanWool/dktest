@@ -1,6 +1,8 @@
 package apc.sl.collectInfo.cutting.web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,86 +50,61 @@ public class CuttingController {
 	
 	@RequestMapping("/sl/collectInfo/cutting/registCutting.do")
 	public String registCutting(ModelMap model) {
-		//사업장목록
-		List<?> compnayList = cuttingService.selectCompanyList();
-		model.put("compnayList", compnayList);
-		//거래처목록
-		List<?> accountList = cuttingService.selectAccountList();
-		model.put("accountList",accountList);
-		//제품목록
-		List<?> prodList = cuttingService.selectProdList();
-		model.put("prodList", prodList);
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		Date now = new Date();
+		String edDate = format.format(now);
+		
+		model.put("curTime", edDate);
+	
+		List<?> eqList = cuttingService.selectEqList();
+		model.put("eqList", eqList);
 		
 		return "sl/collectInfo/cutting/cuttingRegist";
 	}
 	
-	@RequestMapping(value="/sl/collectInfo/cutting/companyInfoAjax.do", method=RequestMethod.POST)
-	public ModelAndView companyInfoAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		List<?> list = cuttingService.selectComapnyInfo(map);
-		mav.setViewName("jsonView");
-		mav.addObject("com_info", list);
-		return mav;
-	}
 	
-	@RequestMapping(value="/sl/collectInfo/cutting/prodPerPriceInfoAjax.do", method=RequestMethod.POST)
-	public ModelAndView prodPerPriceInfoAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		List<?> list = cuttingService.selectProdPerPrice(map);
-		mav.setViewName("jsonView");
-		mav.addObject("item_info", list);
-		return mav;
-	}
 	
 	@RequestMapping("/sl/collectInfo/cutting/registCuttingOk.do")
 	public String registCuttingOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		map.put("user", session.getAttribute("user_id"));
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyMMddHHmm");
+		
+		Date now = new Date();
+		String edDate = format.format(now);
+		map.put("csData09", edDate);
+		int checkEq = cuttingService.checkEq(map);
+		System.out.println("등록 맵 : " + map);
+		if(checkEq == 0) {
+			redirectAttributes.addFlashAttribute("msg","설비명을 확인해주세요.");
+			redirectAttributes.addFlashAttribute("cuttingVO", map);
+			return "redirect:/sl/collectInfo/cutting/registCutting.do";
+		}
+		
 		cuttingService.registCutting(map);
+		cuttingService.registCutting2(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/collectInfo/cutting/cuttingList.do";
 	}
 	
 	@RequestMapping("/sl/collectInfo/cutting/modifyCutting.do")
 	public String modifyCutting(@RequestParam Map<String, Object> map, ModelMap model) {
-		//사업장목록
-		List<?> compnayList = cuttingService.selectCompanyList();
-		model.put("compnayList", compnayList);
-		//거래처목록
-		List<?> accountList = cuttingService.selectAccountList();
-		model.put("accountList",accountList);
-		//제품목록
-		List<?> prodList = cuttingService.selectProdList();
-		model.put("prodList", prodList);
+		Map<String,Object> clDetail = cuttingService.selectCuttingInfo(map);
+		model.put("cuttingVO", clDetail);
 		
-		Map<String, Object> detail = cuttingService.selectCuttingInfo(map);
-		model.put("cuttingVO", detail);
 		
-		Map<String, Object> mapTemp = new HashMap<>();
-		List<Map<String, Object>> listTemp = new ArrayList<>();
-		for(int i=1;i<=4;i++) {
-			mapTemp = new HashMap<>();
-			String prod = "esProd"+i;
-			String cnt = "esCnt"+i;
-			String perPrice = "esPerPrice"+i;
-			
-			if(detail.get(prod)+"" != "") {
-				mapTemp.put("prod", detail.get(prod)+"");
-				mapTemp.put("cnt", detail.get(cnt)+"");
-				mapTemp.put("perPrice", detail.get(perPrice)+"");
-			}else {
-				mapTemp.put("prod", null);
-				mapTemp.put("cnt", null);
-				mapTemp.put("perPrice", null);
-			}
-			listTemp.add(mapTemp);
-		}
-		model.put("prList", listTemp);
+		
+		
 		return "sl/collectInfo/cutting/cuttingModify";
 	}
 	
 	@RequestMapping("/sl/collectInfo/cutting/modifyCuttingOk.do")
 	public String modifyCuttingOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println("수정맵 : " + map);
+	
 		cuttingService.modifyCutting(map);
+		cuttingService.modifyCutting2(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/collectInfo/cutting/cuttingList.do";
 	}
