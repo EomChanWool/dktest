@@ -33,7 +33,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		}
 		int accessLevel = userAuthorityService.selectAccess(str2[5]);
 		int menuState = userAuthorityService.menuState(str2[5]);
-		System.out.println("확인한다");
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");
 		
 		

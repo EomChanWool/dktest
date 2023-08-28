@@ -149,8 +149,7 @@
 	
 	
 	$(function() {
-		companyInfoAjax();
-		calcTotalPrice();
+		
 		
 		$('#collectInfoMenu').addClass("active");
 		$('#collectInfo').addClass("show");

@@ -67,8 +67,6 @@ public class UserController {
 		String miPass = sha256.encrypt(map.get("miPass").toString());
 		map.put("miPass",miPass);
 		
-		
-		
 		userService.registUser(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/user/userList.do";

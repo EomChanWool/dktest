@@ -32,7 +32,7 @@
 		MONTH(mfl_ed_date) AS months,
 		SUM(mfl_work_time -
 		ISNULL(b.total_rest_time, 0)) AS total_real_time,
-		SUM(mfl_person) AS
+		count(DISTINCT mfl_manager) AS
 		total_mfl_person,
 		AVG(mfl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
 		FROM

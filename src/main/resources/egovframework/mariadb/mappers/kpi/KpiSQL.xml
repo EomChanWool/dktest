@@ -118,21 +118,26 @@
 	</select>
 
 	<select id="selectWorktime" resultType="egovMap">
+		<!-- SELECT years, months, SUM(total_real_time) AS total_real_time, SUM(total_mfl_person) 
+			AS total_mfl_person FROM ( SELECT YEAR(mfl_ed_date) AS years, MONTH(mfl_ed_date) 
+			AS months, SUM(mfl_work_time - ISNULL(b.total_rest_time, 0)) AS total_real_time, 
+			SUM(mfl_person) AS total_mfl_person FROM sm_mf_proc_log a LEFT JOIN ( SELECT 
+			or_id, SUM(mfs_rest_time) AS total_rest_time FROM sm_mf_process_stop WHERE 
+			YEAR(mfs_stop_time) = #{searchCondition} GROUP BY or_id ) b ON a.or_id = 
+			b.or_id WHERE YEAR(mfl_ed_date) = #{searchCondition} GROUP BY YEAR(mfl_ed_date), 
+			MONTH(mfl_ed_date) ) AS aa GROUP BY years, months ORDER BY years, months -->
 		SELECT
 		years,
 		months,
 		SUM(total_real_time) AS total_real_time,
-		SUM(total_mfl_person) AS
-		total_mfl_person
+		COUNT(DISTINCT total_mfl_person) AS total_mfl_person
 		FROM
 		(
 		SELECT
 		YEAR(mfl_ed_date) AS years,
 		MONTH(mfl_ed_date) AS months,
-		SUM(mfl_work_time -
-		ISNULL(b.total_rest_time, 0)) AS total_real_time,
-		SUM(mfl_person) AS
-		total_mfl_person
+		SUM(mfl_work_time - ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		mfl_manager AS total_mfl_person
 		FROM
 		sm_mf_proc_log a
 		LEFT JOIN (
@@ -145,23 +150,23 @@
 		YEAR(mfs_stop_time) = #{searchCondition}
 		GROUP BY
 		or_id
-		) b ON a.or_id =
-		b.or_id
+		) b ON a.or_id = b.or_id
 		WHERE
 		YEAR(mfl_ed_date) = #{searchCondition}
 		GROUP BY
-		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date), mfl_manager
 		) AS aa
 		GROUP BY
 		years, months
 		ORDER BY
-		years, months
-
+		years, months;
 	</select>
 
 	<select id="selectWorkCnt" resultType="egovMap">
-		SELECT YEAR(mfl_ed_date) AS years, MONTH(mfl_ed_date) AS months,
-		ISNULL(SUM(or_qty), 0)AS prod_cnt
+		SELECT YEAR(mfl_ed_date)
+		AS years, MONTH(mfl_ed_date) AS months,
+		ISNULL(SUM(or_qty), 0)AS
+		prod_cnt
 		FROM sm_orders a
 		JOIN sm_mf_proc_log b
 		ON a.OR_ID = b.OR_ID
@@ -169,32 +174,50 @@
 		YEAR(or_date) =
 		#{searchCondition}
 		and or_process = 4
-		GROUP BY YEAR(mfl_ed_date),
+		GROUP BY
+		YEAR(mfl_ed_date),
 		MONTH(mfl_ed_date)
 		ORDER BY months
 	</select>
 
 	<select id="selectProdCnt" resultType="egovMap">
-		SELECT YEAR(rel_date) AS
-		years, MONTH(rel_date) AS months,
-		ISNULL(SUM(rel_qty), 0)AS prod_cnt
-		FROM sm_release_info a
-		JOIN sm_orders
-		b ON a.OR_ID = b.OR_ID
-		WHERE YEAR(rel_date) = #{searchCondition}
-		GROUP
-		BY YEAR(rel_date), MONTH(rel_date)
-		ORDER BY months
+		SELECT
+		month(cs_reg_date) AS months,
+		SUM(CAST(cs_data06 AS INT)) AS sum_data06,
+		SUM(cs_work_time) AS sum_cs_work_time
+		FROM (
+		SELECT
+		MIN(cs_reg_date) AS cs_reg_date,
+		eq_sensorid,
+		MAX(cs_data06) AS cs_data06,
+		DATEDIFF(MINUTE, MIN(cs_reg_date), MAX(cs_reg_date)) AS cs_work_time
+		FROM
+		sm_cut_sensor_data
+		WHERE
+		1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
+		GROUP BY
+		eq_sensorid, cs_data09
+		HAVING
+		MAX(cs_data08) = 1
+		) AS grouped_data
+		GROUP BY
+		month(cs_reg_date)
+		ORDER BY months asc
 	</select>
 
 	<select id="selectLeadtime" resultType="egovMap">
-		SELECT YEAR(a.or_date) AS years, MONTH(a.or_date) AS months,
-		max(DATEDIFF(DAY, a.or_date, b.rel_date)) AS lead_max
-		, MIN(DATEDIFF(DAY, a.or_date, b.rel_date)) AS lead_min
+		SELECT YEAR(a.or_date) AS
+		years, MONTH(a.or_date) AS months,
+		max(DATEDIFF(DAY, a.or_date,
+		b.rel_date)) AS lead_max
+		, MIN(DATEDIFF(DAY, a.or_date, b.rel_date)) AS
+		lead_min
 		FROM sm_orders a
 		JOIN sm_release_info b ON a.OR_ID = b.OR_ID
 		WHERE YEAR(a.or_date) = #{searchCondition}
-		GROUP BY YEAR(a.or_date), MONTH(a.or_date)
+		GROUP BY YEAR(a.or_date),
+		MONTH(a.or_date)
 		ORDER BY months
 
 	</select>

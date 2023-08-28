@@ -86,7 +86,7 @@ public class ActualResultController {
 		}
 		else {
 			if(member.get("miId").equals("pop1")) {
-				return "redirect:/sl/pop/popCut/popCutList.do";
+				return "redirect:/sl/pop/popMf/popMfList.do";
 			}
 			if(member.get("miId").equals("pop2")) {
 				return "redirect:/sl/pop/popMf/popMfList.do";

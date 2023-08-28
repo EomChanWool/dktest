@@ -66,7 +66,7 @@
 						    		</select>
 						    		<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition2" id="searchCondition2">
 							    		<option value="">선택</option>
-							    		<option value="1" <c:if test="${searchVO.searchCondition2 eq 1}">selected="selected"</c:if>>생산량</option>
+							    		<option value="1" <c:if test="${searchVO.searchCondition2 eq 1}">selected="selected"</c:if>>시간당생산량</option>
 							    		<option value="2" <c:if test="${searchVO.searchCondition2 eq 2}">selected="selected"</c:if>>불량률</option>
 							    		<option value="3" <c:if test="${searchVO.searchCondition2 eq 3}">selected="selected"</c:if>>작업공수</option>
 							    		<option value="4" <c:if test="${searchVO.searchCondition2 eq 4}">selected="selected"</c:if>>리드타임</option>
@@ -163,7 +163,8 @@
 		let kpiSalesData = [];
 		
 		let viewData = [];
-	
+		
+		let totalProd = [];
 		
 		var years = 0;
 		var maxMon = 0;
@@ -180,12 +181,20 @@
 			date.push(years2+"년 "+i+"월");
 			kpiOutputData.push(0);
 			viewData.push(0);
+			totalProd.push(0);
 			}
 			<c:forEach items="${kpiGraphList}" var="list">
 			kpiOutputData[${list.kiMonth-1}] = ${list.kiQty};
 			</c:forEach>
 			<c:forEach items="${totalProdCnt}" var="list">
-			viewData[${list.months-1}] = ${list.prodCnt};
+			var sumData = ${list.sumData06};
+			var workTime = ${list.sumCsWorkTime};
+			
+			var hourProd = Math.round((sumData/workTime) * 60);
+			
+			console.log(hourProd);
+			viewData[${list.months-1}] = hourProd;
+			totalProd[${list.months-1}] = sumData;
 			</c:forEach>
 			
 		}else if($('#searchCondition2').val() == "2"){
@@ -220,7 +229,7 @@
 		
 		console.log(c1);
 		
-		var manHour = Math.round((a1*b1)/c1);
+		var manHour = Math.round((a1*b1)/c1 *10)/10;
 		if(manHour == Infinity){
 			manHour = 0;
 		}
@@ -276,7 +285,7 @@
 					    }
 					  },
 					  legend: {
-					    data: ['목표치', '생산량']
+					    data: ['목표치', '시간당 생산량', '총 생산량']
 					  },
 					  xAxis: [
 					    {
@@ -290,14 +299,15 @@
 					  yAxis: [
 					    {
 					      type: 'value',
-					      name: '절단',
+					      name: '시간당 생산량',
 					      axisLabel: {
 					        formatter: '{value} EA'
 					      }
 					    },
 					    {
 			    		  type: 'value',
-				      	  name: '생산량',
+				      	  name: '총 생산량',
+				      	  position : 'right',
 				      	  axisLabel: {
 				            formatter: '{value} EA'
 						  }
@@ -315,7 +325,7 @@
 					      data: kpiOutputData
 					    },
 					    {
-				    	name: '생산량',
+				    	name: '시간당 생산량',
 					    type: 'bar',
 					    tooltip: {
 					      valueFormatter: function (value) {
@@ -323,7 +333,18 @@
 					      }
 					    },
 					    data: viewData
-					    }
+					    },
+					    {
+					    	name: '총 생산량',
+					    	yAxisIndex: 1,
+						    type: 'line',
+						    tooltip: {
+						      valueFormatter: function (value) {
+						        return value + ' EA';
+						      }
+						    },
+						    data: totalProd
+						    }
 					  ]
 					};
 		}else if($('#searchCondition2').val() == "2"){

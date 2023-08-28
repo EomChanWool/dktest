@@ -230,7 +230,5 @@ public class PopManufactureController {
 			    }
 		}
 		
-		
-	    
 	}
 }
