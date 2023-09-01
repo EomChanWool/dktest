@@ -47,44 +47,42 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">검사기준서 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">성능시험관리 수정</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/quality/inst/modifyInstOk.do" name="modifyForm" method="post" encType="multipart/form-data">
-                            		<input type="hidden" name="doIdx" value="${documentVO.doIdx}">
-                            		<input type="hidden" name="doFilNm" value="${documentVO.doFilNm}">
+                            	<form action="${pageContext.request.contextPath}/sl/process/checkPr/modifyPerformanceOk.do" name="modifyForm" method="post">
+                            	<input type="hidden" name="ptPerfno" value="${detail.ptPerfno}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>문서명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="doName" id="doName" value="${documentVO.doName}"></td>
-												<th>작성자 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="doManager" id="doManager" value="${documentVO.doManager}"></td>
+												<th>수주번호 <span class="req">*</span></th>
+												<td>
+												<input type="text" class="form-control" name="orId" id="orId" value="${detail.orId }" readonly>
+											</td>
+												<th>설비 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="eqId" id="eqId" value="${detail.eqId }" readonly></td>
 											</tr>
 											<tr>
-												<th>작성일 <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="doDte" id="doDte" value="${documentVO.doDte}"></td>
+												<th>가동시간 <span class="req">*</span></th>
+												<td><input type="datetime-local" class="form-control" name="ptStarttime" id="ptStarttime" value="${detail.ptStarttime}" readonly></td>
+												<th>종료시간 <span class="req">*</span></th>
+												<td><input type="datetime-local" class="form-control" name="ptEndtime" id="ptEndtime" value="${detail.ptEndtime }" readonly></td>
 											</tr>
 											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="doNote" id="doNote">${documentVO.doNote}</textArea></td>
+												<th>가공수량 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptMfQty" id="ptMfQty" value="${detail.ptMfQty}" readonly></td>
+												<th>불량수량 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptBadQty" id="ptBadQty" value="${detail.ptBadQty}"></td>
 											</tr>
-											<tr>
-												<th>파일업로드 <span class="req">*</span></th>
-												<td colspan="3">
-													<label class="file_label" for="input_file">업로드</label>
-													<input type="text" class="form-control file-name-form" id="fileName" value="${documentVO.doOriginFilNm}" readonly="readonly">
-													<input type="file" name="uploadFile" id="input_file" style="display: none;">
-												</td>
-											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_document()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/inst/instList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_document()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/checkPr/performanceList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -120,37 +118,50 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_document(){
-		if($('#doName').val() == ''){
-			alert("문서명을 확인 바랍니다.");
-			return;
-		}
+	function fn_regist_document(){
 		
-		if($('#doManager').val() == ''){
-			alert("작성자를 확인 바랍니다.");
-			return;
-		}
 		
-		if($('#doDte').val() == ''){
-			alert("작성일을 확인 바랍니다.");
+		if($('#ptBadQty').val() == ''){
+			alert("불량수량을 확인 바랍니다.");
 			return;
 		}
 		
 		modifyForm.submit();
 	}
 	
+	
+	function performanceInfoAjax(){
+		$.ajax({
+			  type:"POST",
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/checkPr/performanceInfoAjax.do'/>",	  		  			  
+			  dataType:"JSON",
+			  data:{
+				  'orId':$('#orId').val(),
+			  },
+			  success:function(result){
+				  $('#ptStarttime').val(result.perforList[0].mflStDate);
+				  $('#ptEndtime').val(result.perforList[0].mflEdDate);
+				  $('#ptMfQty').val(result.perforList[0].orQty);
+				  console.log(result);
+			  },
+			  error:function(request,status,error){ 
+				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
+			  }
+		  });
+	}
+	
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#instList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#performanceList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		$('#input_file').change(function(){
-			$('#fileName').val($('#input_file').val().split('\\')[2]);
+		$('#orId').change(function(){
+			performanceInfoAjax();
 		});
 	});
 	</script>

@@ -115,7 +115,7 @@
 		    <c:if test="${mLevel.P0021 <= memberVO.mLev}"><a class="collapse-item" id="cutList" href="${pageContext.request.contextPath}/sl/process/cutProcess/cutList.do">절단공정관리</a></c:if>
 		    <c:if test="${mLevel.P0022 <= memberVO.mLev}"><a class="collapse-item" id="manufactureList" href="${pageContext.request.contextPath}/sl/process/manufacture/manufactureList.do">가공공정관리</a></c:if>
 		    <c:if test="${mLevel.P0023 <= memberVO.mLev}"><a class="collapse-item" id="inspectList" href="${pageContext.request.contextPath}/sl/process/inspect/inspectList.do">검사공정관리</a></c:if>
-		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="performanceList" href="${pageContext.request.contextPath}/sl/process/performances/performanceList.do">성능시험관리</a></c:if>
+		    <c:if test="${mLevel.P0024 <= memberVO.mLev}"><a class="collapse-item" id="performanceList" href="${pageContext.request.contextPath}/sl/process/checkPr/performanceList.do">성능시험관리</a></c:if>
 		</div>
     </div>
 </li>

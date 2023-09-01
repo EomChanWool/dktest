@@ -67,7 +67,8 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/monitoring/dashBoard.do" method="post">
-								<input type="hidden" name="noIdx" id="noIdx">
+                                <input type="hidden" name="noIdx" id="noIdx">
+								<input type="hidden" name="searchCondition" id="searchCondition" value="${searchCondition}">
 								<div class="cont_wrap">
 									<div class="cont">
 								      <h1>수주대실적현황(${date}년)</h1>
@@ -76,10 +77,21 @@
 								    
 								    <div class="cont">
 								      <h1>라인가동현황(${date2}년)</h1>
+								      
                             		<div id="lineRunningGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	<div class="cont">
-								      <h1>생산집계현황(${date3}년)</h1>
+						    	<c:if test="${searchCondition eq 'manu'}"><h1>생산집계현황(${date3}년)-가공 <a href="#" class="btn btn-primary btn-icon-split" onclick="selcetKeyword('cut')" style="float: right;">
+	                                <span class="text">절단</span>
+	                            </a> <a href="#" class="btn btn-primary btn-icon-split" onclick="selcetKeyword('manu')" style="float: right;">
+	                                <span class="text">가공</span>
+	                            </a></h1></c:if>
+	                            <c:if test="${searchCondition eq 'cut'}"><h1>생산집계현황(${date3}년)-절단 <a href="#" class="btn btn-primary btn-icon-split" onclick="selcetKeyword('cut')" style="float: right;">
+	                                <span class="text">절단</span>
+	                            </a> <a href="#" class="btn btn-primary btn-icon-split" onclick="selcetKeyword('manu')" style="float: right;">
+	                                <span class="text">가공</span>
+	                            </a></h1></c:if>
+								      
                             		<div id="actualOutputGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	<div class="cont">
@@ -130,7 +142,7 @@
 
 	$(function() {
 		$('#dashboard').addClass("active");
-		
+		console.log($('#searchCondition').val());
 // 		document.getElementById("sidebarToggle").click();
 
 		window.onresize = function() {
@@ -143,13 +155,21 @@
 		
 		const stockArea = document.querySelector(".stockState");
 		const noticeArea = document.querySelector(".notice");
-		autoScroll(stockArea, 2000);
-		autoScroll(noticeArea, 3000);
+		
+		//autoScroll(stockArea, 2000);
+		//autoScroll(noticeArea, 3000);
 	});
 	
+	function selcetKeyword(keyWord){
+		listForm.searchCondition.value = keyWord;
+		listForm.submit();
+	}
+	
 	function autoScroll(obj, interval){
+		;
 		setInterval(function(){
 			obj.scrollTop = obj.scrollTop + 50;
+			
 			if(obj.offsetHeight + obj.scrollTop >= obj.scrollHeight){
 				obj.scrollTop = 0;
 			}
@@ -195,7 +215,6 @@
 	OutputData[${list.months-1}] = ${list.orderCnt};
 	</c:forEach>
 	
-
 	option = {
 			  tooltip: {
 			    trigger: 'axis',
@@ -438,10 +457,11 @@
 	var years3 = 0;
 	var maxMon3 = 0;
 	
+	
+	if($('#searchCondition').val() == "manu"){
 	<c:forEach items="${prodCntListAc}" var="list">
 	year3 = ${list.years};
 	maxMon3 = ${list.months};
-	console.log(maxMon3);
 </c:forEach>
 
 for(var i=1;i<=maxMon3;i++){
@@ -456,7 +476,24 @@ totalRealTime[${list.months-1}] = ${list.totalRealTime};
 totalMflPerson[${list.months-1}] = ${list.totalMflPerson};
 avgRealTime[${list.months-1}] = ${list.avgRealTime};
 </c:forEach>
+}else if($('#searchCondition').val() == "cut"){
+	<c:forEach items="${prodCntListAc2}" var="list">
+	year3 = ${list.years};
+	maxMon3 = ${list.months};
+</c:forEach>
 
+for(var i=1;i<=maxMon3;i++){
+	date3.push(i+"월");
+	totalRealTime.push(0);
+	avgRealTime.push(0);
+}
+<c:forEach items="${prodCntListAc2}" var="list">
+totalRealTime[${list.months-1}] = ${list.sumCsWorkTime};
+avgRealTime[${list.months-1}] = ${list.avgWorkTime};
+</c:forEach>
+	
+}
+	if($('#searchCondition').val() == "manu"){
 option = {
 		  tooltip: {
 		    trigger: 'axis',
@@ -491,14 +528,14 @@ option = {
 		  yAxis: [
 		    {
 		      type: 'value',
-		      name: '총작업시간',
+		      name: '총작업시간(가공)',
 		      axisLabel: {
 		        formatter: '{value} MIN'
 		      }
 		    },
 		    {
 	    		  type: 'value',
-		      	  name: '평균시간',
+		      	  name: '평균시간(절단)',
 		      	  position: 'right',
 		      	  axisLabel: {
 		            formatter: '{value} MIN'
@@ -560,6 +597,94 @@ option = {
 		    }
 		  ]
 		};
+	}else if($('#searchCondition').val() == "cut"){
+		option = {
+				  tooltip: {
+				    trigger: 'axis',
+				    axisPointer: {
+				    	type: 'cross',
+				    	axis: "auto",
+				    	crossStyle: {
+				        	color: '#999'
+				    	}
+				    }
+				  },
+				  toolbox: {
+				    feature: {
+				      dataView: { show: false, readOnly: false },
+				      magicType: { show: false, type: ['line', 'bar'] },
+				      restore: { show: false },
+				      saveAsImage: { show: true }
+				    }
+				  },
+				  legend: {
+				    data: ['총 시간', '평균 시간']
+				  },
+				  xAxis: [
+				    {
+				      type: 'category',
+				      data: date3,
+				      axisPointer: {
+				        type: 'shadow'
+				      }
+				    }
+				  ],
+				  yAxis: [
+				    {
+				      type: 'value',
+				      name: '총작업시간(절단)',
+				      axisLabel: {
+				        formatter: '{value} MIN'
+				      }
+				    },
+				    {
+			    		  type: 'value',
+				      	  name: '평균시간(절단)',
+				      	  position: 'right',
+				      	  axisLabel: {
+				            formatter: '{value} MIN'
+						  }
+					    }
+				    
+				  ],
+				  series: [
+				    {
+				      name: '총 시간',
+				      stack: 'one',
+				      type: 'bar',
+				      label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c}분'
+				          
+				        },
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' MIN';
+				        }
+				      },
+				      data: totalRealTime
+				    },
+				   
+				    {
+				      name: '평균 시간',
+				      yAxisIndex: 1,
+				      type: 'line',
+				      /* label: {
+				          show: true,
+				          position: 'top',
+				          formatter: '{c}분'
+				        }, */
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' MIN';
+				        }
+				      },
+				      data: avgRealTime
+				    }
+				  ]
+				};
+	}
 
 option && myChart.setOption(option);
 

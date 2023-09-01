@@ -28,5 +28,6 @@ public interface DashBoardMapper {
 	List<?> selectItemList();
 	
 	List<?> selectProdCntAc(String str3);
-
+	
+	List<?> selectProdCntAc2(String str3);
 }

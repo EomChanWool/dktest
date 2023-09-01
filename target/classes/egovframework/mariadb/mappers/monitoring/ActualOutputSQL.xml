@@ -57,31 +57,28 @@
 	</select>
 	<select id="selectProdCnt2" resultType="egovMap">
 	SELECT
-		YEAR(cpl_ed_date) AS years,
-		MONTH(cpl_ed_date) AS months,
-		SUM(cpl_work_time -
-		ISNULL(b.total_rest_time, 0)) AS total_real_time,
-		SUM(cpl_person) AS
-		total_cpl_person,
-		AVG(cpl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
-		FROM
-		sm_cut_proc_log a
-		LEFT JOIN (
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		AVG(cs_work_time) AS avg_work_time,
+		SUM(cs_work_time) AS sum_cs_work_time
+		FROM (
 		SELECT
-		or_id,
-		SUM(cps_rest_time) AS total_rest_time
+		MIN(cs_reg_date) AS cs_reg_date,
+		eq_sensorid,
+		MAX(cs_data06) AS cs_data06,
+		DATEDIFF(MINUTE, MIN(cs_reg_date), MAX(cs_reg_date)) AS cs_work_time
 		FROM
-		sm_cut_process_stop
+		sm_cut_sensor_data
 		WHERE
-		YEAR(cps_stop_time) = #{searchCondition}
+		1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
 		GROUP BY
-		or_id
-		) b ON a.or_id =
-		b.or_id
-		WHERE
-		YEAR(cpl_ed_date) = #{searchCondition}
+		eq_sensorid, cs_data09
+		HAVING
+		MAX(cs_data08) = 1
+		) AS grouped_data
 		GROUP BY
-		YEAR(cpl_ed_date), MONTH(cpl_ed_date)
-		ORDER BY months
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months asc
 	</select>
 </mapper>

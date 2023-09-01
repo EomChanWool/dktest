@@ -19,8 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import apc.sl.process.performance.service.PerformanceService;
@@ -34,7 +36,7 @@ public class PerformanceController {
 	
 	private String filePath = "C:\\jnb\\report\\";
 	
-	@RequestMapping("/sl/process/performances/performanceList.do")
+	@RequestMapping("/sl/process/checkPr/performanceList.do")
 	public String performanceList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session, MultipartFile multipart) throws Exception{
 		int totCnt = performanceService.selectPerformanceListToCnt(searchVO);
 		/** pageing setting */
@@ -54,77 +56,69 @@ public class PerformanceController {
 		return "sl/process/performance/performanceList";
 	}
 	
-	@RequestMapping("/sl/process/performances/registPerformance.do")
+	@RequestMapping("/sl/process/checkPr/registPerformance.do")
 	public String registPerformance(ModelMap model) {
+		//설비리스트
+		List<?> fmList = performanceService.selectFmList();
+		
+		model.put("fmList", fmList);
+		//수주번호 리스트
+		List<?> orderList = performanceService.selectOrderList();
+		
+		model.put("orderList", orderList);
+		
 		return "sl/process/performance/performanceRegist";
 	}
 	
-	@RequestMapping("/sl/process/performances/registPerformanceOk.do")
-	public String registPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
-																RedirectAttributes redirectAttributes, HttpSession session) throws Exception{
-		MultipartFile uploadFile = searchVO.getUploadFile();
-		String fileName = "";
-		if(!uploadFile.isEmpty()) {
-			String originalFileName = uploadFile.getOriginalFilename();
-            String ext = FilenameUtils.getExtension(originalFileName); // 확장자 구하기
-            UUID uuid = UUID.randomUUID(); // UUID 구하기
-            fileName = uuid + "." + ext;
-			uploadFile.transferTo(new File(filePath + fileName + ""));
-		}
-		map.put("doFilNm",fileName);
-		map.put("doOriginFilNm", uploadFile.getOriginalFilename());
-		map.put("userId", session.getAttribute("user_id"));
-		map.put("type", "검사기준서");
-		performanceService.registDocument(map);
-		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
-		return "redirect:/sl/process/performance/performanceList.do";
+	@RequestMapping(value="/sl/process/checkPr/performanceInfoAjax.do", method=RequestMethod.POST)
+	public ModelAndView estimateInfoAjax(@RequestParam Map<String, Object> map) {
+		ModelAndView mav = new ModelAndView();
+		List<?> list = performanceService.performanceInfo(map);
+		mav.setViewName("jsonView");
+		mav.addObject("perforList", list);
+		return mav;
 	}
 	
-	@RequestMapping("/sl/process/performances/modifyPerformance.do")
+	@RequestMapping("/sl/process/checkPr/registPerformanceOk.do")
+	public String registPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
+																RedirectAttributes redirectAttributes, HttpSession session){
+		int checkOrid = performanceService.checkOrid(map);
+		if(checkOrid == 0) {
+			redirectAttributes.addFlashAttribute("msg","없거나 작업되지 않는 수주번호 입니다.");
+			return "redirect:/sl/process/checkPr/registPerformance.do";
+		}
+		
+		map.put("userId", session.getAttribute("user_id"));
+		performanceService.registcheckPr(map);
+		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
+		return "redirect:/sl/process/checkPr/performanceList.do";
+	}
+	
+	@RequestMapping("/sl/process/checkPr/modifyPerformance.do")
 	public String modifyPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
-		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
-		model.put("documentVO", detail);
+		Map<String, Object> detail = performanceService.selectCheckPrInfo(map);
+		model.put("detail", detail);
 		return "sl/process/performance/performanceModify";
 	}
 	
-	@RequestMapping("/sl/process/performances/modifyPerformanceOk.do")
+	@RequestMapping("/sl/process/checkPr/modifyPerformanceOk.do")
 	public String modifyPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
-															RedirectAttributes redirectAttributes, HttpSession session) throws Exception{
-		String curFileName = map.get("doFilNm")+"";
-		MultipartFile uploadFile = searchVO.getUploadFile();
-		String fileName = "";
-		map.put("doFilNm", "");
-		map.put("orginFileName", "");
-		if(!uploadFile.isEmpty()) {
-			//파일이 변경되었으면
-			String originalFileName = uploadFile.getOriginalFilename();
-            String ext = FilenameUtils.getExtension(originalFileName); // 확장자 구하기
-            UUID uuid = UUID.randomUUID(); // UUID 구하기
-            fileName = uuid + "." + ext;
-            uploadFile.transferTo(new File(filePath + fileName + ""));
-			map.replace("doFilNm",fileName);
-			map.replace("orginFileName", uploadFile.getOriginalFilename());
-			
-			//기존 파일 삭제
-			File file = new File(filePath + "" + curFileName);
-			if(file.exists()) {
-				file.delete();
-			}
-		}
+															RedirectAttributes redirectAttributes, HttpSession session){
+		System.out.println("수정맵 : " + map);
 		map.put("userId", session.getAttribute("user_id"));
-		performanceService.modifyDocument(map);
+		performanceService.modifyCheckPr(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
-		return "redirect:/sl/process/performance/performanceList.do";
+		return "redirect:/sl/process/checkPr/performanceList.do";
 	}
 	
-	@RequestMapping("/sl/process/performances/detailPerformance.do")
+	@RequestMapping("/sl/process/checkPr/detailPerformance.do")
 	public String detailPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
-		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
-		model.put("documentVO", detail);
+//		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
+//		model.put("documentVO", detail);
 		return "sl/process/performance/performanceDetail";
 	}
 	
-	@RequestMapping("/sl/process/performances/downloadPerformance.do")
+	@RequestMapping("/sl/process/checkPr/downloadPerformance.do")
 	public void downloadPerformance(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String filename = request.getParameter("fileName");
         String realFilename = "";
@@ -170,7 +164,7 @@ public class PerformanceController {
         }
     }
 	
-	@RequestMapping("/sl/process/performances/deletePerformance.do")
+	@RequestMapping("/sl/process/checkPr/deletePerformance.do")
 	public String deletePerformance(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		//기존 파일 삭제
 		File file = new File(filePath + map.get("doFilNm")+"");
@@ -180,6 +174,6 @@ public class PerformanceController {
 		
 		performanceService.deletePerformance(map);
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");
-		return "redirect:/sl/process/performance/performanceList.do";
+		return "redirect:/sl/process/checkPr/performanceList.do";
 	}
 }

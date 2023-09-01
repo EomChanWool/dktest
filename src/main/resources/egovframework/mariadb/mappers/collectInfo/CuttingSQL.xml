@@ -4,7 +4,7 @@
 	namespace="apc.sl.collectInfo.cutting.service.impl.CuttingMapper">
 	<select id="selectCuttingListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_cut_sensor_data
-		WHERE 1=1
+		WHERE cs_data08 = 1
 		<if test="searchKeyword != ''">
 			AND cs_data01 LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
@@ -15,6 +15,7 @@
 			AND CAST(cs_reg_date AS DATE) <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
+		
 	</select>
 
 	<select id="selectCuttingList" resultType="egovMap">

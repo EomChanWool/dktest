@@ -15,6 +15,7 @@ public interface PopManufactureService {
 	
 	List<?> selectMfManager();
 	
+	
 	Map<String,Object> outData(String str);
 	
 	int countFinish();

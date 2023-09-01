@@ -184,19 +184,17 @@
 	for(var i=1;i<=maxMon;i++){
 		date.push(year+"년 "+i+"월");
 		totalRealTime.push(0);
-		totalMflPerson.push(0);
 		avgRealTime.push(0);
 	}
 	<c:forEach items="${prodCntList2}" var="list">
-	totalRealTime[${list.months-1}] = ${list.totalRealTime};
-	totalMflPerson[${list.months-1}] = ${list.totalCplPerson};
-	avgRealTime[${list.months-1}] = ${list.avgRealTime};
+	totalRealTime[${list.months-1}] = ${list.sumCsWorkTime};
+	avgRealTime[${list.months-1}] = ${list.avgWorkTime};
 	</c:forEach>
 		
 	}
 	
 	
-	
+	if($('#searchCondition2').val() == "1"){
 	option = {
 			  tooltip: {
 			    trigger: 'axis',
@@ -300,6 +298,96 @@
 			    }
 			  ]
 			};
+	}else if($('#searchCondition2').val() == "2"){
+		
+		option = {
+				  tooltip: {
+				    trigger: 'axis',
+				    axisPointer: {
+				    	type: 'cross',
+				    	axis: "auto",
+				    	crossStyle: {
+				        	color: '#999'
+				    	}
+				    }
+				  },
+				  toolbox: {
+				    feature: {
+				      dataView: { show: false, readOnly: false },
+				      magicType: { show: false, type: ['line', 'bar'] },
+				      restore: { show: false },
+				      saveAsImage: { show: true }
+				    }
+				  },
+				  legend: {
+				    data: ['총 시간', '평균 시간']
+				  },
+				  xAxis: [
+				    {
+				      type: 'category',
+				      data: date,
+				      axisPointer: {
+				        type: 'shadow'
+				      }
+				    }
+				  ],
+				  yAxis: [
+				    {
+				      type: 'value',
+				      name: '총작업시간',
+				      axisLabel: {
+				        formatter: '{value} MIN'
+				      }
+				    },
+				    {
+			    		  type: 'value',
+				      	  name: '평균시간',
+				      	  position: 'right',
+				      	  axisLabel: {
+				            formatter: '{value} MIN'
+						  }
+					    }
+				    
+				  ],
+				  series: [
+				    {
+				      name: '총 시간',
+				      stack: 'one',
+				      type: 'bar',
+				      label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c}분'
+				          
+				        },
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' MIN';
+				        }
+				      },
+				      data: totalRealTime
+				    },
+				   
+				    {
+				      name: '평균 시간',
+				      yAxisIndex: 1,
+				      type: 'line',
+				      label: {
+				          show: true,
+				          position: 'top',
+				          formatter: '{c}분'
+				        },
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' MIN';
+				        }
+				      },
+				      data: avgRealTime
+				    }
+				  ]
+				};
+		
+	}
 	
 	option && myChart.setOption(option);
 	</script>

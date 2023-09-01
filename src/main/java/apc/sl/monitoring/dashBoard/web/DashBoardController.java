@@ -37,7 +37,9 @@ public class DashBoardController {
 	@RequestMapping("/sl/monitoring/dashBoard.do")
 	public String dashBoardList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
-		
+		if(searchVO.getSearchCondition().equals("")) {
+			searchVO.setSearchCondition("manu");
+		}
 		
 		String str1 = dashBoardService.selectYear1().get("setYear")+"";
 		model.put("date", str1);
@@ -58,10 +60,13 @@ public class DashBoardController {
 		//생산집계
 		String str3 = dashBoardService.selectYear3().get("setYear")+"";
 		model.put("date3", str3);
+		
 		List<?> prodCntListAc = dashBoardService.selectProdCntAc(str3);
 		model.put("prodCntListAc",prodCntListAc);
+		List<?> prodCntListAc2 = dashBoardService.selectProdCntAc2(str3);
+		model.put("prodCntListAc2", prodCntListAc2);
 		
-
+		model.put("searchCondition", searchVO.getSearchCondition());
 		
 		return "sl/monitoring/dashBoard/dashBoard";
 	}

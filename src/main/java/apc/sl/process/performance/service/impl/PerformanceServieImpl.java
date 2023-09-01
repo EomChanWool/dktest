@@ -25,22 +25,42 @@ public class PerformanceServieImpl implements PerformanceService {
 	}
 
 	@Override
-	public void registDocument(Map<String, Object> map) {
-		performanceMapper.registDocument(map);
+	public void registcheckPr(Map<String, Object> map) {
+		performanceMapper.registcheckPr(map);
 	}
 
 	@Override
-	public Map<String, Object> selectDocumentInfo(Map<String, Object> map) {
-		return performanceMapper.selectDocumentInfo(map);
+	public Map<String, Object> selectCheckPrInfo(Map<String, Object> map) {
+		return performanceMapper.selectCheckPrInfo(map);
 	}
 
 	@Override
-	public void modifyDocument(Map<String, Object> map) {
-		performanceMapper.modifyDocument(map);
+	public void modifyCheckPr(Map<String, Object> map) {
+		performanceMapper.modifyCheckPr(map);
 	}
 
 	@Override
 	public void deletePerformance(Map<String, Object> map) {
 		performanceMapper.deletePerformance(map);
+	}
+
+	@Override
+	public List<?> selectFmList() {
+		return performanceMapper.selectFmList();
+	}
+
+	@Override
+	public List<?> selectOrderList() {
+		return performanceMapper.selectOrderList();
+	}
+
+	@Override
+	public List<?> performanceInfo(Map<String, Object> map) {
+		return performanceMapper.performanceInfo(map);
+	}
+
+	@Override
+	public int checkOrid(Map<String, Object> map) {
+		return performanceMapper.checkOrid(map);
 	}
 }

@@ -64,4 +64,9 @@ public class DashBoardServieImpl implements DashBoardService {
 		return dashBoardMapper.selectYear3();
 	}
 
+	@Override
+	public List<?> selectProdCntAc2(String str3) {
+		return dashBoardMapper.selectProdCntAc2(str3);
+	}
+
 }

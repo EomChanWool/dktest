@@ -26,5 +26,7 @@ public interface DashBoardService {
 	List<?> selectItemList();
 	
 	List<?> selectProdCntAc(String str3);
+	
+	List<?> selectProdCntAc2(String str3);
 
 }
