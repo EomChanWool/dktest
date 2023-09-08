@@ -352,6 +352,45 @@ public class Scheduler {
 		}catch (FileNotFoundException e) {
 		System.out.println("파일없음");	}
 		}
+	//@Scheduled(cron = "30 * * * * *")
+	public void testRead2() throws Exception{
+		File note = new File("C:\\test","Test2.txt");
+		int idx = 0; 
+		Map<String,String> linee = new HashMap<String, String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(note));
+			String inputString = "";
+			String line = "";
+			while ((line= br.readLine()) !=null) {
+			
+				String line1 = line.replace(" ", ",");
+				//System.out.println("렝쓰 : " + line1.length());
+				linee.put("항목"+idx,line);
+				idx++;
+			}
+			String aa = linee.get("항목0");
+			String a2 = linee.get("항목1");
+			String a3 = linee.get("항목2");
+			String a4 = linee.get("항목3");
+			String a5 = linee.get("항목4");
+			String a6 = linee.get("항목5");
+			System.out.println(aa.substring(300,308));
+			System.out.println(a2.substring(300,308));
+			System.out.println(a3.substring(300,308));
+			System.out.println(a4.substring(300,308));
+			System.out.println(a5.substring(300,308));
+			System.out.println(a6.substring(300,308));
+			
+//			System.out.println("확인 : " + linee.get("항목0").length());
+//			System.out.println("확인 : " + linee.get("항목1").length());
+//			System.out.println("확인 : " + linee.get("항목2").length());
+//			System.out.println("확인 : " + linee.get("항목3").length());
+//			System.out.println("확인 : " + linee.get("항목4").length());
+//			System.out.println("확인 : " + linee.get("항목5").length());
+		} catch (Exception e) {
+		}
+	}
+	
 	
 	//@Scheduled(cron = "30 * * * * *")
 	public void testRead() throws Exception {
@@ -480,11 +519,11 @@ public class Scheduler {
 	    }
 	    File get_file = new File("C:\\test","testDown.txt");
 	    
-	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 	    Date now = new Date();
 		String edDate = format.format(now);
 		
-		String fileName = "/textTest/mat"+edDate+".txt";
+		String fileName = "/up-data/prot"+edDate+".txt";
 		
 	    try {
 	    	FileOutputStream outputstream = new FileOutputStream(get_file);
@@ -500,7 +539,7 @@ public class Scheduler {
 	        e.printStackTrace();
 	    } finally {
 	    	try {
-	    		ftp.deleteFile(fileName);
+	    		//ftp.deleteFile(fileName);
 		        ftp.logout();
 		        ftp.disconnect();
 		    } catch (IOException e) {
