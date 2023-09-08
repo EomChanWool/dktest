@@ -47,7 +47,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">KPI관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">KPI현황</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -299,14 +299,14 @@
 					  yAxis: [
 					    {
 					      type: 'value',
-					      name: '시간당 생산량',
+					      name: '시간당 생산량(절단)',
 					      axisLabel: {
 					        formatter: '{value} EA'
 					      }
 					    },
 					    {
 			    		  type: 'value',
-				      	  name: '총 생산량',
+				      	  name: '총 생산량(절단)',
 				      	  position : 'right',
 				      	  axisLabel: {
 				            formatter: '{value} EA'

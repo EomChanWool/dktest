@@ -81,12 +81,12 @@
                                         <tr>
                                         	<th>설비</th>
                                             <th>품명</th>
-											<th>DATA1</th>
-											<th>DATA2</th>
-											<th>DATA3</th>
-											<th>DATA4</th>
-											<th>DATA5</th>
-											<th>DATA6</th>
+											<th>절단모델</th>
+											<th>반경</th>
+											<th>두께</th>
+											<th>갭 설정</th>
+											<th>생산량</th>
+											<th>배길이</th>
 											<th>작업시간</th>
 											<th>동작시간</th>
 											<th>수정/삭제</th>
