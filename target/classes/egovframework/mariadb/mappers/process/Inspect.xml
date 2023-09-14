@@ -4,48 +4,39 @@
 	namespace="apc.sl.process.inspect.service.impl.InspectMapper">
 
 	<select id="selectInspectListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_incongruity
+		SELECT COUNT(*) FROM sm_inspection_data
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND in_name LIKE CONCAT('%',#{searchKeyword},'%')
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND in_reg_dte >= #{searchStDate}
+			AND id_test_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND in_reg_dte <![CDATA[<=]]>
+			AND id_test_time <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 
 	</select>
 
 	<select id="selectInspectList" resultType="egovMap">
-		SELECT
-		b.in_idx,
-		b.in_name,
-		bi.bi_name,
-		ti.ti_name,
-		DATE_FORMAT(b.in_REG_DTE,'%Y-%m-%d') AS in_reg_dte
-		FROM
-		sm_incongruity b
-		INNER JOIN sm_bad_item bi ON b.bi_idx = bi.bi_idx
-		INNER JOIN
-		sm_analysis_info ti ON b.ti_idx = ti.ti_idx
-		WHERE 1=1
-
-
+		SELECT * from sm_inspection_data
+		where 1=1 
 		<if test="searchKeyword != ''">
-			AND in_name LIKE CONCAT('%',#{searchKeyword},'%')
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND in_reg_dte >= #{searchStDate}
+			AND id_test_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND in_reg_dte <![CDATA[<=]]>
+			AND id_test_time <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
-		ORDER BY in_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY id_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
 	</select>
 
 	<select id="selectTiList" resultType="egovMap">
@@ -87,6 +78,12 @@
 		bi_idx,
 		in_note
 		FROM sm_incongruity WHERE in_idx = #{inIdx}
+	</select>
+	
+	<select id="detailInspec" resultType="egovMap">
+	select * from sm_inspection_excel_history 
+	where id_doc = #{idDoc}
+	
 	</select>
 
 <!-- 	<insert id="registInspect"> -->

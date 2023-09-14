@@ -72,6 +72,8 @@ public class ManufactureController {
 		model.put("mfmList", mfmList);
 		model.put("manufactureList", manufactureList);
 		model.put("paginationInfo", paginationInfo);
+		System.out.println("mfmList : " + mfmList);
+		System.out.println("manu : " + manufactureList);
 		
 		return "sl/process/manufacture/manufactureList";
 	}
@@ -178,8 +180,8 @@ public class ManufactureController {
 				//수주번호 중복체크
 		int exists = manufactureService.selctExistsOn(map);
 		
-		if(exists != 0) {
-			redirectAttributes.addFlashAttribute("msg", "중복되는 수주번호입니다.");
+		if(exists == 0) {
+			redirectAttributes.addFlashAttribute("msg", "없는 수주번호입니다.");
 			return "redirect:/sl/process/manufacture/registManufacture.do";
 		}
 		

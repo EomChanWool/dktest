@@ -54,7 +54,8 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/inspect/inspectList.do" method="post">
-									<input type="hidden" name="inIdx">
+									<input type="hidden" name="idId">
+									<input type="hidden" name="idDoc">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
@@ -76,43 +77,39 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>번호</th>
-                                            <th>문서번호</th>
+                                            <th>문서이름</th>
                                             <th>LOT번호</th>
                                             <th>품목코드</th>
                                             <th>품목명</th>
-                                            <th>호칭</th>
-                                            <th>두께</th>
                                             <th>공정번호</th>
-                                            <th>검사일자</th>
-                                            <th>검사확인일자</th>
+                                            <th>검사일</th>
+                                            <th>확인일</th>
+                                            <th>검사자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${inspectList}" varStatus="status">
-	                                   		<%-- <tr onclick="fn_detail_inspect('${result.chIdx}')" style="cursor: pointer;"> --%>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
-	                                            <td></td>
+	                                   	<tr onclick="fn_detail_inspect('${result.idDoc}')" style="cursor: pointer;">
+	                                            <td>${result.idDoc}</td>
+	                                            <td>${result.poLotno}</td>
+	                                            <td>${result.idProdName}</td>
+	                                            <td>${result.idName}</td>
+	                                            <td>${result.mpMfno}</td>
+	                                            <td>${result.idTestTime}</td>
+	                                            <td>${result.idCheckTime}</td>
+	                                            <td>${result.idManager}</td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.inIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.idId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.inIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.idId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty inspectList}"><tr><td colspan='11'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty inspectList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -178,8 +175,8 @@
 			listForm.submit();
 		}
 		
-		function fn_detail_inspect(doIdx){
-			listForm.doIdx.value = doIdx;
+		function fn_detail_inspect(idDoc){
+			listForm.idDoc.value = idDoc;
 			listForm.action = "${pageContext.request.contextPath}/sl/process/inspect/detailInspect.do";
 			listForm.submit();
 		}

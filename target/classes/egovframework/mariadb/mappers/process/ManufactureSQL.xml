@@ -4,23 +4,27 @@
 	namespace="apc.sl.process.manufacture.service.impl.ManufactureMapper">
 
 	<select id="selectManufactureListToCnt" resultType="int">
-		SELECT COUNT(DISTINCT a.or_id) FROM sm_orders a
-		LEFT JOIN
-		sm_mf_process_stop b ON a.OR_ID = b.OR_ID
+		SELECT COUNT(*) FROM sm_mf_proc
 		WHERE 1=1
-		AND or_process in
-		(2,3)
+		AND mp_pr_state IN (0,1)
 
 		<if test="searchKeyword != ''">
-			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
+			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 
 
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty,
-		MAX(a.or_process) AS or_process,
+		<!-- SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty, 
+			MAX(a.or_process) AS or_process, ISNULL( ( SELECT TOP 1 mfs_state FROM sm_mf_process_stop 
+			WHERE OR_ID = a.OR_ID ORDER BY mfs_idx DESC ), 0 ) AS mfs_state , MAX(b.mfs_idx) 
+			AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager, MAX(c.mfl_person) AS mfl_person 
+			FROM sm_orders a LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT 
+			JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND or_process in (2,3) -->
+		SELECT a.or_id, MAX(a.MP_MFNO) AS mp_mfno ,MAX(a.MP_PROD_NAME) AS
+		mp_prod_name, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS
+		mp_pr_state,
 		ISNULL(
 		(
 		SELECT TOP 1 mfs_state
@@ -31,24 +35,17 @@
 		),
 		0
 		) AS
-		mfs_state , MAX(b.mfs_idx) AS mfs_idx , MAX(c.mfl_manager) AS
-		mfl_manager, MAX(c.mfl_person) AS mfl_person
-		FROM sm_orders a
-		LEFT JOIN
-		sm_mf_process_stop b
-		ON a.OR_ID =
-		b.OR_ID
-		LEFT JOIN
-		sm_mf_proc_log c
-		ON
-		a.or_id = c.or_id
-		WHERE 1=1
-		AND or_process in (2,3)
+		mfs_state,MAX(b.mfs_idx) AS
+		mfs_idx,MAX(c.MFL_MANAGER) AS mfl_manager
+		FROM sm_mf_proc a
+		LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT
+		JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND a.mp_pr_state IN
+		(0,1)
 		<if test="searchKeyword != ''">
-			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
+			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		GROUP BY a.or_id
-		ORDER BY a.or_id DESC
+		ORDER BY or_id DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH
 		NEXT
@@ -57,7 +54,8 @@
 	</select>
 
 	<select id="selectMfManager" resultType="egovMap">
-		select mi_name from sm_member_info
+		select mi_name from
+		sm_member_info
 		where mi_department = '가공팀'
 	</select>
 
@@ -77,7 +75,7 @@
 	</select>
 
 	<select id="selectMfInfo" resultType="egovMap">
-		SELECT * FROM sm_orders a
+		SELECT * FROM sm_mf_proc a
 		left JOIN sm_mf_proc_log b
 		ON a.OR_ID = b.OR_ID
 		WHERE a.or_id = #{orId}
@@ -140,43 +138,33 @@
 
 
 	<insert id="registManufacture">
-		INSERT INTO sm_orders (
+		INSERT INTO sm_mf_proc (
 		or_id,
-		or_company,
-		or_prod,
-		or_date,
-		or_due_date,
-		or_fin_date,
-		or_or_type,
-		or_texture,
-		or_thickness,
-		or_standard,
-		or_state,
-		or_manager,
-		or_report,
-		or_unit,
-		or_money,
-		or_qty,
-		or_process
+		mp_mfno,
+		mp_prod_name,
+		mp_reg_date,
+		mp_texture,
+		mp_thickness,
+		mp_state,
+		mp_standard,
+		po_lotno,
+		mp_qty,
+		mp_note,
+		mp_pr_state
 		) VALUES
 		(
 		#{orId},
-		#{orCompany},
-		#{orProd},
-		#{orDate},
-		#{orDueDate},
-		#{orFinDate},
-		#{orOrType},
-		#{orTexture},
-		#{orThickness},
-		#{orStandard},
-		#{orState},
-		#{orManager},
-		#{orReport},
-		#{orUnit},
-		#{orMoney},
-		#{orQty},
-		2
+		#{mpMfno},
+		#{mpProdName},
+		#{mpRegDate},
+		#{mpTexture},
+		#{mpThickness},
+		#{mpState},
+		#{mpStandard},
+		#{poLotno},
+		#{mpQty},
+		#{mpNote},
+		0
 		)
 	</insert>
 
@@ -204,38 +192,33 @@
 	</update>
 
 	<update id="updateProcess3">
-		UPDATE sm_orders SET
-		or_process = 4
+		UPDATE sm_mf_proc SET
+		MP_PR_STATE = 2
 		WHERE or_id
 		=#{orId}
 	</update>
 
 	<update id="updateOrState">
-		UPDATE sm_orders SET
-		or_process = 3
+		UPDATE sm_mf_proc SET
+		MP_PR_STATE = 1
 		WHERE or_id =
 		#{orId}
 	</update>
 
 	<update id="modifyManufacture">
-		UPDATE sm_orders SET
-		or_company = #{orCompany},
-		or_prod = #{orProd},
-		or_date = #{orDate},
-		or_due_date = #{orDueDate},
-		or_fin_date = #{orFinDate},
-		or_or_type = #{orOrType},
-		or_texture =
-		#{orTexture},
-		or_thickness = #{orThickness},
-		or_standard =
-		#{orStandard},
-		or_state = #{orState},
-		or_manager = #{orManager},
-		or_report = #{orReport},
-		or_unit = #{orUnit},
-		or_money = #{orMoney},
-		or_qty = #{orQty}
+		UPDATE sm_mf_proc SET
+		mp_mfno = #{mpMfno},
+		mp_prod_name = #{mpProdName},
+		mp_reg_date = #{mpRegDate},
+		mp_texture = #{mpTexture},
+		mp_thickness = #{mpThickness},
+		mp_state = #{mpState},
+		mp_standard =
+		#{mpStandard},
+		po_lotno = #{poLotno},
+		mp_qty =
+		#{mpQty},
+		mp_note = #{mpNote}
 		WHERE or_id = #{orId}
 	</update>
 
@@ -244,13 +227,15 @@
 		mfl_ed_date = GETDATE(),
 		mfl_work_time =
 		DATEDIFF(MINUTE,mfl_st_date,getdate())
-		WHERE or_id = #{orId}
+		WHERE or_id =
+		#{orId}
 		AND mfl_idx
 		= (
 		SELECT TOP 1 mfl_idx
 		FROM
 		sm_mf_proc_log
-		WHERE or_id = #{orId}
+		WHERE or_id
+		= #{orId}
 		ORDER BY
 		mfl_idx DESC
 		)
@@ -262,29 +247,36 @@
 		mfl_person =
 		#{mflPerson}
 		WHERE or_id = #{orId} AND mfl_idx = (
-		SELECT MAX(mfl_idx)
+		SELECT
+		MAX(mfl_idx)
 		FROM sm_mf_proc_log
 		WHERE or_id = #{orId}
 		)
 	</update>
-	
+
 	<select id="outData" resultType="egovMap">
-		SELECT a.OR_ID, a.OR_MANAGER, b.PO_LOTNO , CONVERT(VARCHAR(8), c.MFL_ED_DATE, 112) AS MFL_ED_DATE, mfl_manager from sm_orders a JOIN
-sm_release_info b ON a.OR_ID = b.OR_ID JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
-WHERE a.OR_ID = #{orId}
+		SELECT a.OR_ID, a.OR_MANAGER,
+		b.PO_LOTNO , CONVERT(VARCHAR(8), c.MFL_ED_DATE, 112) AS MFL_ED_DATE,
+		mfl_manager from sm_orders a JOIN
+		sm_release_info b ON a.OR_ID =
+		b.OR_ID JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
+		WHERE a.OR_ID =
+		#{orId}
 	</select>
 
 	<select id="countFinish" resultType="int">
-		SELECT COUNT(*) as total FROM sm_mf_proc_log
-		WHERE CONVERT(DATE, mfl_ed_date) = CONVERT(DATE, GETDATE());
+		SELECT COUNT(*) as total
+		FROM sm_mf_proc_log
+		WHERE CONVERT(DATE, mfl_ed_date) = CONVERT(DATE,
+		GETDATE());
 
 	</select>
-<update id="deleteManufacture">
-update sm_orders set
-or_process = 0
-where or_id = #{orId}
+	<update id="deleteManufacture">
+		delete sm_mf_proc
+		where or_id =
+		#{orId}
 
-</update>
+	</update>
 	<!-- <delete id="deleteManufacture"> -->
 
 	<!-- Delete From sm_insp_change where ch_idx = #{chIdx} -->

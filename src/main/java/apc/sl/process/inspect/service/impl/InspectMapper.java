@@ -20,6 +20,8 @@ public interface InspectMapper {
 	
 	Map<String, Object> selectInfo(Map<String, Object> map);
 	
+	Map<String, Object> detailInspec(Map<String, Object> map);
+	
 	int selectTiIdx(Map<String,Object> map);
 	
 	void registInspect(Map<String, Object> map);

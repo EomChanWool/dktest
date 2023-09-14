@@ -73,5 +73,10 @@ public class InspectServieImpl implements InspectService {
 		
 	}
 
+	@Override
+	public Map<String, Object> detailInspec(Map<String, Object> map) {
+		return inspectMapper.detailInspec(map);
+	}
+
 	
 }

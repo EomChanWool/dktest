@@ -1,8 +1,15 @@
 package apc.sl.process.inspect.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +33,8 @@ public class InspectController {
 	@Autowired
 	private InspectService inspectService;
 	
+	private String filePath = "C:\\test\\";
+	
 	@RequestMapping("/sl/process/inspect/inspectList.do")
 	public String inspectList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
@@ -44,6 +53,7 @@ public class InspectController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		
 		List<?> inspectList = inspectService.selectInspectList(searchVO);
+		
 		
 		model.put("inspectList", inspectList);
 		model.put("paginationInfo", paginationInfo);
@@ -121,6 +131,64 @@ public class InspectController {
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
 		
 		return "redirect:/sl/process/inspect/inspectList.do";
+	}
+	
+	@RequestMapping("/sl/process/inspect/detailInspect.do")
+	public String detailInspect(@RequestParam Map<String, Object> map,ModelMap model) {
+		
+		Map<String, Object> detail = inspectService.detailInspec(map);
+		
+		
+		model.put("detail", detail);
+		System.out.println("맵 : " + detail);
+		return "sl/process/inspect/inspectDetail";
+	}
+	
+	@RequestMapping("/sl/process/inspect/downloadInspect.do")
+	public void downloadInspect(HttpServletRequest request, HttpServletResponse response) {
+		String filename = request.getParameter("fileName");
+		 String realFilename = "";
+//	        try {
+//	            String browser = request.getHeader("User-Agent");
+//	            // 파일 인코딩
+//	            if (browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")) {
+//	                filename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+//	            } else {
+//	                filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");
+//	            }
+//	 
+//	        } catch (UnsupportedEncodingException e) {
+//	            System.out.println("UnsupportedEncodingException 발생");
+//	        }
+	 
+	        realFilename = filePath + filename;
+	        System.out.println("파일이름 : " + realFilename);
+	        File file = new File(realFilename);
+	        if (!file.exists()) {
+	            return;
+	        }
+	 
+	        // 파일명 지정
+	        response.setContentType("application/octer-stream");
+	        response.setHeader("Content-Transfer-Encoding", "binary");
+	        response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+	 
+	        try {
+	            OutputStream os = response.getOutputStream();
+	            FileInputStream fis = new FileInputStream(realFilename);
+	 
+	            int cnt = 0;
+	            byte[] bytes = new byte[512];
+	 
+	            while ((cnt = fis.read(bytes)) != -1) {
+	                os.write(bytes, 0, cnt);
+	            }
+	 
+	            fis.close();
+	            os.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
 	}
 	
 	@RequestMapping("/sl/process/inspect/deleteInspect.do")
