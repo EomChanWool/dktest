@@ -67,7 +67,7 @@
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_inspect()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_inspect()" style="float: right;">
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_vision()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
 							</div>

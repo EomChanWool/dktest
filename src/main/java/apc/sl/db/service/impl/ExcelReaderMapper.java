@@ -1,5 +1,6 @@
 package apc.sl.db.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
@@ -20,4 +21,12 @@ public interface ExcelReaderMapper {
 	void deletedb();
 	
 	void testRegist(Map<String,String> map);
+	
+	Map<String, Object> inspCount(String edDate);
+	
+	List<Map<String, Object>> noUpList(String edDate);
+	
+	Map<String, Object> mfProc(String str);
+	
+	void registinspData(Map<String,Object> map);
 }

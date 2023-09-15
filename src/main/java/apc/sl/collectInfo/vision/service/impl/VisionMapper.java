@@ -15,7 +15,9 @@ public interface VisionMapper {
 
 	List<?> selectShipmentList(Map<String, Object> map);
 
-	List<?> shipmentAjax(Map<String, Object> map);
+	List<?> excelAjax(Map<String, Object> map);
+	
+	List<?> procAjax(Map<String, Object> map);
 
 	int selectShipmentIdx(Map<String, Object> map);
 

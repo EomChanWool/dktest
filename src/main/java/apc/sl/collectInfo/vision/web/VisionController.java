@@ -54,37 +54,34 @@ public class VisionController {
 	
 	@RequestMapping("/sl/collectInfo/vision/registVision.do")
 	public String registVision(ModelMap model) {
-		Map<String,Object> map = new HashMap<>();
-		map.put("state", "0");
-		List<?> shipmentList = visionService.selectShipmentList(map);
-		model.put("shipmentList", shipmentList);
+		
+		
 		return "sl/collectInfo/vision/visionRegist";
 	}
 	
-	@RequestMapping(value="/sl/collectInfo/vision/shipmentInfoAjax.do", method=RequestMethod.POST)
+	@RequestMapping(value="/sl/collectInfo/vision/visionInfoAjax.do", method=RequestMethod.POST)
 	public ModelAndView shipmentAjax(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
-		List<?> list = visionService.shipmentAjax(map);
+		List<?> list = visionService.excelAjax(map);
 		mav.setViewName("jsonView");
-		mav.addObject("sh_info", list);
+		mav.addObject("ex_info", list);
+		return mav;
+	}
+	@RequestMapping(value="/sl/collectInfo/vision/visionInfoAjax2.do", method=RequestMethod.POST)
+	public ModelAndView shipmentAjax2(@RequestParam Map<String, Object> map) {
+		ModelAndView mav = new ModelAndView();
+		List<?> list = visionService.procAjax(map);
+		mav.setViewName("jsonView");
+		mav.addObject("ex_info2", list);
+		System.out.println("리스트 : " + list);
 		return mav;
 	}
 	
 	@RequestMapping("/sl/collectInfo/vision/registVisionOk.do")
 	public String registVisionOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//납품불량인 경우 전량 반환하여 재고로 다시 넣어줌
-		if(map.get("deState").equals("2")) {
-			calcItemCnt(map, redirectAttributes, "faulty");
-		}else if(map.get("deState").equals("1") && map.get("deState").equals("0")){
-			//견적서 제품코드와 수량 리스트
-			calcItemCnt(map, redirectAttributes, "regist");
-		}
 		
-		map.put("userId", session.getAttribute("user_id"));
 		visionService.registVision(map);
-		//출하계획 상태 출하완료(1)로 변경
-		map.put("state", "1");
-		visionService.updateShipment(map);
+		
 		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
 		return "redirect:/sl/collectInfo/vision/visionList.do";

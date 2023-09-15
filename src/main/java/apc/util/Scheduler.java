@@ -551,6 +551,54 @@ public class Scheduler {
 	    
 	}
 	
+	@Scheduled(cron = "20 30 20 * * *")
+	public void insdataUpdate() {
+		
+		 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		 Date now = new Date();
+		 String edDate = format.format(now);
+		 Map<String, Object> rowMap = excelReaderService.inspCount(edDate);
+		 
+		int insExcelNum = (int) rowMap.get("count1");
+		int insDataNum = (int) rowMap.get("count2");
+		
+		if(insExcelNum > insDataNum) {
+			
+			List<Map<String, Object>> noUpList = excelReaderService.noUpList(edDate);
+			
+			for(int i=0;i<noUpList.size();i++) {
+				Map<String, Object> temp = new HashMap<>();
+				temp = noUpList.get(i);
+				String lotNo = temp.get("iehLotno")+"";
+				Map<String, Object> proc = excelReaderService.mfProc(lotNo);
+				
+				
+				String mpTexture = proc.get("mpTexture") + "";
+				String mpThickness = proc.get("mpThickness")+"";
+				String mpState = proc.get("mpState")+"";
+				String mpStandard = proc.get("mpStandard")+"";
+				
+				String idName = mpTexture+" "+mpThickness+" "+ mpState+" "+mpStandard;
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				
+				map.put("idDoc", temp.get("idDoc")+"");
+				map.put("poLotno", lotNo);
+				map.put("idProdName", proc.get("mpProdName"));
+				map.put("idName", idName);
+				map.put("mpMfno", proc.get("mpMfno"));
+				map.put("idTestTime",edDate);
+				map.put("idCheckTime",edDate);
+				
+				
+				
+				excelReaderService.registinspData(map);
+			}
+			
+		}
+		 
+		
+	}
 
 	
 //	public static void setUserId(String userId) {

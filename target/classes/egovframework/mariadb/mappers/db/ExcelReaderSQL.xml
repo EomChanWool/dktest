@@ -2,6 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.db.service.impl.ExcelReaderMapper">
 
+
+
+	<select id="inspCount" resultType="egovMap">
+		SELECT
+		(SELECT COUNT(*) FROM sm_inspection_excel_history WHERE id_test_time =
+		#{edDate}) AS COUNT1,
+		(SELECT COUNT(*) FROM sm_inspection_data WHERE id_test_time = #{edDate}) AS
+		COUNT2
+	</select>
+
+	<select id="noUpList" resultType="egovMap">
+		SELECT a.id_doc, a.IEH_LOTNO
+		FROM sm_inspection_excel_history a
+		LEFT JOIN sm_inspection_data b ON a.id_doc = b.id_doc
+		WHERE b.id_doc IS NULL
+		and a.id_test_time = #{edDate}
+
+	</select>
+	
+	<select id="mfProc" resultType="egovMap">
+	SELECT * FROM sm_mf_proc
+WHERE PO_LOTNO = #{str}
+	</select>
+	
+	<insert id="registinspData">
+	INSERT INTO sm_inspection_data
+	(id_doc,
+	 po_lotno,
+	 id_prod_name,
+	 id_name,
+	 mp_mfno,
+	 id_test_time) values(
+	 #{idDoc},
+	 #{poLotno},
+	 #{idProdName},
+	 #{idName},
+	 #{mpMfno},
+	 #{idTestTime}
+	 )
+	
+	</insert>
+
 	<insert id="registdb" parameterType="egovMap">
 		INSERT INTO sm_product_info
 		(
@@ -67,7 +109,9 @@
 		CONVERT(INT,CONVERT(float,#{orQty})),
 		#{orUnit},
 		#{orMoney},
-		CASE WHEN TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE, #{orFinDate})) END ,
+		CASE WHEN
+		TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE,
+		#{orFinDate})) END ,
 		#{orReport},
 		#{orManager},
 		#{orId},
@@ -178,7 +222,8 @@
 		)
 		VALUES (
 		'MM' +
-		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID AS
+		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID
+		AS
 		VARCHAR(4)), 4),
 		#{piId},
 		CONVERT(INT, CONVERT(FLOAT, #{mmIn})),
@@ -196,18 +241,18 @@
 
 
 	</insert>
-	
+
 	<insert id="testRegist">
-	insert into sm_test(
-	te_idx,
-	te_name,
-	te_name2
-	) values
-	(
-	#{teIdx},
-	#{teName},
-	#{teName2}
-	)
+		insert into sm_test(
+		te_idx,
+		te_name,
+		te_name2
+		) values
+		(
+		#{teIdx},
+		#{teName},
+		#{teName2}
+		)
 	</insert>
 
 	<delete id="deletedb">

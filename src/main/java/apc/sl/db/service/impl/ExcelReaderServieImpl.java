@@ -1,5 +1,6 @@
 package apc.sl.db.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -47,6 +48,26 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	@Override
 	public void testRegist(Map<String,String> map) {
 		excelReaderMapper.testRegist(map);
+	}
+
+	@Override
+	public Map<String, Object> inspCount(String edDate) {
+		return excelReaderMapper.inspCount(edDate);
+	}
+
+	@Override
+	public List<Map<String, Object>> noUpList(String edDate) {
+		return excelReaderMapper.noUpList(edDate);
+	}
+
+	@Override
+	public Map<String, Object> mfProc(String str) {
+		return excelReaderMapper.mfProc(str);
+	}
+
+	@Override
+	public void registinspData(Map<String, Object> map) {
+		excelReaderMapper.registinspData(map);
 	}
 
 }

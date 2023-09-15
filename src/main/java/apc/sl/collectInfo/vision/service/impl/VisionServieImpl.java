@@ -30,8 +30,8 @@ public class VisionServieImpl implements VisionService {
 	}
 
 	@Override
-	public List<?> shipmentAjax(Map<String, Object> map) {
-		return visionMapper.shipmentAjax(map);
+	public List<?> excelAjax(Map<String, Object> map) {
+		return visionMapper.excelAjax(map);
 	}
 
 	@Override
@@ -87,6 +87,11 @@ public class VisionServieImpl implements VisionService {
 	@Override
 	public void deleteVision(Map<String, Object> map) {
 		visionMapper.deleteVision(map);
+	}
+
+	@Override
+	public List<?> procAjax(Map<String, Object> map) {
+		return visionMapper.procAjax(map);
 	}
 
 }

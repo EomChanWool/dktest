@@ -48,55 +48,44 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/sales/delivery/registDeliveryOk.do" name="registForm" method="post">
+                            	<form action="${pageContext.request.contextPath}/sl/collectInfo/vision/registVisionOk.do" name="registForm" method="post">
                             		<input type="hidden" name="orIdx" id="orIdx">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>수주명  <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="shIdx" id="shIdx">
+												<th>로트번호  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="poLotno" id="poLotno"/>
+												</td>
+												<th>문서이름  <span class="req">*</span></th>
+												<td><select class="form-control" name="idDoc" id="idDoc">
 														<option value="">선택</option>
-														<c:forEach var="list" items="${shipmentList}" varStatus="status">
-															<option value="${list.shIdx}">${list.orName}</option>
-														</c:forEach>
-													</select>
-												</td>
-												<th>납품일  <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="deDte" id="deDte" value="${deliveryVO.deDte}"/></td>
+													</select></td>
 											</tr>
 											<tr>
-												<th>금액  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="deMoney" id="deMoney"/></td>
-												<th>자사 담당자</th>
-												<td><input type="text" class="form-control" name="deChkManager" id="deChkManager" value="${deliveryVO.deChkManager}"/></td>
+												<th>품목코드  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="idProdName" id="idProdName"/></td>
+												<th>품목명</th>
+												<td><input type="text" class="form-control" name="idName" id="idName"/></td>
 											</tr>
 											<tr>
-												<th>납품확인 거래처 담당자</th>
-												<td><input type="text" class="form-control" name="deChkAcManager" id="deChkAcManager" value="${deliveryVO.deChkAcManager}"/></td>
-												<th>납품확인 일자</th>
-												<td><input type="date" class="form-control" name="deChkDte" id="eChkDte" value="${deliveryVO.eChkDte}"/></td>
+												<th>공정번호</th>
+												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno"/></td>
+												<th>검사자</th>
+												<td><input type="text" class="form-control" name="idManager" id="idManager"/></td>
 											</tr>
 											<tr>
-												<th>납품 상태</th>
-												<td>
-													<select class="form-control" name="deState" id="deState">
-														<option value="0" <c:if test="${deliveryVO.deState eq '0'}">selected="selected"</c:if>>미확인</option>
-														<option value="1" <c:if test="${deliveryVO.deState eq '1'}">selected="selected"</c:if>>납품확인</option>
-														<option value="2" <c:if test="${deliveryVO.deState eq '2'}">selected="selected"</c:if>>납품불량</option>
-													</select>
-												</td>
+												<th>검사일</th>
+												<td><input type="date" class="form-control" name="idTestTime" id="idTestTime"/></td>
+												<th>확인일</th>
+												<td><input type="date" class="form-control" name="idCheckTime" id="idCheckTime"/></td>
 											</tr>
-											<tr>
-												<th>비고</th>
-												<td colspan="3"><textarea name="deNote">${deliveryVO.deNote}</textarea></td>
-											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_deilvery()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/sales/delivery/deliveryList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/collectInfo/vision/visionList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -133,60 +122,101 @@
 
 	<script>
 	function fn_regist_deilvery(){
-		var num = /^\d+$/;
-		if($('#shIdx').val() == ''){
-			alert("수주명을 확인 바랍니다.");
+	 	if($('#poLotno').val() == ''){
+			alert("로트번호를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#deDte').val() == ''){
-			alert("납품일을 확인 바랍니다.");
+		if($('#idDoc').val() == ''){
+			alert("문서이름을 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#shIdx').val() == ''){
-			alert("출하계획 번호를 확인 바랍니다.");
+		if($('#idProdName').val() == ''){
+			alert("품목코드를 확인 바랍니다.");
 			return;
 		}
 		
-		if(!num.test($('#deMoney').val())){
-			alert("금액을 확인 바랍니다.");
-			return;
-		}
+		if($('#idName').val() == ''){
+		alert("품목명을 확인 바랍니다.");
+		return;
+	}
 		
-		if($('#deState').val() == '1' && $('#deChkDte').val() == 0){
-			alert("납품 확인일을 확인 바랍니다.");
-			return;
-		}
+		if($('#mpMfno').val() == ''){
+		alert("공정번호를 확인 바랍니다.");
+		return;
+	}
 		
+		if($('#idManager').val() == ''){
+		alert("검사자를 확인 바랍니다.");
+		return;
+	}
+		
+		if($('#idTestTime').val() == ''){
+		alert("검사일을 확인 바랍니다.");
+		return;
+	}
+		
+		if($('#idCheckTime').val() == ''){
+		alert("확인일을 확인 바랍니다.");
+		return;
+	}
+		
+		 
 		registForm.submit();
 	}
 	
 	$(function() {
-		$('#salesMenu').addClass("active");
-		$('#sales').addClass("show");
-		$('#deliveryList').addClass("active");
+		$('#collectInfoMenu').addClass("active");
+		$('#collectInfo').addClass("show");
+		$('#visionList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		$('#shIdx').change(function(){
-			shipmentInfoAjax();
+		$('#poLotno').change(function(){
+			excelInfoAjax();
+			visionInfoAjax2();
+			
 		});
 	});
 	
-	function shipmentInfoAjax(){
+	function excelInfoAjax(){
 		$.ajax({
 			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/sales/delivery/shipmentInfoAjax.do'/>",	  		  			  
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/collectInfo/vision/visionInfoAjax.do'/>",	  		  			  
 			  dataType:"JSON",
 			  data:{
-				  'shIdx':$('#shIdx').val()
+				  'poLotno':$('#poLotno').val()
 			  },
 			  success:function(result){
-				  $('#deMoney').val(result.sh_info[0].orMoney);
+				  for(var i=0; i<result.ex_info.length;i++){
+					  var option = $('<option value="'+result.ex_info[i].idDoc+'">'+result.ex_info[i].idDoc+'</option>');
+					  $('#idDoc').append(option);
+				  }
+			  },
+			  error:function(request,status,error){ 
+				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
+			  }
+		  });
+	}
+	
+	function visionInfoAjax2(){
+		$.ajax({
+			  type:"POST",
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/collectInfo/vision/visionInfoAjax2.do'/>",	  		  			  
+			  dataType:"JSON",
+			  data:{
+				  'poLotno': $('#poLotno').val(),
+				  
+			  },
+			  success:function(result){
+				  registForm.idProdName.value = result.ex_info2[0].mpProdName;
+				  registForm.mpMfno.value = result.ex_info2[0].mpMfno;
+				 var idName = result.ex_info2[0].mpTexture + " " + result.ex_info2[0].mpThickness + " " + result.ex_info2[0].mpState + " " + result.ex_info2[0].mpStandard;
+				 registForm.idName.value = idName;
 			  },
 			  error:function(request,status,error){ 
 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
