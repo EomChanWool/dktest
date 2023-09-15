@@ -2,37 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.collectInfo.vision.service.impl.VisionMapper">
 	<select id="selectVisionListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_delivery
+		SELECT COUNT(*) FROM sm_inspection_data
 		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
 		<if test="searchStDate != ''">
-			AND de_dte >= #{searchStDate}
+			AND id_test_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND de_dte <![CDATA[<=]]> #{searchEdDate}
+			AND id_test_time <![CDATA[<=]]>
+			#{searchEdDate}
 		</if>
 	</select>
 	
 	<select id="selectVisionList" resultType="egovMap">
-		SELECT
-			a.de_idx,
-			a.or_idx,
-			a.sh_idx,
-			b.or_name,
-			a.de_money,
-			a.de_dte,
-			a.de_state
-		FROM sm_delivery a
-		JOIN sm_orders b
-		ON a.or_idx = b.or_idx
-		WHERE 1=1
+		SELECT * from sm_inspection_data
+		where 1=1 
+		<if test="searchKeyword != ''">
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
 		<if test="searchStDate != ''">
-			AND de_dte >= #{searchStDate}
+			AND id_test_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND de_dte <![CDATA[<=]]> #{searchEdDate}
+			AND id_test_time <![CDATA[<=]]>
+			#{searchEdDate}
 		</if>
-		ORDER BY de_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY id_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
 	</select>
 	
 	<select id="selectShipmentList" resultType="egovMap">
@@ -143,25 +144,8 @@
 	</update>
 	
 	<select id="selectVisionInfo" resultType="egovMap">
-		SELECT
-			a.de_idx,
-			a.sh_idx,
-			(SELECT or_name FROM sm_orders WHERE or_idx = 
-										(SELECT or_idx FROM sm_delivery WHERE de_idx = #{deIdx})) AS orName,
-			a.de_money,
-			a.de_dte,
-			a.de_chk_manager,
-			a.de_chk_ac_manager,
-			a.de_chk_dte,
-			a.de_state,
-			a.de_note,
-			b.a_name,
-			b.a_owner,
-			b.a_tel
-		FROM sm_delivery a
-		JOIN sm_account b
-		ON a.a_idx = b.a_idx
-		WHERE de_idx = #{deIdx}
+		select * from sm_inspection_excel_history 
+	where id_doc = #{idDoc}
 	</select>
 	
 	<update id="modifyVision">
