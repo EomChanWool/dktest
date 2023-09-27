@@ -27,15 +27,6 @@ public class InspectServieImpl implements InspectService {
 		return inspectMapper.selectInspectList(searchVO);
 	}
 
-	@Override
-	public List<?> selectTiList() {
-		return inspectMapper.selectTiList();
-	}
-
-	@Override
-	public List<?> selectBiList() {
-		return inspectMapper.selectBiList();
-	}
 
 	@Override
 	public Map<String, Object> selectInfo(Map<String, Object> map) {
@@ -44,9 +35,9 @@ public class InspectServieImpl implements InspectService {
 	}
 
 	@Override
-	public int selectTiIdx(Map<String, Object> map) {
+	public int selectCheckIns(Map<String, Object> map) {
 		
-		return inspectMapper.selectTiIdx(map);
+		return inspectMapper.selectCheckIns(map);
 	}
 
 	@Override
@@ -76,6 +67,36 @@ public class InspectServieImpl implements InspectService {
 	@Override
 	public Map<String, Object> detailInspec(Map<String, Object> map) {
 		return inspectMapper.detailInspec(map);
+	}
+
+	@Override
+	public List<?> selectSiList() {
+		return inspectMapper.selectSiList();
+	}
+
+	@Override
+	public List<?> selectMfList() {
+		return inspectMapper.selectMfList();
+	}
+
+	@Override
+	public List<?> selectInfo2(Map<String, Object> map) {
+		return inspectMapper.selectInfo2(map);
+	}
+
+	@Override
+	public Map<String, Object> spcInfo(String str) {
+		return inspectMapper.spcInfo(str);
+	}
+
+	@Override
+	public Map<String, Object> eDataInfo(String str) {
+		return inspectMapper.eDataInfo(str);
+	}
+
+	@Override
+	public void updateStat(Map<String, Object> map) {
+		inspectMapper.updateStat(map);
 	}
 
 	

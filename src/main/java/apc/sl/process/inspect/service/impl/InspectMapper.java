@@ -14,15 +14,21 @@ public interface InspectMapper {
 	
 	List<?>selectInspectList(SearchVO searchVO);
 	
-	List<?> selectTiList();
+	List<?> selectSiList();
 	
-	List<?> selectBiList();
+	List<?> selectMfList();
+	
+	List<?> selectInfo2(Map<String,Object> map);
 	
 	Map<String, Object> selectInfo(Map<String, Object> map);
 	
 	Map<String, Object> detailInspec(Map<String, Object> map);
 	
-	int selectTiIdx(Map<String,Object> map);
+	Map<String, Object> spcInfo(String str);
+	
+	Map<String,Object> eDataInfo(String str);
+	
+	int selectCheckIns(Map<String,Object> map);
 	
 	void registInspect(Map<String, Object> map);
 	
@@ -31,5 +37,7 @@ public interface InspectMapper {
 	void modifyInspect(Map<String, Object> map);
 	
 	void deleteInspect(Map<String, Object> map);
+	
+	void updateStat(Map<String, Object> map);
 	
 }

@@ -47,50 +47,78 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">부적합관리 수정</h1>
+                    <h1 class="h3 mb-2 text-gray-800">검사공정 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/quality/incongruent/modifyIncongruentOk.do" name="modifyForm" method="post" encType="multipart/form-data">
-                            		<input type="hidden" name="inIdx" value="${incoVO.inIdx}">
-                            		<%-- <input type="hidden" name="doFilNm" value="${documentVO.doFilNm}"> --%>
+                            	<form action="${pageContext.request.contextPath}/sl/process/inspect/modifyInspectOk.do" name="modifyForm" method="post">
+	                                <input type="hidden" name="isiId" value="${incoVO.isiId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>부적합명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="inName" id="inName" value="${incoVO.inName}"></td>
-												<th>검사번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="tiIdx" id="tiIdx" value="${incoVO.tiIdx}" readonly></td>
-											</tr>
-											<tr>
-												<th>검사명 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="tiName" id="tiName" value="${incoVO.tiName}" readonly></td>
-												<th>분석번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="azIdx" id="azIdx" value="${incoVO.azIdx}" readonly></td>
-											</tr>
-											<tr>
-											<th>불량항목 번호 <span class="req">*</span></th>
-												<td>
-												<input type="text" class="form-control" name="biIdx" id="biIdx" list="biList" value="${incoVO.biIdx}" autocomplete="off">
-													<datalist id="biList">
-														<c:forEach var="list" items="${biList}" varStatus="status">
-															<option value="${list.biIdx}">${list.biName}</option>
-														</c:forEach>
-													</datalist>
+												<th>로트번호  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="isiLotno" id="isiLotno" value="${incoVO.isiLotno}" readonly/>
+												</td>
+												<th>수주번호  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${incoVO.orId}" readonly>
 												</td>
 											</tr>
 											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="inNote" id="inNote">${incoVO.inNote}</textArea></td>
+												<th>품목코드  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="isiItemType" id="isiItemType" value="${incoVO.isiItemType}" readonly/></td>
+												<th>품목명</th>
+												<td><input type="text" class="form-control" name="isiItemName" id="isiItemName" value="${incoVO.isiItemName}" readonly/></td>
+											</tr>
+											<tr>
+												<th>검사방식</th>
+												<td><input type="text" class="form-control" name="isiWay" id="isiWay" value="${incoVO.isiWay}"/></td>
+												<th>검사자</th>
+												<td><input type="text" class="form-control" name="isiManager" id="isiManager" value="${incoVO.isiManager}"/></td>
+											</tr>
+											
+											
+										</tbody>
+	                                </table>
+	                                
+	                                <table class="table table-bordered" id="dataTable">
+	                                    <tbody>
+											<tr>
+												<th>SPC항목  <span class="req">*</span></th>
+												<td>
+													<input type="text" class="form-control" name="siType" id="siType" value="${incoVO.siName}" readonly>
+													
+												</td>
+												<th>SPC스펙  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="isiSpcSpec" id="isiSpcSpec" value="${incoVO.isiSpcSpec}" readonly/>
+												</td>
+											</tr>
+											<tr>
+												<th>검사일</th>
+												<td><input type="date" class="form-control" name="isiDate" id="isiDate" value="${incoVO.isiDate}"/></td>
+												<th>검사파일1 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" value="${incoVO.isiFile1}" readonly/></td>
+											</tr>
+											<tr>
+												<th>검사파일2 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" value="${incoVO.isiFile2}" readonly/></td>
+												<th>검사파일3  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" value="${incoVO.isiFile3}" readonly/></td>
+											</tr>
+											<tr>
+												<th>검사파일4  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" value="${incoVO.isiFile4}" readonly/></td>
+												<th>검사파일5  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" value="${incoVO.isiFile5}" readonly/></td>	
+												
 											</tr>
 											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_modify_document()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/incongruent/incongruentList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_modify_ins()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/inspect/inspectList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -126,26 +154,30 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_modify_document(){
-		if($('#inName').val() == ''){
+	function fn_modify_ins(){
+		/* if($('#inName').val() == ''){
 			alert("부적합명을 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#biIdx').val() == ''){
-			alert("불량 항목 번호를 확인 바랍니다.");
+		if($('#tiIdx').val() == ''){
+			alert("검사명을 확인 바랍니다.");
 			return;
 		}
 		
 		
+		if($('#biIdx').val() == ''){
+			alert("불량항목 번호를 확인 바랍니다.");
+			return;
+		} */
 		
 		modifyForm.submit();
 	}
 	
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#incongruentList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#inspectList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
@@ -153,7 +185,14 @@
 		}
 		
 		
+		
 	});
+
+	s
+	
+
+	
+	
 	</script>
 </body>
 

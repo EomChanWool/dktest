@@ -54,8 +54,11 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/inspect/inspectList.do" method="post">
-									<input type="hidden" name="idId">
-									<input type="hidden" name="idDoc">
+									<input type="hidden" name="isiId">
+									<input type="hidden" name="isiItemType">
+									<input type="hidden" name="isiSpcSpec">
+									<input type="hidden" name="isiFile">
+									<input type="hidden" name="cFile">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
@@ -77,39 +80,43 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>문서이름</th>
-                                            <th>LOT번호</th>
+                                            <th>수주번호</th>
                                             <th>품목코드</th>
                                             <th>품목명</th>
-                                            <th>공정번호</th>
+                                            <th>검사방식</th>
+                                            <th>SPC항목</th>
+                                            <th>SPC스펙</th>
                                             <th>검사일</th>
-                                            <th>확인일</th>
                                             <th>검사자</th>
+                                            <th>판정</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${inspectList}" varStatus="status">
-	                                   	<tr onclick="fn_detail_inspect('${result.idDoc}')" style="cursor: pointer;">
-	                                            <td>${result.idDoc}</td>
-	                                            <td>${result.poLotno}</td>
-	                                            <td>${result.idProdName}</td>
-	                                            <td>${result.idName}</td>
-	                                            <td>${result.mpMfno}</td>
-	                                            <td>${result.idTestTime}</td>
-	                                            <td>${result.idCheckTime}</td>
-	                                            <td>${result.idManager}</td>
+	                                   	<tr onclick="fn_detail_inspect('${result.isiId}','${result.isiItemType}','${result.isiSpcSpec}','${result.isiFile1}','1')" style="cursor: pointer;">
+	                                            <td>${result.orId}</td>
+	                                            <td>${result.isiItemType}</td>
+	                                            <td>${result.isiItemName}</td>
+	                                            <td>${result.isiWay}</td>
+	                                            <td>${result.siName}</td>
+	                                            <td>${result.isiSpcSpec}</td>
+	                                            <td>${result.isiDate}</td>
+	                                            <td>${result.isiManager}</td>
+	                                            <c:if test="${result.isiCheck == 0 }"><td>판정전</td></c:if>
+	                                            <c:if test="${result.isiCheck == 1 }"><td>합격</td></c:if>
+	                                            <c:if test="${result.isiCheck == 2 }"><td>불합격</td></c:if>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.idId}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.isiId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.idId}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.isiId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty inspectList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty inspectList}"><tr><td colspan='10'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -169,21 +176,25 @@
 			listForm.submit();
 		}
 	
-		function fn_modify_inspect_go(inIdx){
-			listForm.inIdx.value = inIdx;
+		function fn_modify_inspect_go(isiId){
+			listForm.isiId.value = isiId;
 			listForm.action = "${pageContext.request.contextPath}/sl/process/inspect/modifyInspect.do";
 			listForm.submit();
 		}
 		
-		function fn_detail_inspect(idDoc){
-			listForm.idDoc.value = idDoc;
+		function fn_detail_inspect(isiId,isiItemType,isiSpcSpec,isiFile,cFile){
+			listForm.isiId.value = isiId;
+			listForm.isiItemType.value = isiItemType;
+			listForm.isiSpcSpec.value = isiSpcSpec;
+			listForm.isiFile.value = isiFile;
+			listForm.cFile.value = cFile;
 			listForm.action = "${pageContext.request.contextPath}/sl/process/inspect/detailInspect.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_inspect(inIdx){
+		function fn_delete_inspect(isiId){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.inIdx.value = inIdx;
+				listForm.isiId.value = isiId;
 			
 				listForm.action = "${pageContext.request.contextPath}/sl/process/inspect/deleteInspect.do";
 				listForm.submit();

@@ -59,19 +59,19 @@ public class InspectController {
 		model.put("paginationInfo", paginationInfo);
 		
 		
-		
 		return "sl/process/inspect/inspectList";
 	}
 	
 	@RequestMapping("/sl/process/inspect/registInspect.do")
 	public String registInspect(ModelMap model) {
 		
-		List<?> tiList = inspectService.selectTiList();
+		List<?> mfList = inspectService.selectMfList();
 		
-		List<?> biList = inspectService.selectBiList();
+		List<?> siList = inspectService.selectSiList();
 		
-		model.put("tiList", tiList);
-		model.put("biList", biList);
+		model.put("siList", siList);
+		
+		model.put("mfList", mfList);
 		
 		return "sl/process/inspect/inspectRegist";
 	}
@@ -81,8 +81,17 @@ public class InspectController {
 		ModelAndView mav = new ModelAndView();
 		Map<String, Object> list = inspectService.selectInfo(map);
 		mav.setViewName("jsonView");
-		mav.addObject("tiInfo", list);
+		mav.addObject("inInfo", list);
 		
+		return mav;
+	}
+	
+	@RequestMapping(value="/sl/process/inspect/inspectInfoAjax2.do", method=RequestMethod.POST)
+	public ModelAndView inspectInfoAjax2(@RequestParam Map<String, Object> map) {
+		ModelAndView mav = new ModelAndView();
+		List<?> list = inspectService.selectInfo2(map);
+		mav.setViewName("jsonView");
+		mav.addObject("inInfo2", list);
 		
 		return mav;
 	}
@@ -91,15 +100,12 @@ public class InspectController {
 	public String registInspectOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
 		//검사번호 체크
-		int exists = inspectService.selectTiIdx(map);
-		if(exists == 0) {
-			redirectAttributes.addFlashAttribute("msg", "존재하지 않는 검사번호 입니다.");
-			map.replace("tiIdx", "");
-			redirectAttributes.addFlashAttribute("incoVO", map);
-			return "redirect:/sl/process/inspect/registInspect.do";
-		}
+//		int exists = inspectService.selectCheckIns(map);
+//		if(exists != 0) {
+//			redirectAttributes.addFlashAttribute("msg", "이미검사한 제품 입니다.");
+//			return "redirect:/sl/process/inspect/registInspect.do";
+//		}
 		
-		map.put("userId", session.getAttribute("user_id"));
 		
 		inspectService.registInspect(map);
 		
@@ -113,19 +119,17 @@ public class InspectController {
 		
 		Map<String, Object> list = inspectService.selectInco(map);
 		
-		List<?> biList = inspectService.selectBiList();
+		//List<?> biList = inspectService.selectBiList();
 		
 		model.put("incoVO", list);
-		model.put("biList", biList);
-		
+		//model.put("biList", biList);
+		System.out.println("리스트 : " + list);
 		
 		return "sl/process/inspect/inspectModify";
 	}
 	
 	@RequestMapping("/sl/process/inspect/modifyInspectOk.do")
 	public String modifyInspectOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		
-		map.put("userId", session.getAttribute("user_id"));
 		inspectService.modifyInspect(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
@@ -135,61 +139,40 @@ public class InspectController {
 	
 	@RequestMapping("/sl/process/inspect/detailInspect.do")
 	public String detailInspect(@RequestParam Map<String, Object> map,ModelMap model) {
+		String type = map.get("isiItemType")+"";
+		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
+			Map<String, Object> detail = inspectService.detailInspec(map);
+			model.put("detail", detail);
+			String spcSpect = map.get("isiSpcSpec")+"";
+			Map<String, Object> spcInfo = inspectService.spcInfo(spcSpect);
+			model.put("spcInfo",spcInfo);
+			String Edata = map.get("isiFile")+"";
+			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
+			model.put("eDataInfo", eDataInfo);
+			model.put("cIsiFile", Edata);
+			model.put("cFile", map.get("cFile"));
+			return "sl/process/inspect/ElbowDetail";
+		}
 		
 		Map<String, Object> detail = inspectService.detailInspec(map);
 		
 		
 		model.put("detail", detail);
-		System.out.println("맵 : " + detail);
 		return "sl/process/inspect/inspectDetail";
 	}
 	
-	@RequestMapping("/sl/process/inspect/downloadInspect.do")
-	public void downloadInspect(HttpServletRequest request, HttpServletResponse response) {
-		String filename = request.getParameter("fileName");
-		 String realFilename = "";
-//	        try {
-//	            String browser = request.getHeader("User-Agent");
-//	            // 파일 인코딩
-//	            if (browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")) {
-//	                filename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
-//	            } else {
-//	                filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");
-//	            }
-//	 
-//	        } catch (UnsupportedEncodingException e) {
-//	            System.out.println("UnsupportedEncodingException 발생");
-//	        }
-	 
-	        realFilename = filePath + filename;
-	        System.out.println("파일이름 : " + realFilename);
-	        File file = new File(realFilename);
-	        if (!file.exists()) {
-	            return;
-	        }
-	 
-	        // 파일명 지정
-	        response.setContentType("application/octer-stream");
-	        response.setHeader("Content-Transfer-Encoding", "binary");
-	        response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
-	 
-	        try {
-	            OutputStream os = response.getOutputStream();
-	            FileInputStream fis = new FileInputStream(realFilename);
-	 
-	            int cnt = 0;
-	            byte[] bytes = new byte[512];
-	 
-	            while ((cnt = fis.read(bytes)) != -1) {
-	                os.write(bytes, 0, cnt);
-	            }
-	 
-	            fis.close();
-	            os.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+	@RequestMapping("/sl/process/inspect/updateStat.do")
+	public String updateStat(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes) {
+		
+		
+		inspectService.updateStat(map);
+		
+		redirectAttributes.addFlashAttribute("msg", "판정이 완료되었습니다.");
+		
+		return "redirect:/sl/process/inspect/inspectList.do";
 	}
+	
+	
 	
 	@RequestMapping("/sl/process/inspect/deleteInspect.do")
 	public String deleteInspect(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
